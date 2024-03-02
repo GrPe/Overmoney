@@ -16,6 +16,11 @@ Inspiration: https://moneymanagerex.org/
 - Budget planner
 - Weekly/Monthly summaries send to email
 
+### Nice to have
+
+- Login via Google/Microsoft
+- Support for mobile devices
+
 ## Roadmap
 
 | Name          | Deadline   | Status      |
@@ -30,9 +35,13 @@ List of technologies, frameworks, libraries used for implementation:
 - Docker
 - more in future...
 
+## Containers
+
+![containers](docs/containers.png)
+
 ## Things to learn
 
-List of technologies, frameworks, libraries used for implementation that I want to learn/test:
+List of technologies, frameworks, libraries that I want to learn/test:
 
 ### Frameworks/Libraries
 
@@ -48,7 +57,7 @@ List of technologies, frameworks, libraries used for implementation that I want 
 - [ ] Observability: Loki, Grafana, Prometheus, Jaeger, "sth for alerting"
 - [ ] Hashicorp Vault
 - [ ] RabbitMQ
-- [ ] Azure Containers
+- [ ] Azure Containers, networking
 
 ## How to run
 
