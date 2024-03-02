@@ -6,26 +6,33 @@ Inspiration: https://moneymanagerex.org/
 
 ## Features
 
-- Ability do create account/login via email
-- Support for multiple wallets
-- Support for multiple currency
-- Detailed transaction log including date, payee, category etc.
-- Ability to add attachment to each transaction (eg. invoices, photos)
-- Dashboards to easy track current expenses
-- Support for reccuring transaction
-- Budget planner
-- Weekly/Monthly summaries send to email
+- [ ] Ability do create account/login via email
+- [ ] Support for multiple wallets
+- [ ] Support for multiple currency
+- [ ] Detailed transaction log including date, payee, category etc.
+- [ ] Ability to add attachment to each transaction (eg. invoices, photos)
+- [ ] Dashboards to easy track current expenses
+- [ ] Support for reccuring transaction
+- [ ] Budget planner
+- [ ] Weekly/Monthly summaries send to email
 
 ### Nice to have
 
-- Login via Google/Microsoft
-- Support for mobile devices
+- [ ] Login via Google/Microsoft
+- [ ] Support for mobile devices
 
 ## Roadmap
 
-| Name          | Deadline   | Status      |
-| ------------- | ---------- | ----------- |
-| README + plan | 2024.03.06 | In progress |
+| Name                                                            | Deadline   | Status      |
+| --------------------------------------------------------------- | ---------- | ----------- |
+| README + plan                                                   | 2024.03.04 | In progress |
+| Features without dashboards & budget planner & files (API only) | 2024.03.15 | Todo        |
+| CI/CD + IaC (containers, networking, database)                  | 2024.03.22 | Todo        |
+| Features (files, summaries)                                     | 2024.03.30 | Todo        |
+| Observability + Security                                        | 2024.04.14 | Todo        |
+| Frontend ?                                                      | 2024.04.30 | Todo        |
+| budget planner + dashboards                                     | 2024.05.14 | Todo        |
+| Nice to have feature                                            | 2024.05.31 | Todo        |
 
 ## Technology
 
