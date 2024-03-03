@@ -1,0 +1,6 @@
+@Overmoney.Api_HostAddress = http://localhost:5282
+
+GET {{Overmoney.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
