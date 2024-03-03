@@ -16,6 +16,8 @@ Inspiration: https://moneymanagerex.org/
 - [ ] Budget planner
 - [ ] Weekly/Monthly summaries send to email
 
+![features](docs/features.drawio.png)
+
 ### Nice to have
 
 - [ ] Login via Google/Microsoft
@@ -25,8 +27,8 @@ Inspiration: https://moneymanagerex.org/
 
 | Name                                                            | Deadline   | Status      |
 | --------------------------------------------------------------- | ---------- | ----------- |
-| README + plan                                                   | 2024.03.04 | In progress |
-| Features without dashboards & budget planner & files (API only) | 2024.03.15 | Todo        |
+| README + plan                                                   | 2024.03.04 | ✅ Done     |
+| Features without dashboards & budget planner & files (API only) | 2024.03.15 | In progress |
 | CI/CD + IaC (containers, networking, database)                  | 2024.03.22 | Todo        |
 | Features (files, summaries)                                     | 2024.03.30 | Todo        |
 | Observability + Security                                        | 2024.04.14 | Todo        |
