@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Users;
+using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Users;
 
-public sealed record RegisterUserCommand : IRequest<Response>
+public sealed record RegisterUserCommand : IRequest<int>
 {
     public string? UserName { get; init; }
     public string? Email { get; init; }
@@ -24,7 +25,7 @@ public sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUse
     }
 }
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Response>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, int>
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<RegisterUserCommandHandler> _logger;
@@ -35,18 +36,18 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         _logger = logger;
     }
 
-    public async Task<Response> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(request.Email!, cancellationToken);
         if (user is not null)
         {
-            return Response.FailureResponse("Cannot create new account for this email address");
+            throw new DomainValidationException("Cannot create new account for this email address");
         }
 
-        await _userRepository.CreateAsync(new(request.UserName!, request.Email!, request.Password!), cancellationToken);
+        var userId = await _userRepository.CreateAsync(new(request.UserName!, request.Email!, request.Password!), cancellationToken);
 
         _logger.LogInformation("Temporary account for email {email} created", request.Email);
 
-        return Response.SuccessResponse;
+        return userId;
     }
 }

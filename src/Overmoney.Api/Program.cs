@@ -24,6 +24,8 @@ builder.Services.Scan(
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
+builder.Services.AddScoped<ExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +38,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.MapControllers();
 
