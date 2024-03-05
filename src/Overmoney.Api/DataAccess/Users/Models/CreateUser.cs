@@ -2,13 +2,13 @@
 
 public sealed class CreateUser
 {
-    public string UserName { get; init; } = null!;
+    public string Login { get; init; } = null!;
     public string Email { get; init; } = null!;
     public string Password { get; init; } = null!;
 
-    public CreateUser(string userName, string email, string password)
+    public CreateUser(string login, string email, string password)
     {
-        UserName = userName;
+        Login = login;
         Email = email;
         Password = password;
     }

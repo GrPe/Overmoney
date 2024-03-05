@@ -3,14 +3,14 @@
 public sealed class User
 {
     public int Id { get; init; }
-    public string UserName { get; init; } = null!;
+    public string Login { get; init; } = null!;
     public string Email { get; init; } = null!;
     public string Password { get; init; } = null!;
 
-    public User(int id, string userName, string email, string password)
+    public User(int id, string login, string email, string password)
     {
         Id = id;
-        UserName = userName;
+        Login = login;
         Email = email;
         Password = password;
     }
