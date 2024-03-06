@@ -7,6 +7,7 @@ public interface IUserRepository : IRepository
     Task<int> CreateAsync(CreateUser user, CancellationToken token);
     Task DeleteByIdAsync(int userId, CancellationToken cancellationToken);
     Task<User?> GetByEmailAsync(string email, CancellationToken token);
+    Task<User?> GetByIdAsync(int userId, CancellationToken token);
     Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
 }
 
@@ -35,6 +36,11 @@ internal sealed class UserRepository : IUserRepository
     public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
     {
         return await Task.FromResult(_connection.FirstOrDefault(x => x.Email == email));
+    }
+
+    public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
+    {
+        return await Task.FromResult(_connection.FirstOrDefault(x => x.Id == userId));
     }
 
     public Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken)

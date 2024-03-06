@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Overmoney.Api.DataAccess.Wallets.Models;
 using Overmoney.Api.Features.Users;
+using Overmoney.Api.Features.Wallets;
 
 namespace Overmoney.Api.Controllers;
 
@@ -46,5 +48,21 @@ public class UsersController : BaseController
     {
         await _mediator.Send(new DeleteUserCommand(id));
         return Accepted();
+    }
+
+
+    [HttpGet("{userId}/wallets")]
+    [ProducesResponseType<IEnumerable<Wallet>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserWallets(int userId)
+    {
+        var result = await _mediator.Send(new GetUserWalletsQuery(userId));
+
+        if (result is null || !result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
     }
 }
