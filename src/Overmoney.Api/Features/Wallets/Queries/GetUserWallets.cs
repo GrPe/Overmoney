@@ -3,7 +3,7 @@ using MediatR;
 using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.DataAccess.Wallets.Models;
 
-namespace Overmoney.Api.Features.Wallets;
+namespace Overmoney.Api.Features.Wallets.Queries;
 
 public sealed record GetUserWalletsQuery(int UserId) : IRequest<IEnumerable<Wallet>> { }
 

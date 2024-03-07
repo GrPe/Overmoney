@@ -2,7 +2,7 @@
 using MediatR;
 using Overmoney.Api.DataAccess.Wallets;
 
-namespace Overmoney.Api.Features.Wallets;
+namespace Overmoney.Api.Features.Wallets.Commands;
 
 public sealed record DeleteWalletCommand(int Id) : IRequest;
 

@@ -2,7 +2,7 @@
 using MediatR;
 using Overmoney.Api.DataAccess.Users;
 
-namespace Overmoney.Api.Features.Users;
+namespace Overmoney.Api.Features.Users.Commands;
 
 public sealed record LoginUserCommand(string? Login, string? Password) : IRequest<int?> { }
 
@@ -32,7 +32,7 @@ public sealed class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, 
     {
         var user = await _userRepository.GetByLoginAsync(request.Login, cancellationToken);
 
-        if(user is null)
+        if (user is null)
         {
             return null;
         }

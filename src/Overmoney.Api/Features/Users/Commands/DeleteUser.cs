@@ -2,7 +2,7 @@
 using MediatR;
 using Overmoney.Api.DataAccess.Users;
 
-namespace Overmoney.Api.Features.Users;
+namespace Overmoney.Api.Features.Users.Commands;
 
 public sealed record DeleteUserCommand(int UserId) : IRequest { }
 

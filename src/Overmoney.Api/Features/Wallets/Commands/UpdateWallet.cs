@@ -5,7 +5,7 @@ using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.DataAccess.Wallets.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
-namespace Overmoney.Api.Features.Wallets;
+namespace Overmoney.Api.Features.Wallets.Commands;
 
 public sealed record UpdateWalletCommand(int Id, int UserId, string Name) : IRequest<int?>;
 
@@ -45,7 +45,7 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
 
         var wallet = await _walletRepository.GetAsync(request.Id, cancellationToken);
 
-        if(wallet is null)
+        if (wallet is null)
         {
             var walletId = await _walletRepository.CreateAsync(new(user.Id, request.Name), cancellationToken);
             return walletId;

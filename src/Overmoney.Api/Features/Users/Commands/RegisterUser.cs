@@ -3,7 +3,7 @@ using MediatR;
 using Overmoney.Api.DataAccess.Users;
 using Overmoney.Api.Infrastructure.Exceptions;
 
-namespace Overmoney.Api.Features.Users;
+namespace Overmoney.Api.Features.Users.Commands;
 
 public sealed record RegisterUserCommand : IRequest<int>
 {

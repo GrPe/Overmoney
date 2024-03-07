@@ -4,7 +4,7 @@ using Overmoney.Api.DataAccess.Users;
 using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.Infrastructure.Exceptions;
 
-namespace Overmoney.Api.Features.Wallets;
+namespace Overmoney.Api.Features.Wallets.Commands;
 
 public sealed record CreateWalletCommand(int UserId, string Name) : IRequest<int>;
 
