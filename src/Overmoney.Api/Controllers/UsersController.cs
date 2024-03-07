@@ -17,19 +17,19 @@ public class UsersController : BaseController
 
     [HttpPost]
     [Route("register")]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
-    public async Task<int> Register(RegisterUserCommand command)
+    [ProducesResponseType<int>(StatusCodes.Status202Accepted)]
+    public async Task<ActionResult<int>> Register(RegisterUserCommand command)
     {
         var response = await _mediator.Send(command);
 
-        return response;
+        return Accepted(response);
     }
 
     [HttpPost]
     [Route("login")]
     [ProducesResponseType<int>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Login(LoginUserCommand command)
+    public async Task<ActionResult<int>> Login(LoginUserCommand command)
     {
         var response = await _mediator.Send(command);
 
@@ -54,7 +54,7 @@ public class UsersController : BaseController
     [HttpGet("{userId}/wallets")]
     [ProducesResponseType<IEnumerable<Wallet>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUserWallets(int userId)
+    public async Task<ActionResult<int>> GetUserWallets(int userId)
     {
         var result = await _mediator.Send(new GetUserWalletsQuery(userId));
 
