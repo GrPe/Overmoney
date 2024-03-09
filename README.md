@@ -7,8 +7,8 @@ Inspiration: https://moneymanagerex.org/
 ## Features
 
 - [ ] Ability do create account/login via email
-- [ ] Support for multiple wallets
-- [ ] Support for multiple currency
+- [x] Support for multiple wallets
+- [x] Support for multiple currency
 - [ ] Detailed transaction log including date, payee, category etc.
 - [ ] Ability to add attachment to each transaction (eg. invoices, photos)
 - [ ] Dashboards to easy track current expenses
@@ -22,6 +22,7 @@ Inspiration: https://moneymanagerex.org/
 
 - [ ] Login via Google/Microsoft
 - [ ] Support for mobile devices
+- [ ] Splited transaction (multiple categories for single transaction)
 
 ## Roadmap
 
