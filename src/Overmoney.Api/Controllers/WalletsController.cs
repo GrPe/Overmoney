@@ -18,7 +18,7 @@ public class WalletsController : BaseController
     [HttpGet("{id}")]
     [ProducesResponseType<Wallet>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> GetWallet(int id)
+    public async Task<ActionResult<Wallet>> GetWallet(int id)
     {
         var result = await _mediator.Send(new GetWalletQuery(id));
 
@@ -31,17 +31,17 @@ public class WalletsController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<int>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<int>> Create(CreateWalletCommand wallet)
+    [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Wallet>> Create(CreateWalletCommand wallet)
     {
         var result = await _mediator.Send(wallet);
-        return CreatedAtAction(nameof(GetWallet), new { id = result }, result);
+        return CreatedAtAction(nameof(GetWallet), new { id = result.Id }, result);
     }
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<int>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<int>> Update(UpdateWalletCommand wallet)
+    [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Wallet>> Update(UpdateWalletCommand wallet)
     {
         var result = await _mediator.Send(wallet);
 
@@ -50,7 +50,7 @@ public class WalletsController : BaseController
             return Ok();
         }
 
-        return CreatedAtAction(nameof(GetWallet), new { id = result }, result);
+        return CreatedAtAction(nameof(GetWallet), new { id = result.Id }, result);
     }
 
     [HttpDelete("{id}")]

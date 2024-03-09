@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Overmoney.Api.DataAccess.Currencies;
 using Overmoney.Api.DataAccess.Users;
 using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.DataAccess.Wallets.Models;
@@ -7,7 +8,7 @@ using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Wallets.Commands;
 
-public sealed record UpdateWalletCommand(int Id, int UserId, string Name) : IRequest<int?>;
+public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
 
 public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalletCommand>
 {
@@ -17,24 +18,30 @@ public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalle
             .GreaterThan(0);
         RuleFor(x => x.UserId)
             .GreaterThan(0);
+        RuleFor(x => x.CurrencyId)
+            .GreaterThan(0);
         RuleFor(x => x.Name)
-            .NotNull()
             .NotEmpty();
     }
 }
 
-public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, int?>
+public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, Wallet?>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ICurrencyRepository _currencyRepository;
 
-    public UpdateWalletCommandHandler(IWalletRepository walletRepository, IUserRepository userRepository)
+    public UpdateWalletCommandHandler(
+        IWalletRepository walletRepository, 
+        IUserRepository userRepository, 
+        ICurrencyRepository currencyRepository)
     {
         _walletRepository = walletRepository;
         _userRepository = userRepository;
+        _currencyRepository = currencyRepository;
     }
 
-    public async Task<int?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
+    public async Task<Wallet?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
@@ -43,15 +50,21 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
             throw new DomainValidationException($"User with id {request.UserId} doesn't exists");
         }
 
+        var currency = await _currencyRepository.GetAsync(request.CurrencyId, cancellationToken);
+
+        if (currency is null)
+        {
+            throw new DomainValidationException($"Currency with id {request.CurrencyId} doesn't exists.");
+        }
+
         var wallet = await _walletRepository.GetAsync(request.Id, cancellationToken);
 
         if (wallet is null)
         {
-            var walletId = await _walletRepository.CreateAsync(new(user.Id, request.Name), cancellationToken);
-            return walletId;
+            return await _walletRepository.CreateAsync(new(user.Id, request.Name, request.CurrencyId), cancellationToken);
         }
 
-        await _walletRepository.UpdateAsync(new UpdateWallet(request.Id, request.Name), cancellationToken);
+        await _walletRepository.UpdateAsync(new UpdateWallet(request.Id, request.Name, request.CurrencyId), cancellationToken);
         return null;
     }
 }
