@@ -4,33 +4,43 @@ namespace Overmoney.Api.DataAccess.Currencies;
 
 public interface ICurrencyRepository : IRepository
 {
-    Task<Currency> GetAsync(int id, CancellationToken cancellationToken);
+    Task<Currency?> GetAsync(int id, CancellationToken cancellationToken);
+    Task<Currency?> GetAsync(string code, CancellationToken cancellationToken);
     Task<IEnumerable<Currency>> GetAllAsync(CancellationToken cancellationToken);
-    Task<Currency> CreateAsync(Currency currency, CancellationToken cancellationToken);
-    Task<Currency> UpdateAsync(Currency currency, CancellationToken cancellationToken);
+    Task<Currency> CreateAsync(CreateCurrency currency, CancellationToken cancellationToken);
+    Task UpdateAsync(Currency currency, CancellationToken cancellationToken);
 }
 
 public sealed class CurrencyRepository : ICurrencyRepository
 {
-    private static readonly List<Currency> _connection = [];
+    private static readonly List<Currency> _connection = [new (1, "TNT", "dummy currency")];
 
-    public Task<Currency> CreateAsync(Currency currency, CancellationToken cancellationToken)
+    public async Task<Currency> CreateAsync(CreateCurrency currency, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _connection.Add(new Currency(_connection.Max(x => x.Id) + 1, currency.Code, currency.Name));
+        return await Task.FromResult(_connection.Last());
     }
 
-    public Task<IEnumerable<Currency>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Currency>> GetAllAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(_connection.AsEnumerable());
     }
 
-    public Task<Currency> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Currency?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(_connection.FirstOrDefault(x => x.Id == id));
     }
 
-    public Task<Currency> UpdateAsync(Currency currency, CancellationToken cancellationToken)
+    public async Task<Currency?> GetAsync(string code, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(_connection.FirstOrDefault(x => x.Code == code));
+    }
+
+    public Task UpdateAsync(Currency currency, CancellationToken cancellationToken)
+    {
+        var old = _connection.First(x => x.Id == currency.Id);
+        _connection.Remove(old);
+        _connection.Add(currency);
+        return Task.CompletedTask;
     }
 }
