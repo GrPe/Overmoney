@@ -1,12 +1,12 @@
-﻿namespace Overmoney.Api.DataAccess.Payee;
+﻿namespace Overmoney.Api.DataAccess.Categories.Models;
 
-public class Payee
+public sealed class Category
 {
     public int Id { get; init; }
     public int UserId { get; init; }
     public string Name { get; init; } = null!;
 
-    public Payee(int id, int userId, string name)
+    public Category(int id, int userId, string name)
     {
         Id = id;
         UserId = userId;

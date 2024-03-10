@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Overmoney.Api.DataAccess.Categories.Models;
 using Overmoney.Api.DataAccess.Wallets.Models;
+using Overmoney.Api.Features.Categories.Queries;
 using Overmoney.Api.Features.Users.Commands;
 using Overmoney.Api.Features.Wallets.Queries;
 
@@ -33,7 +35,7 @@ public class UsersController : BaseController
     {
         var response = await _mediator.Send(command);
 
-        if(response is null)
+        if (response is null)
         {
             return NotFound();
         }
@@ -63,6 +65,20 @@ public class UsersController : BaseController
             return NotFound();
         }
 
+        return Ok(result);
+    }
+
+    [HttpGet("{userId}/categories")]
+    [ProducesResponseType<IEnumerable<Category>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<Category>>> GetUserCategories(int userId)
+    {
+        var result = await _mediator.Send(new GetAllCategoriesByUserQuery(userId));
+
+        if (result is null || !result.Any())
+        {
+            return NotFound();
+        }
         return Ok(result);
     }
 }
