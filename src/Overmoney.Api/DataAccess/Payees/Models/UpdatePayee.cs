@@ -1,12 +1,12 @@
-﻿namespace Overmoney.Api.DataAccess.Payee.Models;
+﻿namespace Overmoney.Api.DataAccess.Payees.Models;
 
-public class Payee
+public sealed class UpdatePayee
 {
     public int Id { get; init; }
     public int UserId { get; init; }
     public string Name { get; init; } = null!;
 
-    public Payee(int id, int userId, string name)
+    public UpdatePayee(int id, int userId, string name)
     {
         Id = id;
         UserId = userId;

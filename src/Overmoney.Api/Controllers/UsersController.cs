@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Api.DataAccess.Categories.Models;
+using Overmoney.Api.DataAccess.Payees.Models;
 using Overmoney.Api.DataAccess.Wallets.Models;
 using Overmoney.Api.Features.Categories.Queries;
+using Overmoney.Api.Features.Payees.Queries;
 using Overmoney.Api.Features.Users.Commands;
 using Overmoney.Api.Features.Wallets.Queries;
 
@@ -76,6 +78,20 @@ public class UsersController : BaseController
         var result = await _mediator.Send(new GetAllCategoriesByUserQuery(userId));
 
         if (result is null || !result.Any())
+        {
+            return NotFound();
+        }
+        return Ok(result);
+    }
+
+    [HttpGet("{userId}/payees")]
+    [ProducesResponseType<IEnumerable<Payee>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<Payee>>> GetUserPayees(int userId)
+    {
+        var result = await _mediator.Send(new GetAllPayeesByUserIdQuery(userId));
+
+        if(result is null || !result.Any())
         {
             return NotFound();
         }
