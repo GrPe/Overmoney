@@ -58,6 +58,7 @@ public class CategoriesController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(int id)
     {
-        throw new NotImplementedException();
+        await _mediator.Send(new DeleteCategoryCommand(id));
+        return NoContent();
     }
 }

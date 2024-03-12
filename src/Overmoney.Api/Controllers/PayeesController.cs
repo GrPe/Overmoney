@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Overmoney.Api.DataAccess.Payees.Models;
+using Overmoney.Api.Features.Payees.Commands;
+using Overmoney.Api.Features.Payees.Queries;
 
 namespace Overmoney.Api.Controllers;
 
@@ -13,26 +16,48 @@ public class PayeesController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task GetById(int id)
+    [ProducesResponseType<Payee>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Payee>> GetById(int id)
     {
+        var result = await _mediator.Send(new GetPayeeByIdQuery(id));
 
+        if (result is null)
+        {
+            return NotFound();
+        }
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<object>> Create(object command)
+    [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Payee>> Create(CreatePayeeCommand command)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
     [HttpPut]
-    public async Task<ActionResult<object>> Update(object command)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Payee>> Update(UpdatePayeeCommand command)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(command);
+
+        if(result is not null)
+        {
+            return CreatedAtAction(nameof(GetById), new {result.Id}, result);
+        }
+
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public async Task Delete(int id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(int id)
     {
-
+        await _mediator.Send(new DeletePayeeCommand(id));
+        return NoContent();
     }
 }
