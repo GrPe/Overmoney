@@ -1,3 +1,3 @@
-﻿namespace Overmoney.Api.DataAccess;
+﻿namespace Overmoney.Api.Features;
 
 public interface IRepository;

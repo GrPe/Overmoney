@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Currencies;
-using Overmoney.Api.DataAccess.Users;
-using Overmoney.Api.DataAccess.Wallets;
-using Overmoney.Api.DataAccess.Wallets.Models;
+using Overmoney.Api.Features.Currencies;
+using Overmoney.Api.Features.Users;
+using Overmoney.Api.Features.Wallets;
+using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Wallets.Commands;

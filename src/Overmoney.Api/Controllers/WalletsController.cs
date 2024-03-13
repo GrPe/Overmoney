@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Wallets.Models;
+using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Features.Wallets.Commands;
 using Overmoney.Api.Features.Wallets.Queries;
 

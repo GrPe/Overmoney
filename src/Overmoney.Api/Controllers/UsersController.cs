@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Categories.Models;
-using Overmoney.Api.DataAccess.Payees.Models;
-using Overmoney.Api.DataAccess.Wallets.Models;
+using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Api.Features.Payees.Models;
+using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Features.Categories.Queries;
 using Overmoney.Api.Features.Payees.Queries;
 using Overmoney.Api.Features.Users.Commands;

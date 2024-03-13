@@ -1,4 +1,4 @@
-﻿namespace Overmoney.Api.DataAccess.Users.Models;
+﻿namespace Overmoney.Api.Features.Users.Models;
 
 public sealed class User
 {

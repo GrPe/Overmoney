@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Categories.Models;
+using Overmoney.Api.Features.Categories.Models;
 using Overmoney.Api.Features.Categories.Commands;
 using Overmoney.Api.Features.Categories.Queries;
 

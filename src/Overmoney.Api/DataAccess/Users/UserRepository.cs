@@ -1,6 +1,6 @@
-﻿using Overmoney.Api.DataAccess.Users.Models;
+﻿using Overmoney.Api.Features.Users.Models;
 
-namespace Overmoney.Api.DataAccess.Users;
+namespace Overmoney.Api.Features.Users;
 
 public interface IUserRepository : IRepository
 {

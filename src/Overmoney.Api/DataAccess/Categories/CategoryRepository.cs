@@ -1,6 +1,6 @@
-﻿using Overmoney.Api.DataAccess.Categories.Models;
+﻿using Overmoney.Api.Features.Categories.Models;
 
-namespace Overmoney.Api.DataAccess.Categories;
+namespace Overmoney.Api.Features.Categories;
 
 public interface ICategoryRepository : IRepository
 {

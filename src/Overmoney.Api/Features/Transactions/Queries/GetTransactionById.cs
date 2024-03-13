@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Transactions;
-using Overmoney.Api.DataAccess.Transactions.Models;
+using Overmoney.Api.Features.Transactions;
+using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.Features.Transactions.Queries;
 

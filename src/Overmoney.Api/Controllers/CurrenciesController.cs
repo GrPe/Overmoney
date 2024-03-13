@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Currencies.Models;
+using Overmoney.Api.Features.Currencies.Models;
 using Overmoney.Api.Features.Currencies.Commands;
 using Overmoney.Api.Features.Currencies.Queries;
 

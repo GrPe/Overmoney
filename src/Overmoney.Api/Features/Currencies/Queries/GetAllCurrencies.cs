@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Currencies;
-using Overmoney.Api.DataAccess.Currencies.Models;
+using Overmoney.Api.Features.Currencies;
+using Overmoney.Api.Features.Currencies.Models;
 
 namespace Overmoney.Api.Features.Currencies.Queries;
 

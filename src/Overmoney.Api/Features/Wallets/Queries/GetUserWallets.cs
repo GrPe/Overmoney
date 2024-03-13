@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Wallets;
-using Overmoney.Api.DataAccess.Wallets.Models;
+using Overmoney.Api.Features.Wallets;
+using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.Features.Wallets.Queries;
 

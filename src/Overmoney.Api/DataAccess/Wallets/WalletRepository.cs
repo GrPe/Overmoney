@@ -1,6 +1,6 @@
-﻿using Overmoney.Api.DataAccess.Wallets.Models;
+﻿using Overmoney.Api.Features.Wallets.Models;
 
-namespace Overmoney.Api.DataAccess.Wallets;
+namespace Overmoney.Api.Features.Wallets;
 
 public interface IWalletRepository : IRepository
 {

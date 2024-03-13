@@ -1,6 +1,6 @@
-﻿using Overmoney.Api.DataAccess.Currencies.Models;
+﻿using Overmoney.Api.Features.Currencies.Models;
 
-namespace Overmoney.Api.DataAccess.Currencies;
+namespace Overmoney.Api.Features.Currencies;
 
 public interface ICurrencyRepository : IRepository
 {

@@ -1,5 +1,5 @@
 using FluentValidation;
-using Overmoney.Api.DataAccess;
+using Overmoney.Api.Features;
 using Overmoney.Api.Infrastructure;
 using System.Reflection;
 

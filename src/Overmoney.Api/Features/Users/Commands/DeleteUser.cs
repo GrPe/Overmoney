@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Users;
+using Overmoney.Api.Features.Users;
 
 namespace Overmoney.Api.Features.Users.Commands;
 

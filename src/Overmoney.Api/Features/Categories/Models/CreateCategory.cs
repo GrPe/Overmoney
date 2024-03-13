@@ -1,4 +1,4 @@
-﻿namespace Overmoney.Api.DataAccess.Categories.Models;
+﻿namespace Overmoney.Api.Features.Categories.Models;
 
 public sealed class CreateCategory
 {

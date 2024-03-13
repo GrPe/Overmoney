@@ -1,4 +1,4 @@
-﻿namespace Overmoney.Api.DataAccess.Payees.Models;
+﻿namespace Overmoney.Api.Features.Payees.Models;
 
 public sealed class CreatePayee
 {

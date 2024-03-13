@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Transactions.Models;
+using Overmoney.Api.Features.Transactions.Commands;
+using Overmoney.Api.Features.Transactions.Models;
 using Overmoney.Api.Features.Transactions.Queries;
 
 namespace Overmoney.Api.Controllers;
@@ -30,24 +31,31 @@ public class TransactionsController : BaseController
 
     [HttpPost]
     [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Transaction>> Create()
+    public async Task<ActionResult<Transaction>> Create(CreateTransactionCommand command)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Transaction>> Update()
+    public async Task<ActionResult<Transaction>> Update(UpdateTransactionCommand command)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(command);
+
+        if (result is null)
+        {
+            return Ok();
+        }
+        return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Delete()
+    public async Task<IActionResult> Delete(int id)
     {
-        throw new NotImplementedException();
+        await _mediator.Send(new DeleteTransactionCommand(id));
+        return NoContent();
     }
-
 }

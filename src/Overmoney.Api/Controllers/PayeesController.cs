@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.DataAccess.Payees.Models;
+using Overmoney.Api.Features.Payees.Models;
 using Overmoney.Api.Features.Payees.Commands;
 using Overmoney.Api.Features.Payees.Queries;
 

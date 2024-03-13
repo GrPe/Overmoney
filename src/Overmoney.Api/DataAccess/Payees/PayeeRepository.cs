@@ -1,6 +1,6 @@
-﻿using Overmoney.Api.DataAccess.Payees.Models;
+﻿using Overmoney.Api.Features.Payees.Models;
 
-namespace Overmoney.Api.DataAccess.Payees;
+namespace Overmoney.Api.Features.Payees;
 
 public interface IPayeeRepository : IRepository
 {

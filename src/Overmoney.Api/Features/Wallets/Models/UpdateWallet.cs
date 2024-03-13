@@ -1,4 +1,4 @@
-﻿namespace Overmoney.Api.DataAccess.Wallets.Models;
+﻿namespace Overmoney.Api.Features.Wallets.Models;
 
 public sealed class UpdateWallet
 {

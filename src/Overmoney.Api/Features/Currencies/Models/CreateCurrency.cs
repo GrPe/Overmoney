@@ -1,4 +1,4 @@
-﻿namespace Overmoney.Api.DataAccess.Currencies.Models;
+﻿namespace Overmoney.Api.Features.Currencies.Models;
 
 public sealed class CreateCurrency
 {

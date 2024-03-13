@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.Features.Categories;
 
 namespace Overmoney.Api.Features.Categories.Commands;
 
