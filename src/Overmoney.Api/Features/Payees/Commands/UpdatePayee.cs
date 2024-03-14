@@ -5,7 +5,7 @@ using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
-public sealed record UpdatePayeeCommand(int Id, int UserId, string Name) : IRequest<PayeeEntity?>;
+public sealed record UpdatePayeeCommand(int Id, int UserId, string Name) : IRequest<Payee?>;
 
 public sealed class UpdatePayeeCommandValidator : AbstractValidator<UpdatePayeeCommand>
 {
@@ -20,7 +20,7 @@ public sealed class UpdatePayeeCommandValidator : AbstractValidator<UpdatePayeeC
     }
 }
 
-public sealed class UpdatePayeeCommandHandler : IRequestHandler<UpdatePayeeCommand, PayeeEntity?>
+public sealed class UpdatePayeeCommandHandler : IRequestHandler<UpdatePayeeCommand, Payee?>
 {
     private readonly IPayeeRepository _payeeRepository;
 
@@ -29,16 +29,16 @@ public sealed class UpdatePayeeCommandHandler : IRequestHandler<UpdatePayeeComma
         _payeeRepository = payeeRepository;
     }
 
-    public async Task<PayeeEntity?> Handle(UpdatePayeeCommand request, CancellationToken cancellationToken)
+    public async Task<Payee?> Handle(UpdatePayeeCommand request, CancellationToken cancellationToken)
     {
         var payee = await _payeeRepository.GetAsync(request.Id, cancellationToken);
 
         if(payee == null)
         {
-            return await _payeeRepository.CreateAsync(new(request.UserId, request.Name), cancellationToken);
+            return await _payeeRepository.CreateAsync(new Payee(request.UserId, request.Name), cancellationToken);
         }
 
-        await _payeeRepository.UpdateAsync(new UpdatePayee(request.Id, request.UserId, request.Name), cancellationToken);
+        await _payeeRepository.UpdateAsync(new Payee(request.Id, request.UserId, request.Name), cancellationToken);
         return null;
     }
 }

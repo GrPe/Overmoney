@@ -1,6 +1,6 @@
 ﻿namespace Overmoney.Api.DataAccess.Users;
 
-public sealed class UserEntity
+internal sealed class UserEntity
 {
     public int Id { get; init; }
     public string Login { get; init; } = null!;

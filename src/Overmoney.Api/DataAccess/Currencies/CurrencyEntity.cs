@@ -1,6 +1,6 @@
 ﻿namespace Overmoney.Api.DataAccess.Currencies;
 
-public sealed class CurrencyEntity
+internal sealed class CurrencyEntity
 {
     public int Id { get; init; }
     public string Code { get; init; } = null!;

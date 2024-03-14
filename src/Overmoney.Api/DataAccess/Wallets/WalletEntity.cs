@@ -1,6 +1,6 @@
 ﻿namespace Overmoney.Api.Features.Wallets.Models;
 
-public sealed class WalletEntity
+internal sealed class WalletEntity
 {
     public int Id { get; init; }
     public int UserId { get; init; }

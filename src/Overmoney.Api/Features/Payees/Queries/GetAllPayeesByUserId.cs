@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Payees;
+using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Queries;
 
-public sealed record GetAllPayeesByUserIdQuery(int UserId) : IRequest<IEnumerable<PayeeEntity>>;
+public sealed record GetAllPayeesByUserIdQuery(int UserId) : IRequest<IEnumerable<Payee>>;
 
 public sealed class GetAllPayeesByUserIdQueryValidator : AbstractValidator<GetAllPayeesByUserIdQuery>
 {
@@ -15,7 +16,7 @@ public sealed class GetAllPayeesByUserIdQueryValidator : AbstractValidator<GetAl
     }
 }
 
-public sealed class GetAllPayeesByUserIdQueryHandler : IRequestHandler<GetAllPayeesByUserIdQuery, IEnumerable<PayeeEntity>>
+public sealed class GetAllPayeesByUserIdQueryHandler : IRequestHandler<GetAllPayeesByUserIdQuery, IEnumerable<Payee>>
 {
     private readonly IPayeeRepository _payeeRepository;
 
@@ -24,7 +25,7 @@ public sealed class GetAllPayeesByUserIdQueryHandler : IRequestHandler<GetAllPay
         _payeeRepository = paymentRepository;
     }
 
-    public async Task<IEnumerable<PayeeEntity>> Handle(GetAllPayeesByUserIdQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Payee>> Handle(GetAllPayeesByUserIdQuery request, CancellationToken cancellationToken)
     {
         return await _payeeRepository.GetAllByUserIdAsync(request.UserId, cancellationToken);
     }

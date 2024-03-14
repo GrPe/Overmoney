@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.Features.Categories.Models;
 
 namespace Overmoney.Api.Features.Categories.Commands;
 
-public sealed record UpdateCategoryCommand(int Id, int UserId, string Name) : IRequest<CategoryEntity?>;
+public sealed record UpdateCategoryCommand(int Id, int UserId, string Name) : IRequest<Category?>;
 
 public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
 {
@@ -19,7 +20,7 @@ public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCat
     }
 }
 
-public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, CategoryEntity?>
+public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Category?>
 {
     private readonly ICategoryRepository _categoryRepository;
 
@@ -28,7 +29,7 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<CategoryEntity?> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Category?> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.GetAsync(request.Id, cancellationToken);
 
@@ -37,7 +38,7 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
             return await _categoryRepository.CreateAsync(new(request.UserId, request.Name), cancellationToken);
         }
 
-        await _categoryRepository.UpdateAsync(new(request.Id, request.Name), cancellationToken);
+        await _categoryRepository.UpdateAsync(new(request.Id, request.UserId, request.Name), cancellationToken);
         return null;
     }
 }

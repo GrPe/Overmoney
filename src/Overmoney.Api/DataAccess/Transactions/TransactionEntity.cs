@@ -1,6 +1,6 @@
 ﻿namespace Overmoney.Api.DataAccess.Transactions;
 
-public class TransactionEntity
+internal class TransactionEntity
 {
     public long Id { get; init; }
     public int WalletId { get; init; }

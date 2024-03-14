@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Currencies;
+using Overmoney.Api.Features.Currencies.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Currencies.Commands;
 
-public sealed record UpdateCurrencyCommand(int Id, string Code, string Name) : IRequest<CurrencyEntity?>;
+public sealed record UpdateCurrencyCommand(int Id, string Code, string Name) : IRequest<Currency?>;
 
 public sealed class UpdateCurrencyCommandValidator : AbstractValidator<UpdateCurrencyCommand>
 {
@@ -20,7 +21,7 @@ public sealed class UpdateCurrencyCommandValidator : AbstractValidator<UpdateCur
     }
 }
 
-public sealed class UpdateCurrencyCommandHandler : IRequestHandler<UpdateCurrencyCommand, CurrencyEntity?>
+public sealed class UpdateCurrencyCommandHandler : IRequestHandler<UpdateCurrencyCommand, Currency?>
 {
     private readonly ICurrencyRepository _currencyRepository;
 
@@ -29,13 +30,13 @@ public sealed class UpdateCurrencyCommandHandler : IRequestHandler<UpdateCurrenc
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<CurrencyEntity?> Handle(UpdateCurrencyCommand request, CancellationToken cancellationToken)
+    public async Task<Currency?> Handle(UpdateCurrencyCommand request, CancellationToken cancellationToken)
     {
         var currency = await _currencyRepository.GetAsync(request.Id, cancellationToken);
 
         if(currency is not null & currency?.Code == request.Code)
         {
-            await _currencyRepository.UpdateAsync(new CurrencyEntity(request.Id, request.Code, request.Name), cancellationToken);
+            await _currencyRepository.UpdateAsync(new Currency(request.Id, request.Code, request.Name), cancellationToken);
             return null;
         }
 

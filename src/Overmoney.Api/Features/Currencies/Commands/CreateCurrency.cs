@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Currencies;
+using Overmoney.Api.Features.Currencies.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Currencies.Commands;
 
-public sealed record CreateCurrencyCommand(string Code, string Name) : IRequest<CurrencyEntity>;
+public sealed record CreateCurrencyCommand(string Code, string Name) : IRequest<Currency>;
 
 public sealed class CreateCurrencyCommandValidator : AbstractValidator<CreateCurrencyCommand>
 {
@@ -19,7 +20,7 @@ public sealed class CreateCurrencyCommandValidator : AbstractValidator<CreateCur
     }
 }
 
-public sealed class CreateCurrencyCommandHandler : IRequestHandler<CreateCurrencyCommand, CurrencyEntity>
+public sealed class CreateCurrencyCommandHandler : IRequestHandler<CreateCurrencyCommand, Currency>
 {
     private readonly ICurrencyRepository _currencyRepository;
 
@@ -28,7 +29,7 @@ public sealed class CreateCurrencyCommandHandler : IRequestHandler<CreateCurrenc
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<CurrencyEntity> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
+    public async Task<Currency> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
     {
         var currency = await _currencyRepository.GetAsync(request.Code, cancellationToken);
 

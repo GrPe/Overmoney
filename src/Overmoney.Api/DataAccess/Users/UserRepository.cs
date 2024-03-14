@@ -5,18 +5,18 @@ namespace Overmoney.Api.DataAccess.Users;
 
 public interface IUserRepository : IRepository
 {
-    Task<int> CreateAsync(CreateUser user, CancellationToken token);
+    Task<int> CreateAsync(User user, CancellationToken token);
     Task DeleteByIdAsync(int userId, CancellationToken cancellationToken);
-    Task<UserEntity?> GetByEmailAsync(string email, CancellationToken token);
-    Task<UserEntity?> GetByIdAsync(int userId, CancellationToken token);
-    Task<UserEntity?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
+    Task<User?> GetByEmailAsync(string email, CancellationToken token);
+    Task<User?> GetByIdAsync(int userId, CancellationToken token);
+    Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
 }
 
 internal sealed class UserRepository : IUserRepository
 {
     private static readonly List<UserEntity> _connection = [new(1, "test", "test@test.test", "test")];
 
-    public async Task<int> CreateAsync(CreateUser user, CancellationToken token)
+    public async Task<int> CreateAsync(User user, CancellationToken token)
     {
         _connection.Add(new UserEntity(_connection.Max(x => x.Id) + 1, user.Login, user.Email, user.Password));
         return await Task.FromResult(_connection.Max(x => x.Id));

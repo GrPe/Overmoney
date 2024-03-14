@@ -5,10 +5,10 @@ namespace Overmoney.Api.DataAccess.Payees;
 
 public interface IPayeeRepository : IRepository
 {
-    Task<PayeeEntity?> GetAsync(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<PayeeEntity>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken);
-    Task<PayeeEntity> CreateAsync(CreatePayee payee, CancellationToken cancellationToken);
-    Task UpdateAsync(UpdatePayee payee, CancellationToken cancellationToken);
+    Task<Payee?> GetAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<Payee>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken);
+    Task<Payee> CreateAsync(Payee payee, CancellationToken cancellationToken);
+    Task UpdateAsync(Payee payee, CancellationToken cancellationToken);
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 }
 
@@ -16,10 +16,11 @@ public sealed class PayeeRepository : IPayeeRepository
 {
     private static readonly List<PayeeEntity> _connection = [new(1, 1, "Test")];
 
-    public async Task<PayeeEntity> CreateAsync(CreatePayee payee, CancellationToken cancellationToken)
+    public async Task<Payee> CreateAsync(Payee payee, CancellationToken cancellationToken)
     {
-        _connection.Add(new(_connection.Max(x => x.Id) + 1, payee.UserId, payee.Name));
-        return await Task.FromResult(_connection.Last());
+        var entity = new PayeeEntity(_connection.Max(x => x.Id) + 1, payee.UserId, payee.Name);
+        _connection.Add(entity);
+        return await Task.FromResult(new Payee(entity.Id, entity.UserId, entity.Name));
     }
 
     public Task DeleteAsync(int id, CancellationToken cancellationToken)
@@ -32,21 +33,27 @@ public sealed class PayeeRepository : IPayeeRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<PayeeEntity>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Payee>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_connection.Where(x => x.UserId == userId));
+        return await Task.FromResult(_connection.Where(x => x.UserId == userId).Select(x => new Payee(x.Id, x.UserId, x.Name)));
     }
 
-    public async Task<PayeeEntity?> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Payee?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_connection.FirstOrDefault(x => x.Id == id));
+        var entity = _connection.FirstOrDefault(x => x.Id == id);
+        if (entity is null)
+        {
+            return null;
+        }
+
+        return await Task.FromResult(new Payee(entity.Id, entity.UserId, entity.Name));
     }
 
-    public Task UpdateAsync(UpdatePayee payee, CancellationToken cancellationToken)
+    public Task UpdateAsync(Payee payee, CancellationToken cancellationToken)
     {
         var old = _connection.FirstOrDefault(x => x.Id == payee.Id);
-        _connection.Add(new(payee.Id, payee.UserId, payee.Name));
         _connection.Remove(old);
+        _connection.Add(new PayeeEntity(old.Id, payee.UserId, payee.Name));
         return Task.CompletedTask;
     }
 }

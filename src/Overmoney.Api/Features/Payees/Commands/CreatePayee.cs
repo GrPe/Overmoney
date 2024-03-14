@@ -5,7 +5,7 @@ using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
-public sealed record CreatePayeeCommand(int UserId, string Name) : IRequest<PayeeEntity>;
+public sealed record CreatePayeeCommand(int UserId, string Name) : IRequest<Payee>;
 
 public sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeCommand>
 {
@@ -18,7 +18,7 @@ public sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeC
     }
 }
 
-public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeCommand, PayeeEntity>
+public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeCommand, Payee>
 {
     private readonly IPayeeRepository _payeeRepository;
 
@@ -27,8 +27,8 @@ public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeComma
         _payeeRepository = payeeRepository;
     }
 
-    public async Task<PayeeEntity> Handle(CreatePayeeCommand request, CancellationToken cancellationToken)
+    public async Task<Payee> Handle(CreatePayeeCommand request, CancellationToken cancellationToken)
     {
-        return await _payeeRepository.CreateAsync(new CreatePayee(request.UserId, request.Name), cancellationToken);
+        return await _payeeRepository.CreateAsync(new Payee(request.UserId, request.Name), cancellationToken);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Overmoney.Api.DataAccess.Payees;
 
-public sealed class PayeeEntity
+internal sealed class PayeeEntity
 {
     public int Id { get; init; }
     public int UserId { get; init; }

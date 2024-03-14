@@ -28,6 +28,6 @@ public sealed class DeleteUserHandler : IRequestHandler<DeleteUserCommand>
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         await _userRepository.DeleteByIdAsync(request.UserId, cancellationToken);
-        _logger.LogError("User with id: {id} deleted", request.UserId);
+        _logger.LogInformation("User with id: {id} deleted", request.UserId);
     }
 }
