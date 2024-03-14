@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Categories;
-using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Api.DataAccess.Categories;
 
 namespace Overmoney.Api.Features.Categories.Commands;
 
-public sealed record UpdateCategoryCommand(int Id, int UserId, string Name) : IRequest<Category?>;
+public sealed record UpdateCategoryCommand(int Id, int UserId, string Name) : IRequest<CategoryEntity?>;
 
 public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
 {
@@ -20,7 +19,7 @@ public sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCat
     }
 }
 
-public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Category?>
+public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, CategoryEntity?>
 {
     private readonly ICategoryRepository _categoryRepository;
 
@@ -29,7 +28,7 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Category?> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryEntity?> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.GetAsync(request.Id, cancellationToken);
 

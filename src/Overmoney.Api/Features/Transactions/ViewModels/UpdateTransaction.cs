@@ -1,8 +1,11 @@
-﻿namespace Overmoney.Api.Features.Transactions.Models;
+﻿using Overmoney.Api.DataAccess.Transactions;
+using Overmoney.Api.Features.Transactions.Commands;
 
-public class Transaction
+namespace Overmoney.Api.Features.Transactions.Models;
+
+public class UpdateTransaction
 {
-    public long Id { get; init; }
+    public int Id { get; set; }
     public int WalletId { get; init; }
     public int UserId { get; init; }
     public int PayeeId { get; init; }
@@ -12,8 +15,8 @@ public class Transaction
     public string? Note { get; init; }
     public double Amount { get; init; }
 
-    public Transaction(
-        long id,
+    public UpdateTransaction(
+        int id,
         int walletId,
         int userId,
         int payeeId,
@@ -33,11 +36,17 @@ public class Transaction
         Note = note;
         Amount = amount;
     }
-}
 
-public enum TransactionType
-{
-    Outcome = 0,
-    Income = 1,
-    Transfer = 2
+    public UpdateTransaction(int userId, UpdateTransactionCommand command)
+    {
+        Id = command.Id;
+        WalletId = command.WalletId;
+        UserId = userId;
+        PayeeId = command.PayeeId;
+        CategoryId = command.CategoryId;
+        TransactionDate = command.TransactionDate;
+        TransactionType = command.TransactionType;
+        Note = command.Note;
+        Amount = command.Amount;
+    }
 }

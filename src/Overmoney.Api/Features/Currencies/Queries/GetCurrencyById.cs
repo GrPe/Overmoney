@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Currencies;
-using Overmoney.Api.Features.Currencies.Models;
+using Overmoney.Api.DataAccess.Currencies;
 
 namespace Overmoney.Api.Features.Currencies.Queries;
 
-public sealed record GetCurrencyByIdQuery(int Id) : IRequest<Currency?>;
+public sealed record GetCurrencyByIdQuery(int Id) : IRequest<CurrencyEntity?>;
 
 public sealed class GetCurrencyByIdQueryValidator : AbstractValidator<GetCurrencyByIdQuery>
 {
@@ -16,7 +15,7 @@ public sealed class GetCurrencyByIdQueryValidator : AbstractValidator<GetCurrenc
     }
 }
 
-public sealed class GetCurrencyByIdQueryHandler : IRequestHandler<GetCurrencyByIdQuery, Currency?>
+public sealed class GetCurrencyByIdQueryHandler : IRequestHandler<GetCurrencyByIdQuery, CurrencyEntity?>
 {
     private readonly ICurrencyRepository _currencyRepository;
 
@@ -25,7 +24,7 @@ public sealed class GetCurrencyByIdQueryHandler : IRequestHandler<GetCurrencyByI
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<Currency?> Handle(GetCurrencyByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CurrencyEntity?> Handle(GetCurrencyByIdQuery request, CancellationToken cancellationToken)
     {
         return await _currencyRepository.GetAsync(request.Id, cancellationToken);
     }

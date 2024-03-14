@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Categories;
-using Overmoney.Api.Features.Payees;
-using Overmoney.Api.Features.Transactions.Models;
-using Overmoney.Api.Features.Wallets;
+using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.DataAccess.Payees;
+using Overmoney.Api.DataAccess.Transactions;
+using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
@@ -16,7 +16,7 @@ public sealed record UpdateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount) : IRequest<Transaction?>;
+    double Amount) : IRequest<TransactionEntity?>;
 
 public sealed class UpdateTransactionCommandValidator : AbstractValidator<UpdateTransactionCommand>
 {
@@ -35,7 +35,7 @@ public sealed class UpdateTransactionCommandValidator : AbstractValidator<Update
     }
 }
 
-public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransactionCommand, Transaction?>
+public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransactionCommand, TransactionEntity?>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly ICategoryRepository _categoryRepository;
@@ -52,7 +52,7 @@ public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTran
         _mediator = mediator;
     }
 
-    public async Task<Transaction?> Handle(UpdateTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<TransactionEntity?> Handle(UpdateTransactionCommand request, CancellationToken cancellationToken)
     {
         var transaction = await _transactionRepository.GetAsync(request.Id, cancellationToken);
 

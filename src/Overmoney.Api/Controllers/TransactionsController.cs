@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Overmoney.Api.DataAccess.Transactions;
 using Overmoney.Api.Features.Transactions.Commands;
-using Overmoney.Api.Features.Transactions.Models;
 using Overmoney.Api.Features.Transactions.Queries;
 
 namespace Overmoney.Api.Controllers;
@@ -16,9 +16,9 @@ public class TransactionsController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType<Transaction>(StatusCodes.Status200OK)]
+    [ProducesResponseType<TransactionEntity>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Transaction>> GetById(int id)
+    public async Task<ActionResult<TransactionEntity>> GetById(int id)
     {
         var result = await _mediator.Send(new GetTransactionByIdQuery(id));
 
@@ -30,8 +30,8 @@ public class TransactionsController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Transaction>> Create(CreateTransactionCommand command)
+    [ProducesResponseType<TransactionEntity>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<TransactionEntity>> Create(CreateTransactionCommand command)
     {
         var result = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { result.Id }, result);
@@ -39,8 +39,8 @@ public class TransactionsController : BaseController
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Transaction>> Update(UpdateTransactionCommand command)
+    [ProducesResponseType<TransactionEntity>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<TransactionEntity>> Update(UpdateTransactionCommand command)
     {
         var result = await _mediator.Send(command);
 

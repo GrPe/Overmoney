@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Wallets;
+using Overmoney.Api.DataAccess.Wallets;
 
 namespace Overmoney.Api.Features.Wallets.Commands;
 

@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Transactions;
-using Overmoney.Api.Features.Transactions.Models;
+using Overmoney.Api.DataAccess.Transactions;
 
 namespace Overmoney.Api.Features.Transactions.Queries;
 
-public sealed record GetTransactionByIdQuery(int Id) : IRequest<Transaction?>;
+public sealed record GetTransactionByIdQuery(int Id) : IRequest<TransactionEntity?>;
 
 public sealed class GetTransactionByIdQueryValidator : AbstractValidator<GetTransactionByIdQuery>
 {
@@ -16,7 +15,7 @@ public sealed class GetTransactionByIdQueryValidator : AbstractValidator<GetTran
     }
 }
 
-public sealed class GetTransactionByIdQueryHandler : IRequestHandler<GetTransactionByIdQuery, Transaction?>
+public sealed class GetTransactionByIdQueryHandler : IRequestHandler<GetTransactionByIdQuery, TransactionEntity?>
 {
     private readonly ITransactionRepository _transactionRepository;
 
@@ -25,7 +24,7 @@ public sealed class GetTransactionByIdQueryHandler : IRequestHandler<GetTransact
         _transactionRepository = transactionRepository;
     }
 
-    public async Task<Transaction?> Handle(GetTransactionByIdQuery request, CancellationToken cancellationToken)
+    public async Task<TransactionEntity?> Handle(GetTransactionByIdQuery request, CancellationToken cancellationToken)
     {
         return await _transactionRepository.GetAsync(request.Id, cancellationToken);
     }

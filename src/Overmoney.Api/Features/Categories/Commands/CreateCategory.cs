@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Categories;
-using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Api.DataAccess.Categories;
 
 namespace Overmoney.Api.Features.Categories.Commands;
 
-public sealed record CreateCategoryCommand(int UserId, string Name) : IRequest<Category>;
+public sealed record CreateCategoryCommand(int UserId, string Name) : IRequest<CategoryEntity>;
 
 public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
 {
@@ -18,7 +17,7 @@ public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCat
     }
 }
 
-public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Category>
+public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryEntity>
 {
     private readonly ICategoryRepository _categoryRepository;
 
@@ -27,7 +26,7 @@ public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategor
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Category> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryEntity> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         return await _categoryRepository.CreateAsync(new(request.UserId, request.Name), cancellationToken);
     }

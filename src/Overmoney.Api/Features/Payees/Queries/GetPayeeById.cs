@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Payees;
-using Overmoney.Api.Features.Payees.Models;
+using Overmoney.Api.DataAccess.Payees;
 
 namespace Overmoney.Api.Features.Payees.Queries;
 
-public sealed record GetPayeeByIdQuery(int Id) : IRequest<Payee?>;
+public sealed record GetPayeeByIdQuery(int Id) : IRequest<PayeeEntity?>;
 
 public sealed class GetPayeeByIdQueryValidator : AbstractValidator<GetPayeeByIdQuery>
 {
@@ -16,7 +15,7 @@ public sealed class GetPayeeByIdQueryValidator : AbstractValidator<GetPayeeByIdQ
     }
 }
 
-public sealed class GetPayeeByIdQueryHandler : IRequestHandler<GetPayeeByIdQuery, Payee?>
+public sealed class GetPayeeByIdQueryHandler : IRequestHandler<GetPayeeByIdQuery, PayeeEntity?>
 {
     private readonly IPayeeRepository _payeeRepository;
 
@@ -25,7 +24,7 @@ public sealed class GetPayeeByIdQueryHandler : IRequestHandler<GetPayeeByIdQuery
         _payeeRepository = payeeRepository;
     }
 
-    public async Task<Payee?> Handle(GetPayeeByIdQuery request, CancellationToken cancellationToken)
+    public async Task<PayeeEntity?> Handle(GetPayeeByIdQuery request, CancellationToken cancellationToken)
     {
         return await _payeeRepository.GetAsync(request.Id, cancellationToken);
     }

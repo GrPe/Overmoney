@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Payees;
+using Overmoney.Api.DataAccess.Payees;
 using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
-public sealed record CreatePayeeCommand(int UserId, string Name) : IRequest<Payee>;
+public sealed record CreatePayeeCommand(int UserId, string Name) : IRequest<PayeeEntity>;
 
 public sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeCommand>
 {
@@ -18,7 +18,7 @@ public sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeC
     }
 }
 
-public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeCommand, Payee>
+public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeCommand, PayeeEntity>
 {
     private readonly IPayeeRepository _payeeRepository;
 
@@ -27,7 +27,7 @@ public sealed class CreatePayeeCommandHandler : IRequestHandler<CreatePayeeComma
         _payeeRepository = payeeRepository;
     }
 
-    public async Task<Payee> Handle(CreatePayeeCommand request, CancellationToken cancellationToken)
+    public async Task<PayeeEntity> Handle(CreatePayeeCommand request, CancellationToken cancellationToken)
     {
         return await _payeeRepository.CreateAsync(new CreatePayee(request.UserId, request.Name), cancellationToken);
     }

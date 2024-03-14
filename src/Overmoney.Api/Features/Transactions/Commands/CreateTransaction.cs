@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Categories;
-using Overmoney.Api.Features.Payees;
-using Overmoney.Api.Features.Wallets;
-using Overmoney.Api.Features.Transactions.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
+using Overmoney.Api.DataAccess.Transactions;
+using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.DataAccess.Payees;
+using Overmoney.Api.DataAccess.Wallets;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
 
@@ -15,7 +15,7 @@ public sealed record CreateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount) : IRequest<Transaction>;
+    double Amount) : IRequest<TransactionEntity>;
 
 public sealed class CreateTransactionCommandValidator : AbstractValidator<CreateTransactionCommand>
 {
@@ -32,7 +32,7 @@ public sealed class CreateTransactionCommandValidator : AbstractValidator<Create
     }
 }
 
-public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, Transaction>
+public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, TransactionEntity>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly ICategoryRepository _categoryRepository;
@@ -51,7 +51,7 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
         _transactionRepository = transactionRepository;
     }
 
-    public async Task<Transaction> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<TransactionEntity> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
         var wallet = await _walletRepository.GetAsync(request.WalletId, cancellationToken);
 

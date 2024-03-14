@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Currencies.Models;
 using Overmoney.Api.Features.Currencies.Commands;
 using Overmoney.Api.Features.Currencies.Queries;
+using Overmoney.Api.DataAccess.Currencies;
 
 namespace Overmoney.Api.Controllers;
 
@@ -16,9 +16,9 @@ public class CurrenciesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType<Currency>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CurrencyEntity>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Currency>> GetById(int id)
+    public async Task<ActionResult<CurrencyEntity>> GetById(int id)
     {
         var response = await _mediator.Send(new GetCurrencyByIdQuery(id));
 
@@ -31,8 +31,8 @@ public class CurrenciesController : BaseController
     }
 
     [HttpGet]
-    [ProducesResponseType<IEnumerable<Currency>>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Currency>> GetAll()
+    [ProducesResponseType<IEnumerable<CurrencyEntity>>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<CurrencyEntity>> GetAll()
     {
         var response = await _mediator.Send(new GetAllCurrenciesQuery());
 
@@ -40,8 +40,8 @@ public class CurrenciesController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<Currency>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Currency>> Create(CreateCurrencyCommand currency)
+    [ProducesResponseType<CurrencyEntity>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<CurrencyEntity>> Create(CreateCurrencyCommand currency)
     {
         var response = await _mediator.Send(currency);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
@@ -49,8 +49,8 @@ public class CurrenciesController : BaseController
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<Currency>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Currency>> Update(UpdateCurrencyCommand currency)
+    [ProducesResponseType<CurrencyEntity>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<CurrencyEntity>> Update(UpdateCurrencyCommand currency)
     {
         var response = await _mediator.Send(currency);
 

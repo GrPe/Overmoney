@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Api.Features.Currencies;
-using Overmoney.Api.Features.Users;
-using Overmoney.Api.Features.Wallets;
+using Overmoney.Api.DataAccess.Currencies;
+using Overmoney.Api.DataAccess.Users;
+using Overmoney.Api.DataAccess.Wallets;
 using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Wallets.Commands;
 
-public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
+public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<WalletEntity?>;
 
 public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalletCommand>
 {
@@ -25,7 +25,7 @@ public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalle
     }
 }
 
-public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, Wallet?>
+public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, WalletEntity?>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IUserRepository _userRepository;
@@ -41,7 +41,7 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<Wallet?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
+    public async Task<WalletEntity?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
 

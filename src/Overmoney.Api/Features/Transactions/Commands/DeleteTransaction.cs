@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Overmoney.Api.DataAccess.Transactions;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
 

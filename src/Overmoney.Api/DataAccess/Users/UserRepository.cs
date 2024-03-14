@@ -1,23 +1,24 @@
-﻿using Overmoney.Api.Features.Users.Models;
+﻿using Overmoney.Api.Features;
+using Overmoney.Api.Features.Users.Models;
 
-namespace Overmoney.Api.Features.Users;
+namespace Overmoney.Api.DataAccess.Users;
 
 public interface IUserRepository : IRepository
 {
     Task<int> CreateAsync(CreateUser user, CancellationToken token);
     Task DeleteByIdAsync(int userId, CancellationToken cancellationToken);
-    Task<User?> GetByEmailAsync(string email, CancellationToken token);
-    Task<User?> GetByIdAsync(int userId, CancellationToken token);
-    Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
+    Task<UserEntity?> GetByEmailAsync(string email, CancellationToken token);
+    Task<UserEntity?> GetByIdAsync(int userId, CancellationToken token);
+    Task<UserEntity?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
 }
 
 internal sealed class UserRepository : IUserRepository
 {
-    private static readonly List<User> _connection = [new(1, "test", "test@test.test", "test")];
+    private static readonly List<UserEntity> _connection = [new(1, "test", "test@test.test", "test")];
 
     public async Task<int> CreateAsync(CreateUser user, CancellationToken token)
     {
-        _connection.Add(new User(_connection.Max(x => x.Id) + 1, user.Login, user.Email, user.Password));
+        _connection.Add(new UserEntity(_connection.Max(x => x.Id) + 1, user.Login, user.Email, user.Password));
         return await Task.FromResult(_connection.Max(x => x.Id));
     }
 
@@ -25,7 +26,7 @@ internal sealed class UserRepository : IUserRepository
     {
         var user = _connection.FirstOrDefault(x => x.Id == userId);
 
-        if(user is null)
+        if (user is null)
         {
             return;
         }
@@ -33,17 +34,17 @@ internal sealed class UserRepository : IUserRepository
         _connection.Remove(user);
     }
 
-    public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
+    public async Task<UserEntity?> GetByEmailAsync(string email, CancellationToken token)
     {
         return await Task.FromResult(_connection.FirstOrDefault(x => x.Email == email));
     }
 
-    public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
+    public async Task<UserEntity?> GetByIdAsync(int userId, CancellationToken token)
     {
         return await Task.FromResult(_connection.FirstOrDefault(x => x.Id == userId));
     }
 
-    public Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
+    public Task<UserEntity?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
     {
         return Task.FromResult(_connection.FirstOrDefault(x => x.Login == login));
     }
