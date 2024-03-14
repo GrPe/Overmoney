@@ -26,16 +26,16 @@ Inspiration: https://moneymanagerex.org/
 
 ## Roadmap
 
-| Name                                                            | Deadline   | Status      |
-| --------------------------------------------------------------- | ---------- | ----------- |
-| README + plan                                                   | 2024.03.04 | ✅ Done     |
-| Features without dashboards & budget planner & files (API only) | 2024.03.15 | In progress |
-| CI/CD + IaC (containers, networking, database)                  | 2024.03.22 | Todo        |
-| Features (files, summaries)                                     | 2024.03.30 | Todo        |
-| Observability + Security                                        | 2024.04.14 | Todo        |
-| Frontend ?                                                      | 2024.04.30 | Todo        |
-| budget planner + dashboards                                     | 2024.05.14 | Todo        |
-| Nice to have feature                                            | 2024.05.31 | Todo        |
+| Name                                                             | Deadline   | Status      |
+| ---------------------------------------------------------------- | ---------- | ----------- |
+| README + plan                                                    | 2024.03.04 | ✅ Done     |
+| Features without dashboards & budget planner & files (API only)  | 2024.03.15 | In progress |
+| Features (files, reccuring transactions, budget planner) + tests | 2024.03.30 | Todo        |
+| Database, Security, Observability, CI/CD (build)                 | 2024.04.14 | Todo        |
+| CI/CD + IaC (containers, networking)                             | 2024.04.21 | Todo        |
+| Frontend ?                                                       | 2024.05.12 | Todo        |
+| dashboards, summaries                                            | 2024.05.19 | Todo        |
+| Nice to have feature                                             | 2024.05.31 | Todo        |
 
 ## Technology
 
