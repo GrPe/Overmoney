@@ -16,9 +16,9 @@ public class WalletsController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType<WalletEntity>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Wallet>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<WalletEntity>> GetWallet(int id)
+    public async Task<ActionResult<Wallet>> GetWallet(int id)
     {
         var result = await _mediator.Send(new GetWalletQuery(id));
 
@@ -31,8 +31,8 @@ public class WalletsController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<WalletEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<WalletEntity>> Create(CreateWalletCommand wallet)
+    [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Wallet>> Create(CreateWalletCommand wallet)
     {
         var result = await _mediator.Send(wallet);
         return CreatedAtAction(nameof(GetWallet), new { id = result.Id }, result);
@@ -40,8 +40,8 @@ public class WalletsController : BaseController
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<WalletEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<WalletEntity>> Update(UpdateWalletCommand wallet)
+    [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Wallet>> Update(UpdateWalletCommand wallet)
     {
         var result = await _mediator.Send(wallet);
 

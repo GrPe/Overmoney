@@ -5,7 +5,7 @@ using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.Features.Wallets.Queries;
 
-public sealed record GetUserWalletsQuery(int UserId) : IRequest<IEnumerable<WalletEntity>> { }
+public sealed record GetUserWalletsQuery(int UserId) : IRequest<IEnumerable<Wallet>> { }
 
 public sealed class GetUserWalletsQueryValidator : AbstractValidator<GetUserWalletsQuery>
 {
@@ -16,7 +16,7 @@ public sealed class GetUserWalletsQueryValidator : AbstractValidator<GetUserWall
     }
 }
 
-public sealed class GetUserWalletsQueryHandler : IRequestHandler<GetUserWalletsQuery, IEnumerable<WalletEntity>>
+public sealed class GetUserWalletsQueryHandler : IRequestHandler<GetUserWalletsQuery, IEnumerable<Wallet>>
 {
     private readonly IWalletRepository _walletRepository;
 
@@ -25,7 +25,7 @@ public sealed class GetUserWalletsQueryHandler : IRequestHandler<GetUserWalletsQ
         _walletRepository = walletRepository;
     }
 
-    public async Task<IEnumerable<WalletEntity>> Handle(GetUserWalletsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Wallet>> Handle(GetUserWalletsQuery request, CancellationToken cancellationToken)
     {
         var wallets = await _walletRepository.GetByUserAsync(request.UserId, cancellationToken);
         return wallets;

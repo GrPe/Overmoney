@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Api.Features.Categories.Commands;
 using Overmoney.Api.Features.Categories.Queries;
-using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.Features.Categories.Models;
 
 namespace Overmoney.Api.Controllers;
 
@@ -16,9 +16,9 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType<CategoryEntity>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Category>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CategoryEntity>> GetById(int id)
+    public async Task<ActionResult<Category>> GetById(int id)
     {
         var result = await _mediator.Send(new GetCategoryByIdQuery(id));
 
@@ -31,8 +31,8 @@ public class CategoriesController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<CategoryEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<CategoryEntity>> Create(CreateCategoryCommand command)
+    [ProducesResponseType<Category>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Category>> Create(CreateCategoryCommand command)
     {
         var result = await _mediator.Send(command);
 
@@ -41,8 +41,8 @@ public class CategoriesController : BaseController
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<CategoryEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<CategoryEntity>> Update(UpdateCategoryCommand command)
+    [ProducesResponseType<Category>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Category>> Update(UpdateCategoryCommand command)
     {
         var result = await _mediator.Send(command);
 

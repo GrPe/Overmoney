@@ -34,18 +34,21 @@ internal sealed class UserRepository : IUserRepository
         _connection.Remove(user);
     }
 
-    public async Task<UserEntity?> GetByEmailAsync(string email, CancellationToken token)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
     {
-        return await Task.FromResult(_connection.FirstOrDefault(x => x.Email == email));
+        var user = _connection.FirstOrDefault(x => x.Email == email);
+        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 
-    public async Task<UserEntity?> GetByIdAsync(int userId, CancellationToken token)
+    public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
     {
-        return await Task.FromResult(_connection.FirstOrDefault(x => x.Id == userId));
+        var user = _connection.FirstOrDefault(x => x.Id == userId);
+        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 
-    public Task<UserEntity?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
+    public async Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_connection.FirstOrDefault(x => x.Login == login));
+        var user = _connection.FirstOrDefault(x => x.Login == login);
+        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 }

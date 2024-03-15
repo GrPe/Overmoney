@@ -8,7 +8,7 @@ using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Wallets.Commands;
 
-public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<WalletEntity?>;
+public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
 
 public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalletCommand>
 {
@@ -25,15 +25,15 @@ public sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalle
     }
 }
 
-public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, WalletEntity?>
+public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, Wallet?>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly IUserRepository _userRepository;
     private readonly ICurrencyRepository _currencyRepository;
 
     public UpdateWalletCommandHandler(
-        IWalletRepository walletRepository, 
-        IUserRepository userRepository, 
+        IWalletRepository walletRepository,
+        IUserRepository userRepository,
         ICurrencyRepository currencyRepository)
     {
         _walletRepository = walletRepository;
@@ -41,7 +41,7 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<WalletEntity?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
+    public async Task<Wallet?> Handle(UpdateWalletCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
@@ -61,10 +61,10 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
 
         if (wallet is null)
         {
-            return await _walletRepository.CreateAsync(new(user.Id, request.Name, request.CurrencyId), cancellationToken);
+            return await _walletRepository.CreateAsync(new(request.Name, request.CurrencyId, user!.Id!.Value), cancellationToken);
         }
 
-        await _walletRepository.UpdateAsync(new UpdateWallet(request.Id, request.Name, request.CurrencyId), cancellationToken);
+        await _walletRepository.UpdateAsync(new Wallet(request.Id, request.Name, request.CurrencyId, user!.Id!.Value), cancellationToken);
         return null;
     }
 }

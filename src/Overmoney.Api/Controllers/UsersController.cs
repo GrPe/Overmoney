@@ -5,8 +5,8 @@ using Overmoney.Api.Features.Categories.Queries;
 using Overmoney.Api.Features.Payees.Queries;
 using Overmoney.Api.Features.Users.Commands;
 using Overmoney.Api.Features.Wallets.Queries;
-using Overmoney.Api.DataAccess.Payees;
-using Overmoney.Api.DataAccess.Categories;
+using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Controllers;
 
@@ -71,9 +71,9 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{userId}/categories")]
-    [ProducesResponseType<IEnumerable<CategoryEntity>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<Category>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<CategoryEntity>>> GetUserCategories(int userId)
+    public async Task<ActionResult<IEnumerable<Category>>> GetUserCategories(int userId)
     {
         var result = await _mediator.Send(new GetAllCategoriesByUserQuery(userId));
 
@@ -85,9 +85,9 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{userId}/payees")]
-    [ProducesResponseType<IEnumerable<PayeeEntity>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<Payee>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<PayeeEntity>>> GetUserPayees(int userId)
+    public async Task<ActionResult<IEnumerable<Payee>>> GetUserPayees(int userId)
     {
         var result = await _mediator.Send(new GetAllPayeesByUserIdQuery(userId));
 

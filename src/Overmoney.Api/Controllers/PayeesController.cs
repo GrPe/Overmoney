@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Api.Features.Payees.Commands;
 using Overmoney.Api.Features.Payees.Queries;
-using Overmoney.Api.DataAccess.Payees;
+using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Controllers;
 
@@ -16,9 +16,9 @@ public class PayeesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType<PayeeEntity>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Payee>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<PayeeEntity>> GetById(int id)
+    public async Task<ActionResult<Payee>> GetById(int id)
     {
         var result = await _mediator.Send(new GetPayeeByIdQuery(id));
 
@@ -30,8 +30,8 @@ public class PayeesController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType<PayeeEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<PayeeEntity>> Create(CreatePayeeCommand command)
+    [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Payee>> Create(CreatePayeeCommand command)
     {
         var result = await _mediator.Send(command);
 
@@ -40,8 +40,8 @@ public class PayeesController : BaseController
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType<PayeeEntity>(StatusCodes.Status201Created)]
-    public async Task<ActionResult<PayeeEntity>> Update(UpdatePayeeCommand command)
+    [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<Payee>> Update(UpdatePayeeCommand command)
     {
         var result = await _mediator.Send(command);
 
