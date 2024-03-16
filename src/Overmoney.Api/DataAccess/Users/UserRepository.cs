@@ -37,18 +37,30 @@ internal sealed class UserRepository : IUserRepository
     public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
     {
         var user = _connection.FirstOrDefault(x => x.Email == email);
+        if (user is null)
+        {
+            return null;
+        }
         return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 
     public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
     {
         var user = _connection.FirstOrDefault(x => x.Id == userId);
+        if (user is null)
+        {
+            return null;
+        }
         return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 
     public async Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
     {
         var user = _connection.FirstOrDefault(x => x.Login == login);
+        if(user is null)
+        {
+            return null;
+        }
         return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
     }
 }

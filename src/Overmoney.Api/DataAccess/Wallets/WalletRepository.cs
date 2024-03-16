@@ -40,7 +40,7 @@ public sealed class WalletRepository : IWalletRepository
         {
             return null;
         }
-        return new Wallet(entity.Id, entity.Name, entity.CurrencyId, entity.UserId);
+        return await Task.FromResult(new Wallet(entity.Id, entity.Name, entity.CurrencyId, entity.UserId));
     }
 
     public async Task<IEnumerable<Wallet>> GetByUserAsync(int userId, CancellationToken cancellationToken)

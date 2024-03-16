@@ -33,6 +33,26 @@ public class Transaction
         Note = note;
         Amount = amount;
     }
+
+    public Transaction(
+    int walletId,
+    int userId,
+    int payeeId,
+    int categoryId,
+    DateTime transactionDate,
+    TransactionType transactionType,
+    string? note,
+    double amount)
+    {
+        WalletId = walletId;
+        UserId = userId;
+        PayeeId = payeeId;
+        CategoryId = categoryId;
+        TransactionDate = transactionDate;
+        TransactionType = transactionType;
+        Note = note;
+        Amount = amount;
+    }
 }
 
 public enum TransactionType

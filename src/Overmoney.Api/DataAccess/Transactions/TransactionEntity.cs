@@ -1,4 +1,6 @@
-﻿namespace Overmoney.Api.DataAccess.Transactions;
+﻿using Overmoney.Api.Features.Transactions.Models;
+
+namespace Overmoney.Api.DataAccess.Transactions;
 
 internal class TransactionEntity
 {
@@ -33,11 +35,4 @@ internal class TransactionEntity
         Note = note;
         Amount = amount;
     }
-}
-
-public enum TransactionType
-{
-    Outcome = 0,
-    Income = 1,
-    Transfer = 2
 }

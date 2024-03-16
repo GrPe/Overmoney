@@ -5,6 +5,7 @@ using Overmoney.Api.DataAccess.Transactions;
 using Overmoney.Api.DataAccess.Categories;
 using Overmoney.Api.DataAccess.Payees;
 using Overmoney.Api.DataAccess.Wallets;
+using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
 
@@ -15,7 +16,7 @@ public sealed record CreateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount) : IRequest<TransactionEntity>;
+    double Amount) : IRequest<Transaction>;
 
 public sealed class CreateTransactionCommandValidator : AbstractValidator<CreateTransactionCommand>
 {
@@ -32,7 +33,7 @@ public sealed class CreateTransactionCommandValidator : AbstractValidator<Create
     }
 }
 
-public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, TransactionEntity>
+public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, Transaction>
 {
     private readonly IWalletRepository _walletRepository;
     private readonly ICategoryRepository _categoryRepository;
@@ -51,7 +52,7 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
         _transactionRepository = transactionRepository;
     }
 
-    public async Task<TransactionEntity> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<Transaction> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
         var wallet = await _walletRepository.GetAsync(request.WalletId, cancellationToken);
 
@@ -74,6 +75,6 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        return await _transactionRepository.CreateAsync(new(wallet.UserId, request), cancellationToken);
+        return await _transactionRepository.CreateAsync(new Transaction(wallet.Id, wallet.UserId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
     }
 }
