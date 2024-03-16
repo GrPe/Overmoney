@@ -9,7 +9,7 @@ Inspiration: https://moneymanagerex.org/
 - [ ] Ability do create account/login via email
 - [x] Support for multiple wallets
 - [x] Support for multiple currency
-- [ ] Detailed transaction log including date, payee, category etc.
+- [x] Detailed transaction log including date, payee, category etc.
 - [ ] Ability to add attachment to each transaction (eg. invoices, photos)
 - [ ] Dashboards to easy track current expenses
 - [ ] Support for reccuring transaction
@@ -29,8 +29,8 @@ Inspiration: https://moneymanagerex.org/
 | Name                                                             | Deadline   | Status      |
 | ---------------------------------------------------------------- | ---------- | ----------- |
 | README + plan                                                    | 2024.03.04 | ✅ Done     |
-| Features without dashboards & budget planner & files (API only)  | 2024.03.15 | In progress |
-| Features (files, reccuring transactions, budget planner) + tests | 2024.03.30 | Todo        |
+| Features without dashboards & budget planner & files (API only)  | 2024.03.15 | ✅ Done     |
+| Features (files, reccuring transactions, budget planner) + tests | 2024.03.30 | In progress |
 | Database, Security, Observability, CI/CD (build)                 | 2024.04.14 | Todo        |
 | CI/CD + IaC (containers, networking)                             | 2024.04.21 | Todo        |
 | Frontend ?                                                       | 2024.05.12 | Todo        |
