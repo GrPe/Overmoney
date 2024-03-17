@@ -59,7 +59,7 @@ public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTran
 
         if(transaction is null)
         {
-            return await _mediator.Send(new CreateTransactionCommand(request.WalletId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
+            return await _mediator.Send(new CreateTransactionCommand(request.WalletId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount, transaction?.Attachments?.Select(x => new TransactionAttachment(x.Name, x.FilePath)).ToArray()), cancellationToken);
         }
 
         var wallet = await _walletRepository.GetAsync(request.WalletId, cancellationToken);

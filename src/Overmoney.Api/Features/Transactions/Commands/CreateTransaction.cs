@@ -16,7 +16,10 @@ public sealed record CreateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount) : IRequest<Transaction>;
+    double Amount,
+    TransactionAttachment[]? Attachments) : IRequest<Transaction>;
+
+public sealed record TransactionAttachment(string Name, string Path);
 
 public sealed class CreateTransactionCommandValidator : AbstractValidator<CreateTransactionCommand>
 {
@@ -30,6 +33,11 @@ public sealed class CreateTransactionCommandValidator : AbstractValidator<Create
             .GreaterThan(0);
         RuleFor(x => x.TransactionDate)
             .NotEmpty();
+        RuleForEach(x => x.Attachments).ChildRules(a =>
+        {
+            a.RuleFor(x => x.Name).NotEmpty();
+            a.RuleFor(x => x.Path).NotEmpty();
+        });
     }
 }
 
@@ -41,9 +49,9 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
     private readonly ITransactionRepository _transactionRepository;
 
     public CreateTransactionCommandHandler(
-        IWalletRepository walletRepository, 
-        ICategoryRepository categoryRepository, 
-        IPayeeRepository payeeRepository, 
+        IWalletRepository walletRepository,
+        ICategoryRepository categoryRepository,
+        IPayeeRepository payeeRepository,
         ITransactionRepository transactionRepository)
     {
         _walletRepository = walletRepository;
@@ -75,6 +83,6 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        return await _transactionRepository.CreateAsync(new Transaction(wallet.Id, wallet.UserId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
+        return await _transactionRepository.CreateAsync(new Transaction(wallet.Id, wallet.UserId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount, request.Attachments?.Select(x => new Attachment(x.Name, x.Path)).ToList()), cancellationToken);
     }
 }

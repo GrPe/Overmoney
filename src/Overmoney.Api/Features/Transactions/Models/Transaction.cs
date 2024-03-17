@@ -2,15 +2,16 @@
 
 public class Transaction
 {
-    public long Id { get; init; }
-    public int WalletId { get; init; }
-    public int UserId { get; init; }
-    public int PayeeId { get; init; }
-    public int CategoryId { get; init; }
-    public DateTime TransactionDate { get; init; }
-    public TransactionType TransactionType { get; init; }
-    public string? Note { get; init; }
-    public double Amount { get; init; }
+    public long Id { get; }
+    public int WalletId { get; }
+    public int UserId { get; }
+    public int PayeeId { get; }
+    public int CategoryId { get; }
+    public DateTime TransactionDate { get; }
+    public TransactionType TransactionType { get; }
+    public string? Note { get; }
+    public double Amount { get; }
+    public List<Attachment> Attachments { get; }
 
     public Transaction(
         long id,
@@ -21,7 +22,8 @@ public class Transaction
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount)
+        double amount,
+        List<Attachment>? attachments = null)
     {
         Id = id;
         WalletId = walletId;
@@ -32,17 +34,19 @@ public class Transaction
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
+        Attachments = attachments ?? [];
     }
 
     public Transaction(
-    int walletId,
-    int userId,
-    int payeeId,
-    int categoryId,
-    DateTime transactionDate,
-    TransactionType transactionType,
-    string? note,
-    double amount)
+        int walletId,
+        int userId,
+        int payeeId,
+        int categoryId,
+        DateTime transactionDate,
+        TransactionType transactionType,
+        string? note,
+        double amount,
+        List<Attachment>? attachments = null)
     {
         WalletId = walletId;
         UserId = userId;
@@ -52,6 +56,12 @@ public class Transaction
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
+        Attachments = attachments ?? [];
+    }
+
+    public void AddAttachment(Attachment attachment)
+    {
+        Attachments.Add(attachment);
     }
 }
 
