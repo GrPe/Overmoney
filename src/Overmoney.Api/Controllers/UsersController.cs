@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Features.Categories.Queries;
 using Overmoney.Api.Features.Payees.Queries;
 using Overmoney.Api.Features.Users.Commands;
 using Overmoney.Api.Features.Wallets.Queries;
 using Overmoney.Api.Features.Categories.Models;
 using Overmoney.Api.Features.Payees.Models;
+using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.Controllers;
 
@@ -56,7 +56,7 @@ public class UsersController : BaseController
 
 
     [HttpGet("{userId}/wallets")]
-    [ProducesResponseType<IEnumerable<WalletEntity>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<Wallet>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<int>> GetUserWallets(int userId)
     {

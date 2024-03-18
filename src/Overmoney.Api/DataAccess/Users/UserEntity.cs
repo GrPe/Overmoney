@@ -1,4 +1,8 @@
-﻿namespace Overmoney.Api.DataAccess.Users;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Overmoney.Api.Features.Wallets.Models;
+
+namespace Overmoney.Api.DataAccess.Users;
 
 internal sealed class UserEntity
 {
@@ -13,5 +17,25 @@ internal sealed class UserEntity
         Login = login;
         Email = email;
         Password = password;
+    }
+}
+
+internal sealed class UserEntityTypeConfiguration : IEntityTypeConfiguration<UserEntity>
+{
+    public void Configure(EntityTypeBuilder<UserEntity> builder)
+    {
+        builder
+            .ToTable("users")
+            .HasKey(t => t.Id);
+
+        builder
+            .HasIndex(x => x.Login)
+            .IsUnique()
+            .HasDatabaseName("IX_Login");
+
+        builder
+            .HasIndex(x => x.Email)
+            .IsUnique()
+            .HasDatabaseName("IX_Email");
     }
 }

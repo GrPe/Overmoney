@@ -1,4 +1,7 @@
-﻿namespace Overmoney.Api.DataAccess.Currencies;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Overmoney.Api.DataAccess.Currencies;
 
 internal sealed class CurrencyEntity
 {
@@ -11,5 +14,20 @@ internal sealed class CurrencyEntity
         Id = id;
         Code = code;
         Name = name;
+    }
+}
+
+internal sealed class CurrencyEntityTypeConfiguration : IEntityTypeConfiguration<CurrencyEntity>
+{
+    public void Configure(EntityTypeBuilder<CurrencyEntity> builder)
+    {
+        builder
+            .ToTable("currencies")
+            .HasKey(x => x.Id);
+
+        builder
+            .HasIndex(x => x.Code)
+            .IsUnique()
+            .HasDatabaseName("IX_Code");
     }
 }

@@ -41,8 +41,10 @@ Inspiration: https://moneymanagerex.org/
 
 List of technologies, frameworks, libraries used for implementation:
 
-- .NET 8.0 (platform)
-- Docker
+- [.NET 8.0](https://dotnet.microsoft.com/en-us/) (platform)
+- [Docker](https://www.docker.com/)
+- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/) - ORM
+- [Posgresql](https://www.postgresql.org.pl/) - database engine
 - more in future...
 
 ## Containers
