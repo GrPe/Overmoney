@@ -1,4 +1,6 @@
-﻿using Overmoney.Api.Features;
+﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.Features;
+using Overmoney.Api.Features.Currencies.Models;
 using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.DataAccess.Wallets;
@@ -12,49 +14,81 @@ public interface IWalletRepository : IRepository
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 }
 
-public sealed class WalletRepository : IWalletRepository
+internal sealed class WalletRepository : IWalletRepository
 {
-    private static readonly List<WalletEntity> _connection = [new(1, 1, "My wallet", 1), new(2, 1, "test", 1)];
+    private readonly DatabaseContext _databaseContext;
+
+    public WalletRepository(DatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
 
     public async Task<Wallet> CreateAsync(Wallet wallet, CancellationToken cancellationToken)
     {
-        WalletEntity entity = new(_connection.Max(x => x.Id) + 1, wallet.UserId, wallet.Name, wallet.CurrencyId);
-        _connection.Add(entity);
-        return await Task.FromResult(new Wallet(entity.Id, entity.Name, entity.CurrencyId, entity.UserId));
+        var user = await _databaseContext.Users.SingleAsync(x => x.Id == wallet.UserId, cancellationToken);
+        var currency = await _databaseContext.Currencies.SingleAsync(x => x.Id == wallet.Currency.Id, cancellationToken);
+
+        var entity = _databaseContext.Add(new WalletEntity(user, wallet.Name, currency));
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+
+        return new Wallet(entity.Entity.Id, entity.Entity.Name, new Currency(currency.Id, currency.Code, currency.Name), entity.Entity.UserId);
     }
 
-    public Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        var wallet = _connection.FirstOrDefault(x => x.Id == id);
-        if (wallet != null)
-        {
-            _connection.Remove(wallet);
-        }
-        return Task.CompletedTask;
+        await _databaseContext
+            .Wallets
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<Wallet?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var entity = _connection.FirstOrDefault(x => x.Id == id);
+        var entity = await _databaseContext
+            .Wallets
+            .Include(x => x.Currency)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
         if(entity is null)
         {
             return null;
         }
-        return await Task.FromResult(new Wallet(entity.Id, entity.Name, entity.CurrencyId, entity.UserId));
+
+        return new Wallet(entity.Id, entity.Name, new Currency(entity.Currency.Id, entity.Currency.Code, entity.Currency.Name), entity.UserId);
     }
 
     public async Task<IEnumerable<Wallet>> GetByUserAsync(int userId, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_connection.Where(x => x.UserId == userId).Select(x => new Wallet(x.Id, x.Name, x.CurrencyId, x.UserId)));
+        return await _databaseContext.Wallets
+            .AsNoTracking()
+            .Include(x => x.Currency)
+            .Where(x => x.UserId == userId)
+            .Select(x => new Wallet(x.Id, x.Name, new Currency(x.Currency.Id, x.Currency.Code, x.Currency.Name), x.UserId))
+            .ToListAsync(cancellationToken);
     }
 
-    public Task UpdateAsync(Wallet updateWallet, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Wallet updateWallet, CancellationToken cancellationToken)
     {
-        var wallet = _connection.First(x => x.Id == updateWallet.Id);
-        var newWallet = new WalletEntity(wallet.Id, wallet.UserId, updateWallet.Name, updateWallet.CurrencyId);
-        _connection.Remove(wallet);
-        _connection.Add(newWallet);
+        var wallet = await _databaseContext.Wallets
+            .SingleOrDefaultAsync(x => x.Id == updateWallet.Id, cancellationToken);
 
-        return Task.CompletedTask;
+        if(wallet is null)
+        {
+            return;
+        }
+
+        var user = wallet.UserId == updateWallet.UserId
+            ? wallet.User
+            : await _databaseContext.Users.SingleAsync(x => x.Id == wallet.UserId, cancellationToken);
+
+        var currency = wallet.CurrencyId == updateWallet.Currency.Id
+            ? wallet.Currency
+            : await _databaseContext.Currencies.SingleAsync(x => x.Id == wallet.CurrencyId, cancellationToken);
+
+        wallet.Update(updateWallet.Name, currency, user);
+        _databaseContext.Update(wallet);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }

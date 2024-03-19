@@ -11,9 +11,8 @@ internal sealed class UserEntity
     public string Email { get; init; } = null!;
     public string Password { get; init; } = null!;
 
-    public UserEntity(int id, string login, string email, string password)
+    public UserEntity(string login, string email, string password)
     {
-        Id = id;
         Login = login;
         Email = email;
         Password = password;

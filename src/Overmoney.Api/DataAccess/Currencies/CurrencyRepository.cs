@@ -1,4 +1,5 @@
-﻿using Overmoney.Api.Features;
+﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.Features;
 using Overmoney.Api.Features.Currencies.Models;
 
 namespace Overmoney.Api.DataAccess.Currencies;
@@ -12,47 +13,73 @@ public interface ICurrencyRepository : IRepository
     Task UpdateAsync(Currency currency, CancellationToken cancellationToken);
 }
 
-public sealed class CurrencyRepository : ICurrencyRepository
+internal sealed class CurrencyRepository : ICurrencyRepository
 {
-    private static readonly List<CurrencyEntity> _connection = [new(1, "TNT", "dummy currency")];
+    private readonly DatabaseContext _databaseContext;
+
+    public CurrencyRepository(DatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
 
     public async Task<Currency> CreateAsync(Currency currency, CancellationToken cancellationToken)
     {
-        var entity = new CurrencyEntity(_connection.Max(x => x.Id) + 1, currency.Code, currency.Name);
-        _connection.Add(entity);
-        return await Task.FromResult(new Currency(entity.Id, entity.Code, entity.Name));
+        var entity = _databaseContext.Currencies.Add(new CurrencyEntity(currency.Code, currency.Name));
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+        return new Currency(entity.Entity.Id, entity.Entity.Code, entity.Entity.Name);
     }
 
     public async Task<IEnumerable<Currency>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_connection.Select(x => new Currency(x.Id, x.Code, x.Name)));
+        return await _databaseContext
+            .Currencies
+            .AsNoTracking()
+            .Select(x => new Currency(x.Id, x.Code, x.Name))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Currency?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var entity = _connection.FirstOrDefault(x => x.Id == id);
-        if(entity == null)
+        var entity = await _databaseContext
+            .Currencies
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (entity == null)
         {
             return null;
         }
+
         return await Task.FromResult(new Currency(entity.Id, entity.Code, entity.Name));
     }
 
     public async Task<Currency?> GetAsync(string code, CancellationToken cancellationToken)
     {
-        var entity = _connection.FirstOrDefault(x => x.Code == code);
+        var entity = await _databaseContext
+            .Currencies
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Code == code, cancellationToken);
+
         if (entity == null)
         {
             return null;
         }
-        return await Task.FromResult(new Currency(entity.Id, entity.Code, entity.Name));
+
+        return new Currency(entity.Id, entity.Code, entity.Name);
     }
 
-    public Task UpdateAsync(Currency currency, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Currency currency, CancellationToken cancellationToken)
     {
-        var old = _connection.First(x => x.Id == currency.Id);
-        _connection.Remove(old);
-        _connection.Add(new CurrencyEntity(currency!.Id!.Value, currency.Code, currency.Name));
-        return Task.CompletedTask;
+        var entity = await _databaseContext.Currencies.SingleAsync(x => x.Id == currency.Id, cancellationToken);
+
+        if (entity == null)
+        {
+            return;
+        }
+
+        entity.Update(currency.Code, currency.Name);
+        _databaseContext.Update(currency);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }

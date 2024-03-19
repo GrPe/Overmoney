@@ -6,16 +6,21 @@ namespace Overmoney.Api.DataAccess.Payees;
 
 internal sealed class PayeeEntity
 {
-    public int Id { get; init; }
+    public int Id { get; private set; }
     public int UserId { get; private set; }
-    public UserEntity User { get; init; }
-    public string Name { get; init; } = null!;
+    public UserEntity User { get; private set; }
+    public string Name { get; private set; } = null!;
 
-    public PayeeEntity(int id, UserEntity user, string name)
+    public PayeeEntity(UserEntity user, string name)
     {
-        Id = id;
         User = user;
         Name = name;
+    }
+
+    public void Update(UserEntity user, string name)
+    {
+        Name = name;
+        User = user;    
     }
 }
 
@@ -31,6 +36,7 @@ internal sealed class PayeeEntityTypeConfiguration : IEntityTypeConfiguration<Pa
             .HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

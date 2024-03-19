@@ -1,4 +1,5 @@
-﻿using Overmoney.Api.Features;
+﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.Features;
 using Overmoney.Api.Features.Users.Models;
 
 namespace Overmoney.Api.DataAccess.Users;
@@ -14,53 +15,68 @@ public interface IUserRepository : IRepository
 
 internal sealed class UserRepository : IUserRepository
 {
-    private static readonly List<UserEntity> _connection = [new(1, "test", "test@test.test", "test")];
+    private readonly DatabaseContext _databaseContext;
+
+    public UserRepository(DatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
 
     public async Task<int> CreateAsync(User user, CancellationToken token)
     {
-        _connection.Add(new UserEntity(_connection.Max(x => x.Id) + 1, user.Login, user.Email, user.Password));
-        return await Task.FromResult(_connection.Max(x => x.Id));
+        var entity = _databaseContext.Add(new UserEntity(user.Login, user.Email, user.Password));
+        await _databaseContext.SaveChangesAsync(token);
+
+        return entity.Entity.Id;
     }
 
     public async Task DeleteByIdAsync(int userId, CancellationToken cancellationToken)
     {
-        var user = _connection.FirstOrDefault(x => x.Id == userId);
-
-        if (user is null)
-        {
-            return;
-        }
-
-        _connection.Remove(user);
+        await _databaseContext
+            .Users
+            .Where(x => x.Id == userId)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<User?> GetByEmailAsync(string email, CancellationToken token)
     {
-        var user = _connection.FirstOrDefault(x => x.Email == email);
+        var user = await _databaseContext.Users
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Email == email, token);
+
         if (user is null)
         {
             return null;
         }
-        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
+
+        return new User(user.Id, user.Login, user.Email, user.Password);
     }
 
     public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
     {
-        var user = _connection.FirstOrDefault(x => x.Id == userId);
+        var user = await _databaseContext.Users
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == userId, token);
+
         if (user is null)
         {
             return null;
         }
-        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
+
+        return new User(user.Id, user.Login, user.Email, user.Password);
     }
 
     public async Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken)
     {
-        var user = _connection.FirstOrDefault(x => x.Login == login);
+        var user = await _databaseContext.Users
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Login == login, cancellationToken);
+
         if(user is null)
         {
             return null;
         }
-        return await Task.FromResult(new User(user.Id, user.Login, user.Email, user.Password));
+
+        return new User(user.Id, user.Login, user.Email, user.Password);
     }
 }

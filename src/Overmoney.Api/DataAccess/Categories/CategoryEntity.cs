@@ -6,14 +6,19 @@ namespace Overmoney.Api.DataAccess.Categories;
 
 internal sealed class CategoryEntity
 {
-    public int Id { get; init; }
+    public int Id { get; private set; }
     public int UserId { get; private set; }
-    public UserEntity User { get; init; }
-    public string Name { get; init; } = null!;
+    public UserEntity User { get; private set; }
+    public string Name { get; private set; } = null!;
 
-    public CategoryEntity(int id, UserEntity user, string name)
+    public CategoryEntity(UserEntity user, string name)
     {
-        Id = id;
+        User = user;
+        Name = name;
+    }
+
+    public void Update(UserEntity user, string name)
+    {
         User = user;
         Name = name;
     }
@@ -31,6 +36,7 @@ internal sealed class CategoryEntityTypeConfiguration : IEntityTypeConfiguration
             .HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -5,13 +5,18 @@ namespace Overmoney.Api.DataAccess.Currencies;
 
 internal sealed class CurrencyEntity
 {
-    public int Id { get; init; }
-    public string Code { get; init; } = null!;
-    public string Name { get; init; } = null!;
+    public int Id { get; private set; }
+    public string Code { get; private set; } = null!;
+    public string Name { get; private set; } = null!;
 
-    public CurrencyEntity(int id, string code, string name)
+    public CurrencyEntity(string code, string name)
     {
-        Id = id;
+        Code = code;
+        Name = name;
+    }
+
+    public void Update(string code, string name)
+    {
         Code = code;
         Name = name;
     }

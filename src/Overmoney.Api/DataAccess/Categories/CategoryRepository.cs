@@ -1,4 +1,5 @@
-﻿using Overmoney.Api.Features;
+﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.Features;
 using Overmoney.Api.Features.Categories.Models;
 
 namespace Overmoney.Api.DataAccess.Categories;
@@ -14,51 +15,69 @@ public interface ICategoryRepository : IRepository
 
 internal sealed class CategoryRepository : ICategoryRepository
 {
-    private static readonly List<CategoryEntity> _connection = [new(1, 1, "Test Category")];
+    private readonly DatabaseContext _databaseContext;
+
+    public CategoryRepository(DatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
 
     public async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken)
     {
-        var entity = new CategoryEntity(_connection.Max(x => x.Id) + 1, category.UserId, category.Name);
-        _connection.Add(entity);
-        return new Category(entity.Id, entity.UserId, entity.Name);
+        var user = await _databaseContext.Users.SingleAsync(x => x.Id == category.UserId, cancellationToken);
+        var entity = _databaseContext.Add(new CategoryEntity(user, category.Name));
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+        return new Category(entity.Entity.Id, entity.Entity.UserId, entity.Entity.Name);
     }
 
-    public Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        var category = _connection.FirstOrDefault(x => x.Id == id);
-
-        if (category is null)
-        {
-            return Task.CompletedTask;
-        }
-
-        _connection.Remove(category);
-        return Task.CompletedTask;
+        await _databaseContext
+            .Categories
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Category>> GetAllByUserAsync(int userId, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(_connection.Where(x => x.UserId == userId).Select(x => new Category(x.Id, x.UserId, x.Name)));
+        return await _databaseContext
+            .Categories
+            .Where(x => x.UserId == userId)
+            .Select(x => new Category(x.Id, x.UserId, x.Name))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Category?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var category = _connection.FirstOrDefault(x => x.Id == id);
-        if(category is null)
+        var category = await _databaseContext.Categories
+            .AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (category is null)
         {
             return null;
         }
+
         return new Category(category.Id, category.UserId, category.Name);
     }
 
-    public Task UpdateAsync(Category category, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
     {
-        var old = _connection.FirstOrDefault(x => x.Id == category.Id);
-        if(old is not null)
+        var entity = await _databaseContext.Categories
+            .SingleOrDefaultAsync(x => x.Id == category.Id, cancellationToken);
+
+        if (entity is null)
         {
-            _connection.Remove(old);
+            return;
         }
-        _connection.Add(new(old!.Id, category.UserId, category.Name));
-        return Task.CompletedTask;
+
+        var user = entity.UserId == category.UserId
+            ? entity.User
+            : await _databaseContext.Users.SingleAsync(x => x.Id == category.UserId, cancellationToken);
+
+        entity.Update(user, category.Name);
+        _databaseContext.Update(entity);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }
