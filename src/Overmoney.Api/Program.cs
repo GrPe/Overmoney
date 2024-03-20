@@ -27,6 +27,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+    options.UseSnakeCaseNamingConvention();
 });
 
 builder.Services.AddMediatR(

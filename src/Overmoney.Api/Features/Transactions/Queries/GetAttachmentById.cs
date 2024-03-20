@@ -7,7 +7,7 @@ namespace Overmoney.Api.Features.Transactions.Queries;
 
 public sealed record GetAttachmentByIdQuery(long Id) : IRequest<Attachment?>;
 
-public sealed class GetAttachmentByIdQueryValidator : AbstractValidator<Attachment>
+public sealed class GetAttachmentByIdQueryValidator : AbstractValidator<GetAttachmentByIdQuery>
 {
     public GetAttachmentByIdQueryValidator()
     {

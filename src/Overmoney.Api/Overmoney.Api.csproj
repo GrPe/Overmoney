@@ -19,6 +19,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.28" />
+		<PackageReference Include="EFCore.NamingConventions" Version="8.0.2" />
 		<PackageReference Include="FluentValidation" Version="11.9.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
@@ -33,6 +34,10 @@
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
 		<PackageReference Include="Scrutor" Version="4.2.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

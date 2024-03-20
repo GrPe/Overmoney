@@ -78,7 +78,7 @@ internal sealed class CurrencyRepository : ICurrencyRepository
         }
 
         entity.Update(currency.Code, currency.Name);
-        _databaseContext.Update(currency);
+        _databaseContext.Update(entity);
 
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
