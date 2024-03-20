@@ -1,12 +1,16 @@
-﻿namespace Overmoney.Api.Features.Transactions.Models;
+﻿using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Api.Features.Payees.Models;
+using Overmoney.Api.Features.Wallets.Models;
+
+namespace Overmoney.Api.Features.Transactions.Models;
 
 public class Transaction
 {
     public long Id { get; }
-    public int WalletId { get; }
     public int UserId { get; }
-    public int PayeeId { get; }
-    public int CategoryId { get; }
+    public Wallet Wallet { get; }
+    public Payee Payee { get; }
+    public Category Category { get; }
     public DateTime TransactionDate { get; }
     public TransactionType TransactionType { get; }
     public string? Note { get; }
@@ -15,10 +19,10 @@ public class Transaction
 
     public Transaction(
         long id,
-        int walletId,
         int userId,
-        int payeeId,
-        int categoryId,
+        Wallet wallet,
+        Payee payee,
+        Category category,
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
@@ -26,10 +30,10 @@ public class Transaction
         List<Attachment>? attachments = null)
     {
         Id = id;
-        WalletId = walletId;
         UserId = userId;
-        PayeeId = payeeId;
-        CategoryId = categoryId;
+        Wallet = wallet;
+        Payee = payee;
+        Category = category;
         TransactionDate = transactionDate;
         TransactionType = transactionType;
         Note = note;
@@ -38,20 +42,20 @@ public class Transaction
     }
 
     public Transaction(
-        int walletId,
         int userId,
-        int payeeId,
-        int categoryId,
+        Wallet wallet,
+        Payee payee,
+        Category category,
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
         double amount,
-        List<Attachment>? attachments = null)
+    List<Attachment>? attachments = null)
     {
-        WalletId = walletId;
         UserId = userId;
-        PayeeId = payeeId;
-        CategoryId = categoryId;
+        Wallet = wallet;
+        Payee = payee;
+        Category = category;
         TransactionDate = transactionDate;
         TransactionType = transactionType;
         Note = note;

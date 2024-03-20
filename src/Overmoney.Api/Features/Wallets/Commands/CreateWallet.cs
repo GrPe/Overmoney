@@ -58,7 +58,7 @@ public sealed class CreateWalletCommandHandler : IRequestHandler<CreateWalletCom
             throw new DomainValidationException($"Currency with id {request.CurrencyId} doesn't exists.");
         }
 
-        var wallet = await _walletRepository.CreateAsync(new(request.Name, request.CurrencyId, request.UserId), cancellationToken);
+        var wallet = await _walletRepository.CreateAsync(new(request.Name, currency, request.UserId), cancellationToken);
 
         _logger.LogInformation("Created new wallet for user {userId}", request.UserId);
 

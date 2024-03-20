@@ -8,7 +8,7 @@ internal sealed class PayeeEntity
 {
     public int Id { get; private set; }
     public int UserId { get; private set; }
-    public UserEntity User { get; private set; }
+    public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
 
     public PayeeEntity(UserEntity user, string name)
@@ -21,6 +21,11 @@ internal sealed class PayeeEntity
     {
         Name = name;
         User = user;    
+    }
+
+    private PayeeEntity()
+    {
+
     }
 }
 

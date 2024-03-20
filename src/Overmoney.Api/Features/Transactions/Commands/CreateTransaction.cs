@@ -83,6 +83,6 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        return await _transactionRepository.CreateAsync(new Transaction(wallet.Id, wallet.UserId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount, request.Attachments?.Select(x => new Attachment(x.Name, x.Path)).ToList()), cancellationToken);
+        return await _transactionRepository.CreateAsync(new Transaction(wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount, request.Attachments?.Select(x => new Attachment(x.Name, x.Path)).ToList()), cancellationToken);
     }
 }

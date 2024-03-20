@@ -61,10 +61,10 @@ public sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCom
 
         if (wallet is null)
         {
-            return await _walletRepository.CreateAsync(new(request.Name, request.CurrencyId, user!.Id!.Value), cancellationToken);
+            return await _walletRepository.CreateAsync(new(request.Name, currency, user!.Id!.Value), cancellationToken);
         }
 
-        await _walletRepository.UpdateAsync(new Wallet(request.Id, request.Name, request.CurrencyId, user!.Id!.Value), cancellationToken);
+        await _walletRepository.UpdateAsync(new Wallet(request.Id, request.Name, currency, user!.Id!.Value), cancellationToken);
         return null;
     }
 }

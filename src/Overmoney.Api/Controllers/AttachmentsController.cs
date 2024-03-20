@@ -37,16 +37,6 @@ public class AttachmentsController : BaseController
         return Accepted();
     }
 
-    [HttpPost]
-    [ProducesResponseType<Attachment>(StatusCodes.Status201Created)]
-    [ProducesDefaultResponseType]
-    public async Task<ActionResult<Attachment>> AddAttachment(AddAttachmentCommand command)
-    {
-        var result = await _mediator.Send(command);
-
-        return CreatedAtAction(nameof(Get), new { result.Id }, result);
-    }
-
     //[HttpPatch]
     //[ProducesResponseType(StatusCodes.Status204NoContent)]
     //[ProducesDefaultResponseType]

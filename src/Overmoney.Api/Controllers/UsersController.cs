@@ -46,7 +46,7 @@ public class UsersController : BaseController
     }
 
     [HttpDelete]
-    [Route("{id:int:min(1)}")]
+    [Route("{id:int}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Remove(int id)
     {

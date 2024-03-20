@@ -5,18 +5,22 @@ namespace Overmoney.Api.DataAccess.Transactions;
 
 internal sealed class AttachmentEntity
 {
-    public long Id { get; init; }
-    public long TransactionId {  get; private set; }
-    public TransactionEntity Transaction { get; init; }
-    public string Name {  get; init; }
-    public string FilePath { get; init; }
+    public long Id { get; private set; }
+    public long TransactionId {  get; private set; }    
+    public TransactionEntity Transaction { get; private set; } = null!;
+    public string Name { get; private set; } = null!;
+    public string FilePath { get; private set; } = null!;
 
-    public AttachmentEntity(long id, TransactionEntity transaction, string name, string filePath)
+    public AttachmentEntity(TransactionEntity transaction, string name, string filePath)
     {
-        Id = id;
         Transaction = transaction;
         Name = name;
         FilePath = filePath;
+    }
+
+    private AttachmentEntity()
+    {
+        
     }
 }
 
@@ -30,8 +34,9 @@ internal sealed class AttachmentEntityTypeConfiguration : IEntityTypeConfigurati
 
         builder
             .HasOne(x => x.Transaction)
-            .WithMany()
+            .WithMany(x => x.Attachments)
             .HasForeignKey(x => x.TransactionId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

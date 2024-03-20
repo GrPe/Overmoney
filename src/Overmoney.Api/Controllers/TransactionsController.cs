@@ -58,4 +58,13 @@ public class TransactionsController : BaseController
         await _mediator.Send(new DeleteTransactionCommand(id));
         return NoContent();
     }
+
+    [HttpPost("attachments")]
+    [ProducesResponseType<Attachment>(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<Attachment>> AddAttachment(AddAttachmentCommand command)
+    {
+         await _mediator.Send(command);
+        return Ok();
+    }
 }

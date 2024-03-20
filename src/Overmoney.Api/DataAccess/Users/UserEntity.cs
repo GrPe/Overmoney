@@ -1,21 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.DataAccess.Users;
 
 internal sealed class UserEntity
 {
-    public int Id { get; init; }
-    public string Login { get; init; } = null!;
-    public string Email { get; init; } = null!;
-    public string Password { get; init; } = null!;
+    public int Id { get; private set; }
+    public string Login { get; private set; } = null!;
+    public string Email { get; private set; } = null!;
+    public string Password { get; private set; } = null!;
 
     public UserEntity(string login, string email, string password)
     {
         Login = login;
         Email = email;
         Password = password;
+    }
+
+    private UserEntity()
+    {
+            
     }
 }
 

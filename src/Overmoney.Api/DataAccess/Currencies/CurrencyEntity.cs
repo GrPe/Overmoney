@@ -20,6 +20,11 @@ internal sealed class CurrencyEntity
         Code = code;
         Name = name;
     }
+
+    private CurrencyEntity()
+    {
+        
+    }
 }
 
 internal sealed class CurrencyEntityTypeConfiguration : IEntityTypeConfiguration<CurrencyEntity>

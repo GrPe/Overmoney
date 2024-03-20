@@ -9,10 +9,10 @@ internal sealed class WalletEntity
 {
     public int Id { get; private set; }
     public int UserId { get; private set; }
-    public UserEntity User { get; private set; }
+    public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public int CurrencyId { get; private set; }
-    public CurrencyEntity Currency { get; private set; }
+    public CurrencyEntity Currency { get; private set; } = null!;
 
     public WalletEntity(UserEntity user, string name, CurrencyEntity currency)
     {
@@ -26,6 +26,11 @@ internal sealed class WalletEntity
         User = user;
         Currency = currency;
         Name = name;
+    }
+
+    private WalletEntity()
+    {
+        
     }
 }
 

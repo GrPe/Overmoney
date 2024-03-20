@@ -1,4 +1,5 @@
-﻿using Overmoney.Api.Features;
+﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.Features;
 using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.DataAccess.Transactions;
@@ -7,91 +8,135 @@ public interface ITransactionRepository : IRepository
 {
     Task<Transaction?> GetAsync(long id, CancellationToken cancellationToken);
     Task<Transaction> CreateAsync(Transaction transaction, CancellationToken cancellationToken);
-    Task<Transaction> UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
+    Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 
     Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken);
     Task<Attachment?> GetAttachmentAsync(long id, CancellationToken cancellationToken);
 }
 
-public sealed class TransactionRepository : ITransactionRepository
+internal sealed class TransactionRepository : ITransactionRepository
 {
-    private static readonly List<TransactionEntity> _connection = [new(1, 1, 1, 1, 1, DateTime.UtcNow, TransactionType.Outcome, "Onion", .3)];
-    private static readonly List<AttachmentEntity> _connectionA = [new(1, 1, "invoice.pdf", "random/file/path")];
+    private readonly DatabaseContext _databaseContext;
+
+    public TransactionRepository(DatabaseContext databaseContext)
+    {
+        _databaseContext = databaseContext;
+    }
 
     public async Task<Transaction> CreateAsync(Transaction transaction, CancellationToken cancellationToken)
     {
-        var entity = new TransactionEntity(_connection.Max(x => x.Id) + 1, transaction.WalletId, transaction.UserId, transaction.PayeeId, transaction.CategoryId, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
-        _connection.Add(entity);
+        var user = await _databaseContext.Users.SingleAsync(x => x.Id == transaction.UserId, cancellationToken);
+        var category = await _databaseContext.Categories.SingleAsync(x => x.Id == transaction.Category.Id, cancellationToken);
+        var payee = await _databaseContext.Payees.SingleAsync(x => x.Id == transaction.Payee.Id, cancellationToken);
+        var wallet = await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
+
+        var entity = _databaseContext.Add(new TransactionEntity(wallet, user, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount));
 
         foreach (var attachment in transaction.Attachments)
         {
-            _connectionA.Add(new AttachmentEntity(_connectionA.Max(x => x.Id) + 1, entity.Id, attachment.Name, attachment.FilePath));
+            entity.Entity.Attachments.Add(new AttachmentEntity(entity.Entity, attachment.Name, attachment.FilePath));
         }
 
-        return (await GetAsync(entity.Id, cancellationToken))!;
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+
+        return (await GetAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        var transaction = _connection.FirstOrDefault(x => x.Id == id);
-        if (transaction != null)
-        {
-            _connection.Remove(transaction);
-        }
-
-        var attachments = _connectionA.Where(x => x.TransactionId == id).ToList();
-        foreach (var attachment in attachments)
-        {
-            _connectionA.Remove(attachment);
-        }
-
-        return Task.CompletedTask;
+        await _databaseContext
+            .Transactions
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken)
+    public async Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken)
     {
-        var attachment = _connectionA.FirstOrDefault(x => x.Id == id);
-        if (attachment != null)
-        {
-            _connectionA.Remove(attachment);
-        }
-        return Task.CompletedTask;
+        await _databaseContext
+            .Attachments
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<Transaction?> GetAsync(long id, CancellationToken cancellationToken)
     {
-        var entity = _connection.FirstOrDefault(x => x.Id == id);
+        var entity = await _databaseContext
+            .Transactions
+            .AsNoTracking()
+            .Include(x => x.Wallet)
+            .ThenInclude(w => w.Currency)
+            .Include(x => x.Category)
+            .Include(x => x.Payee)
+            .Include(x => x.Attachments)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
         if (entity is null)
         {
             return null;
         }
 
-        var attachments = _connectionA.Where(x => x.TransactionId == id);
-
-        return await Task.FromResult(new Transaction(entity.Id, entity.WalletId, entity.UserId, entity.PayeeId, entity.CategoryId, entity.TransactionDate, entity.TransactionType, entity.Note, entity.Amount, attachments.Select(x => new Attachment(x.Id, x.Name, x.FilePath)).ToList()));
+        return new Transaction(
+            entity.Id,
+            entity.UserId,
+            new Features.Wallets.Models.Wallet(entity.Wallet.Id, entity.Wallet.Name, new Features.Currencies.Models.Currency(entity.Wallet.CurrencyId, entity.Wallet.Currency.Code, entity.Wallet.Currency.Name), entity.Wallet.UserId),
+            new Features.Payees.Models.Payee(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
+            new Features.Categories.Models.Category(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
+            entity.TransactionDate,
+            entity.TransactionType,
+            entity.Note,
+            entity.Amount,
+            entity.Attachments.Select(x => new Attachment(x.Id, x.Name, x.FilePath)).ToList());
     }
 
     public async Task<Attachment?> GetAttachmentAsync(long id, CancellationToken cancellationToken)
     {
-        var entity = _connectionA.FirstOrDefault(x => x.Id == id);
+        var entity = await _databaseContext
+            .Attachments
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (entity is null)
         {
             return null;
         }
-        return await Task.FromResult(new Attachment(entity.Id, entity.Name, entity.FilePath));
+
+        return new Attachment(entity.Id, entity.Name, entity.FilePath);
     }
 
-    public async Task<Transaction> UpdateAsync(Transaction transaction, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken)
     {
-        var oldTransaction = _connection.First(x => x.Id == transaction.Id);
-        var newTransaction = new TransactionEntity(oldTransaction.Id, transaction.WalletId, transaction.UserId, transaction.PayeeId, transaction.CategoryId, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
-        _connection.Remove(oldTransaction);
-        _connection.Add(newTransaction);
+        var entity = await _databaseContext
+           .Transactions
+           .Include(x => x.Wallet)
+           .Include(x => x.Category)
+           .Include(x => x.Payee)
+           .SingleOrDefaultAsync(x => x.Id == transaction.Id, cancellationToken);
 
-        //add attachments updates
+        if (entity is null)
+        {
+            return;
+        }
 
-        return (await GetAsync(transaction.Id, cancellationToken))!;
+        var user = entity.UserId == transaction.UserId
+            ? entity.User
+            : await _databaseContext.Users.SingleAsync(x => x.Id == transaction.UserId, cancellationToken);
+
+        var category = entity.CategoryId == transaction.Category.Id
+            ? entity.Category
+            : await _databaseContext.Categories.SingleAsync(x => x.Id == transaction.Category.Id, cancellationToken);
+
+        var payee = entity.PayeeId == transaction.Payee.Id
+            ? entity.Payee
+            : await _databaseContext.Payees.SingleAsync(x => x.Id == transaction.Payee.Id, cancellationToken);
+
+        var wallet = entity.WalletId == transaction.Wallet.Id
+            ? entity.Wallet
+            : await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
+
+        entity.Update(wallet, user, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
+        _databaseContext.Update(entity);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }

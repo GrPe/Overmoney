@@ -10,22 +10,22 @@ namespace Overmoney.Api.DataAccess.Transactions;
 
 internal class TransactionEntity
 {
-    public long Id { get; init; }
+    public long Id { get; private set; }
     public int WalletId { get; private set; }
-    public WalletEntity Wallet { get; init; }
+    public WalletEntity Wallet { get; private set; } = null!;
     public int UserId { get; private set; }
-    public UserEntity User { get; init; }
+    public UserEntity User { get; private set; } = null!;
     public int PayeeId { get; private set; }
-    public PayeeEntity Payee { get; init; }
+    public PayeeEntity Payee { get; private set; } = null!;
     public int CategoryId { get; private set; }
-    public CategoryEntity Category { get; init; }
-    public DateTime TransactionDate { get; init; }
-    public TransactionType TransactionType { get; init; }
-    public string? Note { get; init; }
-    public double Amount { get; init; }
+    public CategoryEntity Category { get; private set; } = null!;
+    public DateTime TransactionDate { get; private set; }
+    public TransactionType TransactionType { get; private set; }
+    public string? Note { get; private set; }
+    public double Amount { get; private set; }
+    public ICollection<AttachmentEntity> Attachments { get; private set; } = [];
 
     public TransactionEntity(
-        long id, 
         WalletEntity wallet, 
         UserEntity user, 
         PayeeEntity payee, 
@@ -35,7 +35,6 @@ internal class TransactionEntity
         string? note, 
         double amount)
     {
-        Id = id;
         Wallet = wallet;
         User = user;
         Payee = payee;
@@ -44,6 +43,31 @@ internal class TransactionEntity
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
+    }
+
+    public void Update(
+        WalletEntity wallet,
+        UserEntity user,
+        PayeeEntity payee,
+        CategoryEntity category,
+        DateTime transactionDate,
+        TransactionType transactionType,
+        string? note,
+        double amount)
+    {
+        Wallet = wallet;
+        User = user;
+        Payee = payee;
+        Category = category;
+        TransactionDate = transactionDate;
+        TransactionType = transactionType;
+        Note = note;
+        Amount = amount;
+    }
+
+    private TransactionEntity()
+    {
+        
     }
 }
 
@@ -59,24 +83,28 @@ internal class TransactionEntityTypeConfiguration : IEntityTypeConfiguration<Tra
             .HasOne(x => x.Wallet)
             .WithMany()
             .HasForeignKey(x => x.WalletId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.Category)
             .WithMany()
             .HasForeignKey(x => x.CategoryId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.Payee)
             .WithMany()
             .HasForeignKey(x => x.PayeeId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -6,7 +6,7 @@ using Overmoney.Api.Infrastructure.Exceptions;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
 
-public sealed record AddAttachmentCommand(long TransactionId, string Name, string Path) : IRequest<Attachment>;
+public sealed record AddAttachmentCommand(long TransactionId, string Name, string Path) : IRequest;
 
 public sealed class AddAttachmentCommandValidator : AbstractValidator<AddAttachmentCommand>
 {
@@ -21,7 +21,7 @@ public sealed class AddAttachmentCommandValidator : AbstractValidator<AddAttachm
     }
 }
 
-public sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand, Attachment>
+public sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand>
 {
     private readonly ITransactionRepository _transactionRepository;
 
@@ -30,7 +30,7 @@ public sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentC
         _transactionRepository = transactionRepository;
     }
 
-    public async Task<Attachment> Handle(AddAttachmentCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddAttachmentCommand request, CancellationToken cancellationToken)
     {
         var transaction = await _transactionRepository.GetAsync(request.TransactionId, cancellationToken);
 
@@ -41,7 +41,6 @@ public sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentC
 
         transaction.AddAttachment(new Attachment(request.Name, request.Path));
 
-        transaction = await _transactionRepository.UpdateAsync(transaction, cancellationToken);
-        return transaction.Attachments.Last();
+        await _transactionRepository.UpdateAsync(transaction, cancellationToken);
     }
 }

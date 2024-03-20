@@ -8,7 +8,7 @@ internal sealed class CategoryEntity
 {
     public int Id { get; private set; }
     public int UserId { get; private set; }
-    public UserEntity User { get; private set; }
+    public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
 
     public CategoryEntity(UserEntity user, string name)
@@ -21,6 +21,11 @@ internal sealed class CategoryEntity
     {
         User = user;
         Name = name;
+    }
+
+    private CategoryEntity()
+    {
+        
     }
 }
 
