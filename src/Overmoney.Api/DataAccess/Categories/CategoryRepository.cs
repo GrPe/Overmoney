@@ -43,6 +43,7 @@ internal sealed class CategoryRepository : ICategoryRepository
     {
         return await _databaseContext
             .Categories
+            .AsNoTracking()
             .Where(x => x.UserId == userId)
             .Select(x => new Category(x.Id, x.UserId, x.Name))
             .ToListAsync(cancellationToken);
@@ -50,8 +51,10 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public async Task<Category?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var category = await _databaseContext.Categories
-            .AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var category = await _databaseContext
+            .Categories
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (category is null)
         {
@@ -63,7 +66,9 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
     {
-        var entity = await _databaseContext.Categories
+        var entity = await _databaseContext
+            .Categories
+            .Include(x => x.User)
             .SingleOrDefaultAsync(x => x.Id == category.Id, cancellationToken);
 
         if (entity is null)

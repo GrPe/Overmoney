@@ -70,7 +70,9 @@ internal sealed class CurrencyRepository : ICurrencyRepository
 
     public async Task UpdateAsync(Currency currency, CancellationToken cancellationToken)
     {
-        var entity = await _databaseContext.Currencies.SingleAsync(x => x.Id == currency.Id, cancellationToken);
+        var entity = await _databaseContext
+            .Currencies
+            .SingleAsync(x => x.Id == currency.Id, cancellationToken);
 
         if (entity == null)
         {

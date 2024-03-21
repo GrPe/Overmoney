@@ -70,7 +70,10 @@ internal sealed class WalletRepository : IWalletRepository
 
     public async Task UpdateAsync(Wallet updateWallet, CancellationToken cancellationToken)
     {
-        var wallet = await _databaseContext.Wallets
+        var wallet = await _databaseContext
+            .Wallets
+            .Include(x => x.Currency)
+            .Include(x => x.User)
             .SingleOrDefaultAsync(x => x.Id == updateWallet.Id, cancellationToken);
 
         if(wallet is null)

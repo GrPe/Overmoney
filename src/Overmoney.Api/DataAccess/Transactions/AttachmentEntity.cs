@@ -22,6 +22,12 @@ internal sealed class AttachmentEntity
     {
         
     }
+
+    public void Update(string name, string filePath)
+    {
+        Name = name;
+        FilePath = filePath;
+    }
 }
 
 internal sealed class AttachmentEntityTypeConfiguration : IEntityTypeConfiguration<AttachmentEntity>

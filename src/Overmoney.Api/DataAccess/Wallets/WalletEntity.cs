@@ -52,7 +52,7 @@ internal sealed class WalletEntityTypeConfiguration : IEntityTypeConfiguration<W
         builder
             .HasOne(x => x.Currency)
             .WithMany()
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.CurrencyId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
     }

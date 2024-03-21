@@ -53,7 +53,7 @@ public class TransactionsController : BaseController
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         await _mediator.Send(new DeleteTransactionCommand(id));
         return NoContent();

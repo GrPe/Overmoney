@@ -24,7 +24,7 @@ internal sealed class PayeeRepository : IPayeeRepository
 
     public async Task<Payee> CreateAsync(Payee payee, CancellationToken cancellationToken)
     {
-        var user = await _databaseContext.Users.SingleAsync(x => x.Id == payee.Id, cancellationToken);
+        var user = await _databaseContext.Users.SingleAsync(x => x.Id == payee.UserId, cancellationToken);
         var entity = _databaseContext.Add(new PayeeEntity(user, payee.Name));
 
         await _databaseContext.SaveChangesAsync(cancellationToken);
@@ -68,6 +68,7 @@ internal sealed class PayeeRepository : IPayeeRepository
     {
         var entity = await _databaseContext
             .Payees
+            .Include(x => x.User)
             .SingleOrDefaultAsync(x => x.Id == payee.Id, cancellationToken);
 
         if (entity is null)

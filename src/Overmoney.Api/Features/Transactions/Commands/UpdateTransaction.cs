@@ -10,7 +10,7 @@ using Overmoney.Api.Infrastructure.Exceptions;
 namespace Overmoney.Api.Features.Transactions.Commands;
 
 public sealed record UpdateTransactionCommand(
-    int Id,
+    long Id,
     int WalletId,
     int PayeeId,
     int CategoryId,
@@ -31,7 +31,7 @@ public sealed class UpdateTransactionCommandValidator : AbstractValidator<Update
             .GreaterThan(0);
         RuleFor(x => x.CategoryId)
             .GreaterThan(0);
-        RuleFor(x => x.TransactionType)
+        RuleFor(x => x.TransactionDate)
             .NotEmpty();
     }
 }
@@ -83,7 +83,7 @@ public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTran
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        await _transactionRepository.UpdateAsync(new Transaction(wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
+        await _transactionRepository.UpdateAsync(new Transaction(transaction.Id, wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
         return null;
     }
 }

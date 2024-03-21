@@ -4,7 +4,7 @@ using Overmoney.Api.DataAccess.Transactions;
 
 namespace Overmoney.Api.Features.Transactions.Commands;
 
-public sealed record DeleteTransactionCommand(int Id) : IRequest;
+public sealed record DeleteTransactionCommand(long Id) : IRequest;
 
 public sealed class DeleteTransactionCommandValidator : AbstractValidator<DeleteTransactionCommand>
 {

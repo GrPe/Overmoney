@@ -6,13 +6,15 @@ namespace Overmoney.Api.DataAccess.Transactions;
 
 public interface ITransactionRepository : IRepository
 {
+    Task<bool> IsExists(long id, CancellationToken cancellationToken);
     Task<Transaction?> GetAsync(long id, CancellationToken cancellationToken);
     Task<Transaction> CreateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
-    Task DeleteAsync(int id, CancellationToken cancellationToken);
+    Task DeleteAsync(long id, CancellationToken cancellationToken);
 
     Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken);
     Task<Attachment?> GetAttachmentAsync(long id, CancellationToken cancellationToken);
+    Task AddAttachmentAsync(long transactionId, Attachment attachment, CancellationToken cancellationToken);
 }
 
 internal sealed class TransactionRepository : ITransactionRepository
@@ -43,7 +45,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         return (await GetAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(long id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Transactions
@@ -81,7 +83,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             entity.UserId,
             new Features.Wallets.Models.Wallet(entity.Wallet.Id, entity.Wallet.Name, new Features.Currencies.Models.Currency(entity.Wallet.CurrencyId, entity.Wallet.Currency.Code, entity.Wallet.Currency.Name), entity.Wallet.UserId),
             new Features.Payees.Models.Payee(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
-            new Features.Categories.Models.Category(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
+            new Features.Categories.Models.Category(entity.Category.Id, entity.Category.UserId, entity.Category.Name),
             entity.TransactionDate,
             entity.TransactionType,
             entity.Note,
@@ -104,6 +106,17 @@ internal sealed class TransactionRepository : ITransactionRepository
         return new Attachment(entity.Id, entity.Name, entity.FilePath);
     }
 
+    public async Task<bool> IsExists(long id, CancellationToken cancellationToken)
+    {
+        var entity = await _databaseContext
+            .Transactions
+            .AsNoTracking()
+            .Select(x => x.Id)
+            .SingleOrDefaultAsync(x => x == id, cancellationToken);
+
+        return entity != 0;
+    }
+
     public async Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
@@ -111,6 +124,8 @@ internal sealed class TransactionRepository : ITransactionRepository
            .Include(x => x.Wallet)
            .Include(x => x.Category)
            .Include(x => x.Payee)
+           .Include(x => x.User)
+           .Include(x => x.Attachments)
            .SingleOrDefaultAsync(x => x.Id == transaction.Id, cancellationToken);
 
         if (entity is null)
@@ -137,6 +152,19 @@ internal sealed class TransactionRepository : ITransactionRepository
         entity.Update(wallet, user, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
         _databaseContext.Update(entity);
 
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task AddAttachmentAsync(long transactionId, Attachment attachment, CancellationToken cancellationToken)
+    {
+        var transaction = await _databaseContext
+            .Transactions
+            .SingleAsync(x => x.Id == transactionId, cancellationToken);
+
+        var entity = new AttachmentEntity(transaction, attachment.Name, attachment.FilePath);
+
+        _databaseContext.Add(entity);
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }
