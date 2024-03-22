@@ -19,6 +19,12 @@ public class UsersController : BaseController
         _mediator = mediator;
     }
 
+
+    /// <summary>
+    /// Register new user
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>TBD</returns>
     [HttpPost]
     [Route("register")]
     [ProducesResponseType<int>(StatusCodes.Status202Accepted)]
@@ -29,6 +35,11 @@ public class UsersController : BaseController
         return Accepted(response);
     }
 
+    /// <summary>
+    /// Authorize user
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>TBD</returns>
     [HttpPost]
     [Route("login")]
     [ProducesResponseType<int>(StatusCodes.Status200OK)]
@@ -45,6 +56,11 @@ public class UsersController : BaseController
         return Ok(response);
     }
 
+    /// <summary>
+    /// Delete user
+    /// </summary>
+    /// <param name="id">User Id</param>
+    /// <returns></returns>
     [HttpDelete]
     [Route("{id:int}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
@@ -55,6 +71,11 @@ public class UsersController : BaseController
     }
 
 
+    /// <summary>
+    /// Retrieve user's wallets
+    /// </summary>
+    /// <param name="userId">User Id</param>
+    /// <returns>List of wallets</returns>
     [HttpGet("{userId}/wallets")]
     [ProducesResponseType<IEnumerable<Wallet>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,6 +91,11 @@ public class UsersController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Retrieve user's categories
+    /// </summary>
+    /// <param name="userId">User Id</param>
+    /// <returns>List of categories</returns>
     [HttpGet("{userId}/categories")]
     [ProducesResponseType<IEnumerable<Category>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,6 +110,11 @@ public class UsersController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Retrieve user's payees
+    /// </summary>
+    /// <param name="userId">User Id</param>
+    /// <returns>List of payees</returns>
     [HttpGet("{userId}/payees")]
     [ProducesResponseType<IEnumerable<Payee>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

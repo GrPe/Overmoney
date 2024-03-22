@@ -15,6 +15,11 @@ public class TransactionsController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve transaction by Id
+    /// </summary>
+    /// <param name="id">Transaction Id</param>
+    /// <returns>Transaction entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Transaction>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -29,6 +34,11 @@ public class TransactionsController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Create new transaction
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created transaction</returns>
     [HttpPost]
     [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
     public async Task<ActionResult<Transaction>> Create(CreateTransactionCommand command)
@@ -37,6 +47,11 @@ public class TransactionsController : BaseController
         return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
+    /// <summary>
+    /// Update transaction or create new one
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created transaction</returns>
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Transaction>(StatusCodes.Status201Created)]
@@ -51,6 +66,11 @@ public class TransactionsController : BaseController
         return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
+    /// <summary>
+    /// Delete transaction
+    /// </summary>
+    /// <param name="id">Transaction Id</param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(long id)
@@ -59,6 +79,11 @@ public class TransactionsController : BaseController
         return NoContent();
     }
 
+    /// <summary>
+    /// Add attachment to transaction
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
     [HttpPost("attachments")]
     [ProducesResponseType<Attachment>(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]

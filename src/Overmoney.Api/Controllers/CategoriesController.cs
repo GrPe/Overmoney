@@ -15,6 +15,11 @@ public class CategoriesController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve Category by Id
+    /// </summary>
+    /// <param name="id">Category Id</param>
+    /// <returns>Category entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Category>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -30,6 +35,11 @@ public class CategoriesController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Create new category
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created category</returns>
     [HttpPost]
     [ProducesResponseType<Category>(StatusCodes.Status201Created)]
     public async Task<ActionResult<Category>> Create(CreateCategoryCommand command)
@@ -39,6 +49,11 @@ public class CategoriesController : BaseController
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
+    /// <summary>
+    /// Update existing category or create new one
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created category</returns>
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Category>(StatusCodes.Status201Created)]
@@ -54,6 +69,11 @@ public class CategoriesController : BaseController
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
+    /// <summary>
+    /// Delete category
+    /// </summary>
+    /// <param name="id">Category Id</param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(int id)

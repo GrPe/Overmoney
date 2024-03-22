@@ -15,6 +15,11 @@ public class AttachmentsController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve attachment by Id
+    /// </summary>
+    /// <param name="id">Attachment Id</param>
+    /// <returns>Attachment entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Attachment>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -28,6 +33,11 @@ public class AttachmentsController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Delete attachment
+    /// </summary>
+    /// <param name="id">Attachment Id</param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesDefaultResponseType]

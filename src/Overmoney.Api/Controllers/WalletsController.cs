@@ -15,6 +15,11 @@ public class WalletsController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve wallet by Id
+    /// </summary>
+    /// <param name="id">Wallet Id</param>
+    /// <returns>Wallet entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Wallet>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -30,6 +35,11 @@ public class WalletsController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Create new wallet
+    /// </summary>
+    /// <param name="wallet"></param>
+    /// <returns>Created wallet</returns>
     [HttpPost]
     [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
     public async Task<ActionResult<Wallet>> Create(CreateWalletCommand wallet)
@@ -38,6 +48,11 @@ public class WalletsController : BaseController
         return CreatedAtAction(nameof(GetWallet), new { id = result.Id }, result);
     }
 
+    /// <summary>
+    /// Update wallet or create new one
+    /// </summary>
+    /// <param name="wallet"></param>
+    /// <returns>Created wallet</returns>
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Wallet>(StatusCodes.Status201Created)]
@@ -53,6 +68,11 @@ public class WalletsController : BaseController
         return CreatedAtAction(nameof(GetWallet), new { id = result.Id }, result);
     }
 
+    /// <summary>
+    /// Delete wallet
+    /// </summary>
+    /// <param name="id">Wallet Id</param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Delete(int id)

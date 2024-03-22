@@ -15,6 +15,11 @@ public class PayeesController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve Payee by Id
+    /// </summary>
+    /// <param name="id">Payee Id</param>
+    /// <returns>Payee entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Payee>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -29,6 +34,11 @@ public class PayeesController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Create new Payee
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created payee</returns>
     [HttpPost]
     [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
     public async Task<ActionResult<Payee>> Create(CreatePayeeCommand command)
@@ -38,6 +48,11 @@ public class PayeesController : BaseController
         return CreatedAtAction(nameof(GetById), new { result.Id }, result);
     }
 
+    /// <summary>
+    /// Update payee or create new one
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns>Created payee</returns>
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Payee>(StatusCodes.Status201Created)]
@@ -53,6 +68,11 @@ public class PayeesController : BaseController
         return Ok();
     }
 
+    /// <summary>
+    /// Delete payee
+    /// </summary>
+    /// <param name="id">Payee Id</param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(int id)

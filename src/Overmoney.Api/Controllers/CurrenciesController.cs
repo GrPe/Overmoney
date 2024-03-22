@@ -15,6 +15,11 @@ public class CurrenciesController : BaseController
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Retrieve currency by id
+    /// </summary>
+    /// <param name="id">Id of the currency</param>
+    /// <returns>Currency entity</returns>
     [HttpGet("{id}")]
     [ProducesResponseType<Currency>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -30,6 +35,10 @@ public class CurrenciesController : BaseController
         return Ok(response);
     }
 
+    /// <summary>
+    /// Retrieve all available currencies
+    /// </summary>
+    /// <returns>List of currencies</returns>
     [HttpGet]
     [ProducesResponseType<IEnumerable<Currency>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<Currency>> GetAll()
@@ -39,6 +48,11 @@ public class CurrenciesController : BaseController
         return Ok(response);
     }
 
+    /// <summary>
+    /// Create new currency
+    /// </summary>
+    /// <param name="currency"></param>
+    /// <returns>Created currency</returns>
     [HttpPost]
     [ProducesResponseType<Currency>(StatusCodes.Status201Created)]
     public async Task<ActionResult<Currency>> Create(CreateCurrencyCommand currency)
@@ -47,6 +61,11 @@ public class CurrenciesController : BaseController
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
+    /// <summary>
+    /// Update currency or create new one
+    /// </summary>
+    /// <param name="currency"></param>
+    /// <returns>Created currency</returns>
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<Currency>(StatusCodes.Status201Created)]
