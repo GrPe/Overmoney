@@ -89,7 +89,35 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult<Attachment>> AddAttachment(AddAttachmentCommand command)
     {
-         await _mediator.Send(command);
+        await _mediator.Send(command);
         return Ok();
+    }
+
+    [HttpPost("recurring")]
+    public async Task<ActionResult<RecurringTransaction>> CreateRecurringTransaction(object command)
+    {
+        var result = await _mediator.Send(command);
+        return null; //todo
+    }
+
+    [HttpGet("recurring/{id}")]
+    public async Task<ActionResult<RecurringTransaction>> GetRecurringById(long id)
+    {
+        var result = await _mediator.Send(id);
+        return null; //todo
+    }
+
+    [HttpPut("recurring")]
+    public async Task<IActionResult> UpdateRecurring(object command)
+    {
+        await _mediator.Send(command);
+        return null; //todo
+    }
+
+    [HttpDelete("recurring/{id}")]
+    public async Task<IActionResult> DeleteRecurring(long id)
+    {
+        await _mediator.Send(id);
+        return null; //todo
     }
 }

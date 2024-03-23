@@ -7,6 +7,8 @@ using Overmoney.Api.Features.Wallets.Queries;
 using Overmoney.Api.Features.Categories.Models;
 using Overmoney.Api.Features.Payees.Models;
 using Overmoney.Api.Features.Wallets.Models;
+using Overmoney.Api.Features.Transactions.Models;
+using System.Runtime.InteropServices;
 
 namespace Overmoney.Api.Controllers;
 
@@ -128,4 +130,19 @@ public class UsersController : BaseController
         }
         return Ok(result);
     }
+
+    [HttpGet("{userId}/transactions")]
+    public async Task<ActionResult<IEnumerable<Transaction>>> GetUserTransactions(int userId)
+    {
+        var result = await _mediator.Send(userId);
+        return null; //todo
+    }
+
+    [HttpGet("{userId}/transactions/recurring")]
+    public async Task<ActionResult<IEnumerable<RecurringTransaction>>> GetUserRecurringTransactions(int userId)
+    {
+        var result = await _mediator.Send(userId);
+        return null; //todo
+    }
+
 }

@@ -4,7 +4,7 @@ using Overmoney.Api.Features.Wallets.Models;
 
 namespace Overmoney.Api.Features.Transactions.Models;
 
-public class Transaction
+public class RecurringTransaction
 {
     public long Id { get; }
     public int UserId { get; }
@@ -15,9 +15,11 @@ public class Transaction
     public TransactionType TransactionType { get; }
     public string? Note { get; }
     public double Amount { get; }
-    public List<Attachment> Attachments { get; }
+    public string Schedule { get; }
+    public DateTime NextOccurrence { get; }
 
-    public Transaction(
+
+    public RecurringTransaction(
         long id,
         int userId,
         Wallet wallet,
@@ -27,7 +29,8 @@ public class Transaction
         TransactionType transactionType,
         string? note,
         double amount,
-        List<Attachment>? attachments = null)
+        string schedule,
+        DateTime nextOccurrence)
     {
         Id = id;
         UserId = userId;
@@ -38,10 +41,11 @@ public class Transaction
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
-        Attachments = attachments ?? [];
+        Schedule = schedule;
+        NextOccurrence = nextOccurrence;
     }
 
-    public Transaction(
+    public RecurringTransaction(
         int userId,
         Wallet wallet,
         Payee payee,
@@ -50,7 +54,8 @@ public class Transaction
         TransactionType transactionType,
         string? note,
         double amount,
-    List<Attachment>? attachments = null)
+        string schedule,
+        DateTime nextOccurrence)
     {
         UserId = userId;
         Wallet = wallet;
@@ -60,11 +65,7 @@ public class Transaction
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
-        Attachments = attachments ?? [];
-    }
-
-    public void AddAttachment(Attachment attachment)
-    {
-        Attachments.Add(attachment);
+        Schedule = schedule;
+        NextOccurrence = nextOccurrence;
     }
 }
