@@ -23,10 +23,9 @@ internal sealed class AttachmentEntity
         
     }
 
-    public void Update(string name, string filePath)
+    public void Update(string name)
     {
         Name = name;
-        FilePath = filePath;
     }
 }
 

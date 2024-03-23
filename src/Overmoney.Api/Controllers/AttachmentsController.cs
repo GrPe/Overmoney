@@ -47,12 +47,17 @@ public class AttachmentsController : BaseController
         return Accepted();
     }
 
-    //[HttpPatch]
-    //[ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[ProducesDefaultResponseType]
-    //public async Task<ActionResult> UpdateAttachment(UpdateAttachmentCommand command)
-    //{
-    //    await _mediator.Send(command);
-    //    return NoContent();
-    //}
+    /// <summary>
+    /// Update attachment
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPatch]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateAttachment(UpdateAttachmentCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
+    }
 }
