@@ -35,6 +35,12 @@ internal sealed class CurrencyEntityTypeConfiguration : IEntityTypeConfiguration
             .ToTable("currencies")
             .HasKey(x => x.Id);
 
+        builder.Property(x => x.Code)
+            .IsRequired();
+
+        builder.Property(x => x.Name)
+            .IsRequired();
+
         builder
             .HasIndex(x => x.Code)
             .IsUnique()

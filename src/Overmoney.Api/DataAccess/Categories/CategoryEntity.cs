@@ -37,6 +37,9 @@ internal sealed class CategoryEntityTypeConfiguration : IEntityTypeConfiguration
             .ToTable("categories")
             .HasKey(e => e.Id);
 
+        builder.Property(e => e.Name)
+            .IsRequired();
+
         builder
             .HasOne(x => x.User)
             .WithMany()

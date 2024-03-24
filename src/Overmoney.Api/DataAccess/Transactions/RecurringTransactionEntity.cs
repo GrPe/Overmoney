@@ -8,7 +8,7 @@ using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.DataAccess.Transactions;
 
-internal class TransactionEntity
+internal sealed class RecurringTransactionEntity
 {
     public long Id { get; private set; }
     public int WalletId { get; private set; }
@@ -23,9 +23,9 @@ internal class TransactionEntity
     public TransactionType TransactionType { get; private set; }
     public string? Note { get; private set; }
     public double Amount { get; private set; }
-    public ICollection<AttachmentEntity> Attachments { get; private set; } = [];
+    public Schedule Schedule { get; private set; }
 
-    public TransactionEntity(
+    public RecurringTransactionEntity(
         WalletEntity wallet,
         UserEntity user,
         PayeeEntity payee,
@@ -33,7 +33,8 @@ internal class TransactionEntity
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount)
+        double amount,
+        Schedule schedule)
     {
         Wallet = wallet;
         User = user;
@@ -43,51 +44,50 @@ internal class TransactionEntity
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
+        Schedule = schedule;
     }
 
     public void Update(
         WalletEntity wallet,
-        UserEntity user,
         PayeeEntity payee,
         CategoryEntity category,
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount)
+        double amount,
+        Schedule schedule)
     {
         Wallet = wallet;
-        User = user;
         Payee = payee;
         Category = category;
         TransactionDate = transactionDate;
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
+        Schedule = schedule;
     }
 
-    private TransactionEntity()
+    private RecurringTransactionEntity()
     {
 
     }
 }
 
-internal class TransactionEntityTypeConfiguration : IEntityTypeConfiguration<TransactionEntity>
+internal sealed class RecurringTransactionEntityConfiguration : IEntityTypeConfiguration<RecurringTransactionEntity>
 {
-    public void Configure(EntityTypeBuilder<TransactionEntity> builder)
+    public void Configure(EntityTypeBuilder<RecurringTransactionEntity> builder)
     {
         builder
-            .ToTable("transactions")
+            .ToTable("recurring_transactions")
             .HasKey(x => x.Id);
 
-        builder
-            .Property(x => x.TransactionDate)
-            .IsRequired();
-
-        builder
-            .Property(x => x.Amount)
+        builder.Property(x => x.TransactionDate)
             .IsRequired();
 
         builder.Property(x => x.TransactionType)
+            .IsRequired();
+
+        builder.Property(x => x.Amount)
             .IsRequired();
 
         builder
@@ -105,6 +105,13 @@ internal class TransactionEntityTypeConfiguration : IEntityTypeConfiguration<Tra
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
+            .HasOne(x => x.Payee)
+            .WithMany()
+            .HasForeignKey(x => x.PayeeId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
             .HasOne(x => x.Category)
             .WithMany()
             .HasForeignKey(x => x.CategoryId)
@@ -112,10 +119,9 @@ internal class TransactionEntityTypeConfiguration : IEntityTypeConfiguration<Tra
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.Payee)
-            .WithMany()
-            .HasForeignKey(x => x.PayeeId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+            .Property(x => x.Schedule)
+            .HasConversion(
+                v => v.ToString(),
+                v => new Schedule(v));
     }
 }

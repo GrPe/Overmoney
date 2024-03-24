@@ -15,7 +15,7 @@ public class RecurringTransaction
     public TransactionType TransactionType { get; }
     public string? Note { get; }
     public double Amount { get; }
-    public string Schedule { get; }
+    public Schedule Schedule { get; }
     public DateTime NextOccurrence { get; }
 
 
@@ -29,7 +29,7 @@ public class RecurringTransaction
         TransactionType transactionType,
         string? note,
         double amount,
-        string schedule)
+        Schedule schedule)
     {
         Id = id;
         UserId = userId;
@@ -53,7 +53,7 @@ public class RecurringTransaction
         TransactionType transactionType,
         string? note,
         double amount,
-        string schedule)
+        Schedule schedule)
     {
         UserId = userId;
         Wallet = wallet;

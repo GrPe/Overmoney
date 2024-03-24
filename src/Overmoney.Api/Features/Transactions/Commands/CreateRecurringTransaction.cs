@@ -78,6 +78,6 @@ public sealed class CreateRecurringTransactionCommandHandler : IRequestHandler<C
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        return await _transactionRepository.CreateAsync(new RecurringTransaction(wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount, request.Schedule), cancellationToken);
+        return await _transactionRepository.CreateAsync(new RecurringTransaction(wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule)), cancellationToken);
     }
 }

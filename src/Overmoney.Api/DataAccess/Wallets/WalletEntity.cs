@@ -42,6 +42,9 @@ internal sealed class WalletEntityTypeConfiguration : IEntityTypeConfiguration<W
             .ToTable("wallets")
             .HasKey(t => t.Id);
 
+        builder.Property(t => t.Name)
+            .IsRequired();
+
         builder
             .HasOne(x => x.User)
             .WithMany()

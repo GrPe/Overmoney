@@ -16,6 +16,7 @@ internal sealed class DatabaseContext : DbContext
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<CurrencyEntity> Currencies { get; set; }
     public DbSet<TransactionEntity> Transactions { get; set; }
+    public DbSet<RecurringTransactionEntity> RecurringTransactions { get; set; }
     public DbSet<AttachmentEntity> Attachments { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)

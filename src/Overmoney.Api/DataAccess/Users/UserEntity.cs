@@ -31,6 +31,15 @@ internal sealed class UserEntityTypeConfiguration : IEntityTypeConfiguration<Use
             .ToTable("users")
             .HasKey(t => t.Id);
 
+        builder.Property(t => t.Login)
+            .IsRequired();
+
+        builder.Property(t => t.Email)
+            .IsRequired();
+
+        builder.Property(t => t.Password)
+            .IsRequired();
+
         builder
             .HasIndex(x => x.Login)
             .IsUnique()
