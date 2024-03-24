@@ -9,6 +9,8 @@ using Overmoney.Api.Features.Payees.Models;
 using Overmoney.Api.Features.Wallets.Models;
 using Overmoney.Api.Features.Transactions.Models;
 using System.Runtime.InteropServices;
+using Overmoney.Api.Features.Transactions.Queries;
+using Microsoft.AspNetCore.Http;
 
 namespace Overmoney.Api.Controllers;
 
@@ -138,11 +140,25 @@ public class UsersController : BaseController
         return null; //todo
     }
 
+    /// <summary>
+    /// Retrieve user's recurring transactions
+    /// </summary>
+    /// <param name="userId">User Id</param>
+    /// <returns></returns>
     [HttpGet("{userId}/transactions/recurring")]
+    [ProducesResponseType<IEnumerable<RecurringTransaction>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<IEnumerable<RecurringTransaction>>> GetUserRecurringTransactions(int userId)
     {
-        var result = await _mediator.Send(userId);
-        return null; //todo
+        var result = await _mediator.Send(new GetRecurringTransactionsByUserIdQuery(userId));
+
+        if (result is null || !result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
     }
 
 }

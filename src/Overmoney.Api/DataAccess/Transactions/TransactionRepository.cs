@@ -12,6 +12,12 @@ public interface ITransactionRepository : IRepository
     Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task DeleteAsync(long id, CancellationToken cancellationToken);
 
+    Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);
+    Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken);
+    Task<RecurringTransaction> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken);
+    Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken);
+    Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);
+
     Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken);
     Task<Attachment?> GetAttachmentAsync(long id, CancellationToken cancellationToken);
     Task AddAttachmentAsync(long transactionId, Attachment attachment, CancellationToken cancellationToken);
@@ -166,5 +172,30 @@ internal sealed class TransactionRepository : ITransactionRepository
 
         _databaseContext.Add(entity);
         await _databaseContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<RecurringTransaction> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

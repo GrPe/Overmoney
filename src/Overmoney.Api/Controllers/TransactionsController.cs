@@ -93,31 +93,72 @@ public class TransactionsController : BaseController
         return Ok();
     }
 
+    /// <summary>
+    /// Create new recurring transaction
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
     [HttpPost("recurring")]
-    public async Task<ActionResult<RecurringTransaction>> CreateRecurringTransaction(object command)
+    [ProducesResponseType<RecurringTransaction>(StatusCodes.Status201Created)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<RecurringTransaction>> CreateRecurringTransaction(CreateRecurringTransactionCommand command)
     {
         var result = await _mediator.Send(command);
-        return null; //todo
+        return CreatedAtAction(nameof(GetRecurringById), new { result.Id }, result);
     }
 
+    /// <summary>
+    /// Retrieve recurring transaction by Id
+    /// </summary>
+    /// <param name="id">Recurring Transaction Id</param>
+    /// <returns></returns>
     [HttpGet("recurring/{id}")]
+    [ProducesResponseType<RecurringTransaction>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<RecurringTransaction>> GetRecurringById(long id)
     {
         var result = await _mediator.Send(id);
-        return null; //todo
+        
+        if (result is null)
+        {
+            return NotFound();
+        }
+        return Ok(result);
     }
 
+    /// <summary>
+    /// Update recurring transaction or create new one
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
     [HttpPut("recurring")]
-    public async Task<IActionResult> UpdateRecurring(object command)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<RecurringTransaction>(StatusCodes.Status201Created)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpdateRecurring(UpdateRecurringTransactionCommand command)
     {
-        await _mediator.Send(command);
-        return null; //todo
+        var result = await _mediator.Send(command);
+
+        if (result is null)
+        {
+            return Ok();
+        }
+
+        return CreatedAtAction(nameof(GetRecurringById), new { result.Id }, result);
     }
 
+    /// <summary>
+    /// Delete recurring transaction
+    /// </summary>
+    /// <param name="id">Recurring Transaction Id</param>
+    /// <returns></returns>
     [HttpDelete("recurring/{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
     public async Task<IActionResult> DeleteRecurring(long id)
     {
         await _mediator.Send(id);
-        return null; //todo
+        return NoContent();
     }
 }
