@@ -19,7 +19,7 @@ internal sealed class RecurringTransactionEntity
     public PayeeEntity Payee { get; private set; } = null!;
     public int CategoryId { get; private set; }
     public CategoryEntity Category { get; private set; } = null!;
-    public DateTime TransactionDate { get; private set; }
+    public DateTime NextOccurrence { get; private set; }
     public TransactionType TransactionType { get; private set; }
     public string? Note { get; private set; }
     public double Amount { get; private set; }
@@ -30,7 +30,7 @@ internal sealed class RecurringTransactionEntity
         UserEntity user,
         PayeeEntity payee,
         CategoryEntity category,
-        DateTime transactionDate,
+        DateTime nextOccurrence,
         TransactionType transactionType,
         string? note,
         double amount,
@@ -40,7 +40,7 @@ internal sealed class RecurringTransactionEntity
         User = user;
         Payee = payee;
         Category = category;
-        TransactionDate = transactionDate;
+        NextOccurrence = nextOccurrence;
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
@@ -51,7 +51,7 @@ internal sealed class RecurringTransactionEntity
         WalletEntity wallet,
         PayeeEntity payee,
         CategoryEntity category,
-        DateTime transactionDate,
+        DateTime nextOccurrence,
         TransactionType transactionType,
         string? note,
         double amount,
@@ -60,7 +60,7 @@ internal sealed class RecurringTransactionEntity
         Wallet = wallet;
         Payee = payee;
         Category = category;
-        TransactionDate = transactionDate;
+        NextOccurrence = nextOccurrence;
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
@@ -81,7 +81,7 @@ internal sealed class RecurringTransactionEntityConfiguration : IEntityTypeConfi
             .ToTable("recurring_transactions")
             .HasKey(x => x.Id);
 
-        builder.Property(x => x.TransactionDate)
+        builder.Property(x => x.NextOccurrence)
             .IsRequired();
 
         builder.Property(x => x.TransactionType)
@@ -121,7 +121,7 @@ internal sealed class RecurringTransactionEntityConfiguration : IEntityTypeConfi
         builder
             .Property(x => x.Schedule)
             .HasConversion(
-                v => v.ToString(),
+                v => v.Cron,
                 v => new Schedule(v));
     }
 }

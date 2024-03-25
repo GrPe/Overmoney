@@ -14,7 +14,7 @@ public interface ITransactionRepository : IRepository
 
     Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);
     Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken);
-    Task<RecurringTransaction> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken);
+    Task<RecurringTransaction?> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken);
     Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken);
     Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);
 
@@ -130,7 +130,6 @@ internal sealed class TransactionRepository : ITransactionRepository
            .Include(x => x.Wallet)
            .Include(x => x.Category)
            .Include(x => x.Payee)
-           .Include(x => x.User)
            .Include(x => x.Attachments)
            .SingleOrDefaultAsync(x => x.Id == transaction.Id, cancellationToken);
 
@@ -138,10 +137,6 @@ internal sealed class TransactionRepository : ITransactionRepository
         {
             return;
         }
-
-        var user = entity.UserId == transaction.UserId
-            ? entity.User
-            : await _databaseContext.Users.SingleAsync(x => x.Id == transaction.UserId, cancellationToken);
 
         var category = entity.CategoryId == transaction.Category.Id
             ? entity.Category
@@ -155,7 +150,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             ? entity.Wallet
             : await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
 
-        entity.Update(wallet, user, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
+        entity.Update(wallet, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
         _databaseContext.Update(entity);
 
 
@@ -174,28 +169,111 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
+    public async Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await _databaseContext.Users.SingleAsync(x => x.Id == transaction.UserId, cancellationToken);
+        var wallet = await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
+        var payee = await _databaseContext.Payees.SingleAsync(x => x.Id == transaction.Payee.Id, cancellationToken);
+        var category = await _databaseContext.Categories.SingleAsync(x => x.Id == transaction.Category.Id, cancellationToken);
+
+        var entity = _databaseContext.Add(new RecurringTransactionEntity(wallet, user, payee, category, transaction.NextOccurrence, transaction.TransactionType, transaction.Note, transaction.Amount, transaction.Schedule));
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
+        return (await GetRecurringTransactionAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public Task<RecurringTransaction> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    public async Task<RecurringTransaction?> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var entity = await _databaseContext
+            .RecurringTransactions
+            .AsNoTracking()
+            .Include(x => x.Wallet)
+            .ThenInclude(w => w.Currency)
+            .Include(x => x.Category)
+            .Include(x => x.Payee)
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (entity is null)
+        {
+            return null;
+        }
+
+        return new RecurringTransaction(
+            entity.Id,
+            entity.UserId,
+            new Features.Wallets.Models.Wallet(entity.Wallet.Id, entity.Wallet.Name, new Features.Currencies.Models.Currency(entity.Wallet.CurrencyId, entity.Wallet.Currency.Code, entity.Wallet.Currency.Name), entity.Wallet.UserId),
+            new Features.Payees.Models.Payee(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
+            new Features.Categories.Models.Category(entity.Category.Id, entity.Category.UserId, entity.Category.Name),
+            entity.TransactionType,
+            entity.Note,
+            entity.Amount,
+            entity.Schedule,
+            entity.NextOccurrence);
     }
 
-    public Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    public async Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _databaseContext
+            .RecurringTransactions
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
+    public async Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var entity = await _databaseContext
+           .RecurringTransactions
+           .Include(x => x.Wallet)
+           .Include(x => x.Category)
+           .Include(x => x.Payee)
+           .Include(x => x.User)
+           .SingleOrDefaultAsync(x => x.Id == transaction.Id, cancellationToken);
+
+        if (entity is null)
+        {
+            return;
+        }
+
+        var category = entity.CategoryId == transaction.Category.Id
+            ? entity.Category
+            : await _databaseContext.Categories.SingleAsync(x => x.Id == transaction.Category.Id, cancellationToken);
+
+        var payee = entity.PayeeId == transaction.Payee.Id
+            ? entity.Payee
+            : await _databaseContext.Payees.SingleAsync(x => x.Id == transaction.Payee.Id, cancellationToken);
+
+        var wallet = entity.WalletId == transaction.Wallet.Id
+            ? entity.Wallet
+            : await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
+
+        entity.Update(wallet, payee, category, transaction.NextOccurrence, transaction.TransactionType, transaction.Note, transaction.Amount, transaction.Schedule);
+        _databaseContext.Update(entity);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var entities = await _databaseContext
+            .RecurringTransactions
+            .AsNoTracking()
+            .Include(x => x.Wallet)
+            .ThenInclude(w => w.Currency)
+            .Include(x => x.Category)
+            .Include(x => x.Payee)
+            .Where(x => x.UserId == userId)
+            .ToListAsync(cancellationToken);
+
+        return entities.Select(x => new RecurringTransaction(
+            x.Id,
+            x.UserId,
+            new Features.Wallets.Models.Wallet(x.Wallet.Id, x.Wallet.Name, new Features.Currencies.Models.Currency(x.Wallet.CurrencyId, x.Wallet.Currency.Code, x.Wallet.Currency.Name), x.Wallet.UserId),
+            new Features.Payees.Models.Payee(x.Payee.Id, x.Payee.UserId, x.Payee.Name),
+            new Features.Categories.Models.Category(x.Category.Id, x.Category.UserId, x.Category.Name),
+            x.TransactionType,
+            x.Note,
+            x.Amount,
+            x.Schedule,
+            x.NextOccurrence));
     }
 }

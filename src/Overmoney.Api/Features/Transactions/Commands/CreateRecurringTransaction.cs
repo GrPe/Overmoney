@@ -13,10 +13,10 @@ public sealed record CreateRecurringTransactionCommand(
     int WalletId,
     int PayeeId,
     int CategoryId,
-    DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
     double Amount,
+    DateTime FirstOccurrence,
     string Schedule) : IRequest<RecurringTransaction>;
 
 public sealed class CreateRecurringTransactionCommandValidator : AbstractValidator<CreateRecurringTransactionCommand>
@@ -29,7 +29,7 @@ public sealed class CreateRecurringTransactionCommandValidator : AbstractValidat
             .GreaterThan(0);
         RuleFor(x => x.CategoryId)
             .GreaterThan(0);
-        RuleFor(x => x.TransactionDate)
+        RuleFor(x => x.FirstOccurrence)
             .NotEmpty();
         RuleFor(x => x.Schedule)
             .NotEmpty();
@@ -78,6 +78,6 @@ public sealed class CreateRecurringTransactionCommandHandler : IRequestHandler<C
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        return await _transactionRepository.CreateAsync(new RecurringTransaction(wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule)), cancellationToken);
+        return await _transactionRepository.CreateAsync(new RecurringTransaction(wallet.UserId, wallet, payee, category, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule), request.FirstOccurrence), cancellationToken);
     }
 }

@@ -118,7 +118,7 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult<RecurringTransaction>> GetRecurringById(long id)
     {
-        var result = await _mediator.Send(id);
+        var result = await _mediator.Send(new GetRecurringTransactionQuery(id));
         
         if (result is null)
         {
@@ -158,7 +158,7 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> DeleteRecurring(long id)
     {
-        await _mediator.Send(id);
+        await _mediator.Send(new DeleteRecurringTransactionCommand(id));
         return NoContent();
     }
 }

@@ -11,7 +11,6 @@ public class RecurringTransaction
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
-    public DateTime TransactionDate { get; }
     public TransactionType TransactionType { get; }
     public string? Note { get; }
     public double Amount { get; }
@@ -25,23 +24,22 @@ public class RecurringTransaction
         Wallet wallet,
         Payee payee,
         Category category,
-        DateTime transactionDate,
         TransactionType transactionType,
         string? note,
         double amount,
-        Schedule schedule)
+        Schedule schedule,
+        DateTime nextOccurrence)
     {
         Id = id;
         UserId = userId;
         Wallet = wallet;
         Payee = payee;
         Category = category;
-        TransactionDate = transactionDate;
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
         Schedule = schedule;
-        NextOccurrence = DateTime.UtcNow; //todo
+        NextOccurrence = nextOccurrence;
     }
 
     public RecurringTransaction(
@@ -49,21 +47,20 @@ public class RecurringTransaction
         Wallet wallet,
         Payee payee,
         Category category,
-        DateTime transactionDate,
         TransactionType transactionType,
         string? note,
         double amount,
-        Schedule schedule)
+        Schedule schedule,
+        DateTime nextOccurrence)
     {
         UserId = userId;
         Wallet = wallet;
         Payee = payee;
         Category = category;
-        TransactionDate = transactionDate;
         TransactionType = transactionType;
         Note = note;
         Amount = amount;
         Schedule = schedule;
-        NextOccurrence = DateTime.Now; //todo
+        NextOccurrence = nextOccurrence;
     }
 }

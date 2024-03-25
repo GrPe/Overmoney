@@ -47,7 +47,6 @@ internal class TransactionEntity
 
     public void Update(
         WalletEntity wallet,
-        UserEntity user,
         PayeeEntity payee,
         CategoryEntity category,
         DateTime transactionDate,
@@ -56,7 +55,6 @@ internal class TransactionEntity
         double amount)
     {
         Wallet = wallet;
-        User = user;
         Payee = payee;
         Category = category;
         TransactionDate = transactionDate;

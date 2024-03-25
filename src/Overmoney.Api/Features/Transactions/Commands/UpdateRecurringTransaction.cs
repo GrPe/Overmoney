@@ -14,10 +14,10 @@ public sealed record UpdateRecurringTransactionCommand(
     int WalletId,
     int PayeeId,
     int CategoryId,
-    DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
     double Amount,
+    DateTime FirstOccurrence,
     string Schedule) : IRequest<RecurringTransaction?>;
 
 public sealed class UpdateRecurringTransactionCommandValidator : AbstractValidator<UpdateRecurringTransactionCommand>
@@ -32,7 +32,7 @@ public sealed class UpdateRecurringTransactionCommandValidator : AbstractValidat
             .GreaterThan(0);
         RuleFor(x => x.CategoryId)
             .GreaterThan(0);
-        RuleFor(x => x.TransactionDate)
+        RuleFor(x => x.FirstOccurrence)
             .NotEmpty();
         RuleFor(x => x.Schedule)
             .NotEmpty();
@@ -67,7 +67,7 @@ public sealed class UpdateRecurringTransactionCommandHandler : IRequestHandler<U
 
         if (transaction is null)
         {
-            return await _mediator.Send(new CreateRecurringTransactionCommand(request.WalletId, request.PayeeId, request.CategoryId, request.TransactionDate, request.TransactionType, request.Note, request.Amount, request.Schedule), cancellationToken);
+            return await _mediator.Send(new CreateRecurringTransactionCommand(request.WalletId, request.PayeeId, request.CategoryId, request.TransactionType, request.Note, request.Amount, request.FirstOccurrence, request.Schedule), cancellationToken);
         }
 
         var wallet = await _walletRepository.GetAsync(request.WalletId, cancellationToken);
@@ -91,7 +91,7 @@ public sealed class UpdateRecurringTransactionCommandHandler : IRequestHandler<U
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        await _transactionRepository.UpdateAsync(new RecurringTransaction(transaction.Id, wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule)), cancellationToken);
+        await _transactionRepository.UpdateAsync(new RecurringTransaction(transaction.Id, wallet.UserId, wallet, payee, category, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule), request.FirstOccurrence), cancellationToken);
         return null;
     }
 }

@@ -3,15 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using Overmoney.Api.DataAccess;
 using Overmoney.Api.Features;
 using Overmoney.Api.Infrastructure;
+using Overmoney.Api.Infrastructure.Converters;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new ScheduleJsonConverter());
+});
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -34,7 +38,7 @@ builder.Services.AddMediatR(
     cfg => {
         cfg.RegisterServicesFromAssemblyContaining<Program>();
         cfg.AddOpenRequestPreProcessor(typeof(RequestValidationBehavior<>));
-        });
+    });
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.Scan(
