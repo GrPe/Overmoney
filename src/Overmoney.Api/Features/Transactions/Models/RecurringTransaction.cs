@@ -15,7 +15,7 @@ public class RecurringTransaction
     public string? Note { get; }
     public double Amount { get; }
     public Schedule Schedule { get; }
-    public DateTime NextOccurrence { get; }
+    public DateTime NextOccurrence { get; private set; }
 
 
     public RecurringTransaction(
@@ -62,5 +62,10 @@ public class RecurringTransaction
         Amount = amount;
         Schedule = schedule;
         NextOccurrence = nextOccurrence;
+    }
+
+    public void UpdateSchedule(DateTime currentDate)
+    {
+        NextOccurrence = Schedule.NextOccurrence(currentDate);
     }
 }

@@ -108,6 +108,20 @@ public class TransactionsController : BaseController
     }
 
     /// <summary>
+    /// Update recurring transaction next occurrence based on schedule
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpPatch("recurring/{id}/schedule")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpdateRecurringTransaction(long id)
+    {
+        await _mediator.Send(new UpdateRecurringTransactionNextOccurrenceCommand(id));
+        return NoContent();
+    }
+
+    /// <summary>
     /// Retrieve recurring transaction by Id
     /// </summary>
     /// <param name="id">Recurring Transaction Id</param>

@@ -48,6 +48,7 @@ builder.Services.Scan(
     .WithScopedLifetime());
 
 builder.Services.AddScoped<ExceptionHandler>();
+builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
 var app = builder.Build();
 

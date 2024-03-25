@@ -32,7 +32,14 @@ public sealed class CreateRecurringTransactionCommandValidator : AbstractValidat
         RuleFor(x => x.FirstOccurrence)
             .NotEmpty();
         RuleFor(x => x.Schedule)
-            .NotEmpty();
+            .NotEmpty()
+            .Custom((schedule, context) =>
+            {
+                if (!Cronos.CronExpression.TryParse(schedule, out var _))
+                {
+                    context.AddFailure("Invalid schedule format. Use (* * * * *)");
+                }
+            });
     }
 }
 
