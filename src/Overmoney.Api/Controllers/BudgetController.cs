@@ -73,8 +73,12 @@ public class BudgetController : BaseController
         return NoContent();
     }
 
-    public async Task<IActionResult> DeleteLine(int id)
+    [HttpDelete("{id}/lines")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> DeleteLine(int id, List<int> BudgetLinesIds)
     {
-        throw new NotImplementedException();
+        await _mediator.Send(new DeleteBudgetLinesCommand(id, BudgetLinesIds));
+        return NoContent();
     }
 }
