@@ -31,14 +31,14 @@ public sealed class UpdatePayeeCommandHandler : IRequestHandler<UpdatePayeeComma
 
     public async Task<Payee?> Handle(UpdatePayeeCommand request, CancellationToken cancellationToken)
     {
-        var payee = await _payeeRepository.GetAsync(request.Id, cancellationToken);
+        var payee = await _payeeRepository.GetAsync(new PayeeId(request.Id), cancellationToken);
 
         if(payee == null)
         {
             return await _payeeRepository.CreateAsync(new Payee(request.UserId, request.Name), cancellationToken);
         }
 
-        await _payeeRepository.UpdateAsync(new Payee(request.Id, request.UserId, request.Name), cancellationToken);
+        await _payeeRepository.UpdateAsync(new Payee(new PayeeId(request.Id), request.UserId, request.Name), cancellationToken);
         return null;
     }
 }

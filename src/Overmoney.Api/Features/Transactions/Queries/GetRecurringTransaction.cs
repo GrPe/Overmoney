@@ -5,7 +5,7 @@ using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.Features.Transactions.Queries;
 
-public sealed record GetRecurringTransactionQuery(long Id) : IRequest<RecurringTransaction>;
+public sealed record GetRecurringTransactionQuery(long Id) : IRequest<RecurringTransaction?>;
 
 public sealed class GetRecurringTransactionQueryValidator : AbstractValidator<GetRecurringTransactionQuery>
 {
@@ -16,7 +16,7 @@ public sealed class GetRecurringTransactionQueryValidator : AbstractValidator<Ge
     }
 }
 
-public sealed class GetRecurringTransactionQueryHandler : IRequestHandler<GetRecurringTransactionQuery, RecurringTransaction>
+public sealed class GetRecurringTransactionQueryHandler : IRequestHandler<GetRecurringTransactionQuery, RecurringTransaction?>
 {
     private readonly ITransactionRepository _transactionRepository;
 
@@ -25,7 +25,7 @@ public sealed class GetRecurringTransactionQueryHandler : IRequestHandler<GetRec
         _transactionRepository = transactionRepository;
     }
 
-    public async Task<RecurringTransaction> Handle(GetRecurringTransactionQuery request, CancellationToken cancellationToken)
+    public async Task<RecurringTransaction?> Handle(GetRecurringTransactionQuery request, CancellationToken cancellationToken)
     {
         return await _transactionRepository.GetRecurringTransactionAsync(request.Id, cancellationToken);
     }

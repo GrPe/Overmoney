@@ -27,6 +27,6 @@ public sealed class GetPayeeByIdQueryHandler : IRequestHandler<GetPayeeByIdQuery
 
     public async Task<Payee?> Handle(GetPayeeByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _payeeRepository.GetAsync(request.Id, cancellationToken);
+        return await _payeeRepository.GetAsync(new PayeeId(request.Id), cancellationToken);
     }
 }

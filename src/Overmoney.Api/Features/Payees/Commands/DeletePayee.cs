@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Api.DataAccess.Payees;
+using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
@@ -26,6 +27,6 @@ public sealed class DeletePayeeCommandHandler : IRequestHandler<DeletePayeeComma
 
     public async Task Handle(DeletePayeeCommand request, CancellationToken cancellationToken)
     {
-        await _payeeRepository.DeleteAsync(request.Id, cancellationToken);
+        await _payeeRepository.DeleteAsync(new PayeeId(request.Id), cancellationToken);
     }
 }

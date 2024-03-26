@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.Api.DataAccess.Users;
+using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.DataAccess.Payees;
 
 internal sealed class PayeeEntity
 {
-    public int Id { get; private set; }
+    public PayeeId Id { get; private set; } = null!;
     public int UserId { get; private set; }
     public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
@@ -36,6 +37,11 @@ internal sealed class PayeeEntityTypeConfiguration : IEntityTypeConfiguration<Pa
         builder
             .ToTable("payees")
             .HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .HasConversion(
+            x => x.Id, 
+            x => new PayeeId(x));
 
         builder.Property(x => x.Name)
             .IsRequired();

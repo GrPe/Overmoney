@@ -4,6 +4,7 @@ using Overmoney.Api.DataAccess.Categories;
 using Overmoney.Api.DataAccess.Payees;
 using Overmoney.Api.DataAccess.Transactions;
 using Overmoney.Api.DataAccess.Wallets;
+using Overmoney.Api.Features.Payees.Models;
 using Overmoney.Api.Features.Transactions.Models;
 using Overmoney.Api.Infrastructure.Exceptions;
 
@@ -76,7 +77,7 @@ public sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTran
             throw new DomainValidationException($"Category of id {request.CategoryId} does not exists.");
         }
 
-        var payee = await _payeeRepository.GetAsync(request.PayeeId, cancellationToken);
+        var payee = await _payeeRepository.GetAsync(new PayeeId(request.PayeeId), cancellationToken);
 
         if (payee is null)
         {

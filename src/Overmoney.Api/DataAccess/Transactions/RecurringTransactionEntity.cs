@@ -4,6 +4,7 @@ using Overmoney.Api.DataAccess.Categories;
 using Overmoney.Api.DataAccess.Payees;
 using Overmoney.Api.DataAccess.Users;
 using Overmoney.Api.DataAccess.Wallets;
+using Overmoney.Api.Features.Payees.Models;
 using Overmoney.Api.Features.Transactions.Models;
 
 namespace Overmoney.Api.DataAccess.Transactions;
@@ -15,7 +16,7 @@ internal sealed class RecurringTransactionEntity
     public WalletEntity Wallet { get; private set; } = null!;
     public int UserId { get; private set; }
     public UserEntity User { get; private set; } = null!;
-    public int PayeeId { get; private set; }
+    public PayeeId PayeeId { get; private set; } = null!;
     public PayeeEntity Payee { get; private set; } = null!;
     public int CategoryId { get; private set; }
     public CategoryEntity Category { get; private set; } = null!;
@@ -117,6 +118,11 @@ internal sealed class RecurringTransactionEntityConfiguration : IEntityTypeConfi
             .HasForeignKey(x => x.CategoryId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(x => x.PayeeId)
+            .HasConversion(
+                x => x.Id,
+                x => new PayeeId(x));
 
         builder
             .Property(x => x.Schedule)

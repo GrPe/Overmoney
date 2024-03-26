@@ -1,12 +1,28 @@
-﻿namespace Overmoney.Api.Features.Payees.Models;
+﻿using Overmoney.Api.Infrastructure.Exceptions;
+
+namespace Overmoney.Api.Features.Payees.Models;
+
+public sealed record PayeeId
+{
+    public int Id { get; }
+
+    public PayeeId(int id)
+    {
+        if(id <= 0)
+        {
+            throw new DomainValidationException("Id must be greater than 0");
+        }
+        Id = id;
+    }
+}
 
 public sealed class Payee
 {
-    public int? Id { get; }
+    public PayeeId? Id { get; }
     public int UserId { get; }
     public string Name { get; }
 
-    public Payee(int id, int userId, string name) : this(userId, name)
+    public Payee(PayeeId id, int userId, string name) : this(userId, name)
     {
         Id = id;
         UserId = userId;
@@ -23,5 +39,4 @@ public sealed class Payee
         UserId = userId;
         Name = name;
     }
-
 }

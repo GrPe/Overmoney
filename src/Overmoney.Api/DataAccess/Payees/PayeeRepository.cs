@@ -6,11 +6,11 @@ namespace Overmoney.Api.DataAccess.Payees;
 
 public interface IPayeeRepository : IRepository
 {
-    Task<Payee?> GetAsync(int id, CancellationToken cancellationToken);
+    Task<Payee?> GetAsync(PayeeId id, CancellationToken cancellationToken);
     Task<IEnumerable<Payee>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken);
     Task<Payee> CreateAsync(Payee payee, CancellationToken cancellationToken);
     Task UpdateAsync(Payee payee, CancellationToken cancellationToken);
-    Task DeleteAsync(int id, CancellationToken cancellationToken);
+    Task DeleteAsync(PayeeId id, CancellationToken cancellationToken);
 }
 
 internal sealed class PayeeRepository : IPayeeRepository
@@ -31,7 +31,7 @@ internal sealed class PayeeRepository : IPayeeRepository
         return new Payee(entity.Entity.Id, entity.Entity.UserId, entity.Entity.Name);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(PayeeId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Payees
@@ -49,7 +49,7 @@ internal sealed class PayeeRepository : IPayeeRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Payee?> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Payee?> GetAsync(PayeeId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .Payees
