@@ -8,9 +8,9 @@ public sealed class BudgetLine
     public Category Category { get; private set; } = null!;
     public double Amount { get; private set; }
 
-    public BudgetLine(long id, Category category, double amount)
+    public BudgetLine(long? id, Category category, double amount)
     {
-        Id = id;
+        Id = id ?? 0;
         Category = category;
         Amount = amount;
     }

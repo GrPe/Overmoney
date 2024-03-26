@@ -64,9 +64,13 @@ public class BudgetController : BaseController
         throw new NotImplementedException();
     }
 
-    public async Task<IActionResult> UpsertLine(object command)
+    [HttpPost("lines")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpsertLine(UpsertBudgetLineCommand command)
     {
-        throw new NotImplementedException();
+        await _mediator.Send(command);
+        return NoContent();
     }
 
     public async Task<IActionResult> DeleteLine(int id)
