@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Overmoney.Api.DataAccess.Budgets;
 using Overmoney.Api.DataAccess.Categories;
 using Overmoney.Api.DataAccess.Currencies;
 using Overmoney.Api.DataAccess.Payees;
@@ -18,6 +19,9 @@ internal sealed class DatabaseContext : DbContext
     public DbSet<TransactionEntity> Transactions { get; set; }
     public DbSet<RecurringTransactionEntity> RecurringTransactions { get; set; }
     public DbSet<AttachmentEntity> Attachments { get; set; }
+    public DbSet<BudgetEntity> Budgets { get; set; }
+    public DbSet<BudgetLineEntity> BudgetLines { get; set; }
+
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
