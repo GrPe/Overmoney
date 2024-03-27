@@ -26,6 +26,11 @@ internal sealed class BudgetLineEntity
         Amount = amount;
     }
 
+    public void Update(double amount)
+    {
+        Amount = amount;
+    }
+
     private BudgetLineEntity()
     {
         

@@ -33,6 +33,6 @@ public sealed class CreateBudgetCommandHandler : IRequestHandler<CreateBudgetCom
 
     public async Task<Budget> Handle(CreateBudgetCommand request, CancellationToken cancellationToken)
     {
-        return await _budgetRepository.CreateAsync(new Budget(request.Name, request.UserId, request.Year, request.Month), cancellationToken);
+        return await _budgetRepository.CreateAsync(new Budget(request.UserId, request.Name, request.Year, request.Month), cancellationToken);
     }
 }

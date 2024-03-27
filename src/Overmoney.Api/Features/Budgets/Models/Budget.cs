@@ -13,7 +13,7 @@ public sealed class Budget
 
     private readonly List<BudgetLine> _budgetLines = [];
 
-    public Budget(int id, string name, int userId, int year, int month, List<BudgetLine> budgetLines)
+    public Budget(int id, int userId, string name, int year, int month, List<BudgetLine> budgetLines)
     {
         Id = id;
         Name = name;
@@ -23,7 +23,7 @@ public sealed class Budget
         _budgetLines = budgetLines;
     }
 
-    public Budget(string name, int year, int userId, int month, List<BudgetLine>? budgetLines = null)
+    public Budget(int userId, string name, int year, int month, List<BudgetLine>? budgetLines = null)
     {
         Name = name;
         Year = year;

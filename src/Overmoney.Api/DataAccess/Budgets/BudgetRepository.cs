@@ -70,15 +70,15 @@ internal class BudgetRepository : IBudgetRepository
         }
 
         return new Budget(
-            budget.Id, 
-            budget.Name, 
-            budget.UserId, 
+            budget.Id,
+            budget.UserId,
+            budget.Name,  
             budget.Year, 
             budget.Month, 
             budget.BudgetLines.Select(x => 
                 new BudgetLine(
                     x.Id, 
-                    new Category(x.Category.Id, x.Category.Name), 
+                    new Category(x.Category.Id, x.Category.UserId, x.Category.Name), 
                     x.Amount)).ToList());
     }
 
@@ -95,18 +95,24 @@ internal class BudgetRepository : IBudgetRepository
         }
 
         entity.Update(budget.Name, budget.Year, budget.Month);
+        _databaseContext.Update(entity);
 
-        foreach(var line in entity.BudgetLines)
+        List<BudgetLineEntity> linesToRemove = [];
+        foreach (var entityLine in entity.BudgetLines)
         {
-            var entityLine = budget.BudgetLines.FirstOrDefault(x => x.Id == line.Id);
+            var line = budget.BudgetLines.FirstOrDefault(x => x.Id == entityLine.Id);
 
-            if(entityLine is null)
+            if(line is null)
             {
-                _databaseContext.Remove(line);
+                linesToRemove.Add(entityLine);
                 continue;
             }
             entityLine.Update(line.Amount);
-            _databaseContext.Update(entityLine);
+        }
+
+        foreach(var line in linesToRemove)
+        {
+            entity.BudgetLines.Remove(line);
         }
 
         foreach(var line in budget.BudgetLines.Where(x => x.Id == 0))
@@ -115,7 +121,6 @@ internal class BudgetRepository : IBudgetRepository
             entity.BudgetLines.Add(new BudgetLineEntity(category, line.Amount));
         }
 
-        _databaseContext.Update(entity);
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }
