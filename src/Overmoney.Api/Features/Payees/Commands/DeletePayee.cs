@@ -5,14 +5,14 @@ using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
-public sealed record DeletePayeeCommand(int Id) : IRequest;
+public sealed record DeletePayeeCommand(PayeeId Id) : IRequest;
 
 public sealed class DeletePayeeCommandValidator : AbstractValidator<DeletePayeeCommand>
 {
     public DeletePayeeCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty();
     }
 }
 
@@ -27,6 +27,6 @@ public sealed class DeletePayeeCommandHandler : IRequestHandler<DeletePayeeComma
 
     public async Task Handle(DeletePayeeCommand request, CancellationToken cancellationToken)
     {
-        await _payeeRepository.DeleteAsync(new PayeeId(request.Id), cancellationToken);
+        await _payeeRepository.DeleteAsync(request.Id, cancellationToken);
     }
 }

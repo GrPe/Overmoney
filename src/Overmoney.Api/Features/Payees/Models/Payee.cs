@@ -1,18 +1,21 @@
-﻿using Overmoney.Api.Infrastructure.Exceptions;
+﻿using Overmoney.Api.Features.Common.Models;
+using Overmoney.Api.Infrastructure.Converters;
+using Overmoney.Api.Infrastructure.Exceptions;
+using System.Text.Json.Serialization;
 
 namespace Overmoney.Api.Features.Payees.Models;
 
-public sealed record PayeeId
+[JsonConverter(typeof(IntIdentityJsonConverter))]
+public sealed class PayeeId : Identity<int>
 {
-    public int Id { get; }
-
     public PayeeId(int id)
+        : base(id)
     {
-        if(id <= 0)
-        {
-            throw new DomainValidationException("Id must be greater than 0");
-        }
-        Id = id;
+        //todo:
+        //if(id < 0)
+        //{
+        //    throw new DomainValidationException("Id must be greater than 0");
+        //}
     }
 }
 

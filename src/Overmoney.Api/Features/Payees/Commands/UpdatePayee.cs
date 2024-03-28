@@ -5,14 +5,14 @@ using Overmoney.Api.Features.Payees.Models;
 
 namespace Overmoney.Api.Features.Payees.Commands;
 
-public sealed record UpdatePayeeCommand(int Id, int UserId, string Name) : IRequest<Payee?>;
+public sealed record UpdatePayeeCommand(PayeeId Id, int UserId, string Name) : IRequest<Payee?>;
 
 public sealed class UpdatePayeeCommandValidator : AbstractValidator<UpdatePayeeCommand>
 {
     public UpdatePayeeCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty();
         RuleFor(x => x.UserId)
             .GreaterThan(0);
         RuleFor(x => x.Name)
@@ -31,14 +31,14 @@ public sealed class UpdatePayeeCommandHandler : IRequestHandler<UpdatePayeeComma
 
     public async Task<Payee?> Handle(UpdatePayeeCommand request, CancellationToken cancellationToken)
     {
-        var payee = await _payeeRepository.GetAsync(new PayeeId(request.Id), cancellationToken);
+        var payee = await _payeeRepository.GetAsync(request.Id, cancellationToken);
 
         if(payee == null)
         {
             return await _payeeRepository.CreateAsync(new Payee(request.UserId, request.Name), cancellationToken);
         }
 
-        await _payeeRepository.UpdateAsync(new Payee(new PayeeId(request.Id), request.UserId, request.Name), cancellationToken);
+        await _payeeRepository.UpdateAsync(new Payee(request.Id, request.UserId, request.Name), cancellationToken);
         return null;
     }
 }

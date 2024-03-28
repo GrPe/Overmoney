@@ -25,7 +25,7 @@ public class PayeesController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Payee>> GetById(int id)
     {
-        var result = await _mediator.Send(new GetPayeeByIdQuery(id));
+        var result = await _mediator.Send(new GetPayeeByIdQuery(new PayeeId(id)));
 
         if (result is null)
         {
@@ -60,9 +60,9 @@ public class PayeesController : BaseController
     {
         var result = await _mediator.Send(command);
 
-        if(result is not null)
+        if (result is not null)
         {
-            return CreatedAtAction(nameof(GetById), new {result.Id}, result);
+            return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
         return Ok();
@@ -77,7 +77,7 @@ public class PayeesController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(int id)
     {
-        await _mediator.Send(new DeletePayeeCommand(id));
+        await _mediator.Send(new DeletePayeeCommand(new PayeeId(id)));
         return NoContent();
     }
 }
