@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Infrastructure.Exceptions;
+using Overmoney.Domain.Exceptions;
 using System.Net;
 using System.Text.Json;
 

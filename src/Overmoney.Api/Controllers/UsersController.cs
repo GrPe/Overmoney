@@ -1,16 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Categories.Queries;
-using Overmoney.Api.Features.Payees.Queries;
-using Overmoney.Api.Features.Users.Commands;
-using Overmoney.Api.Features.Wallets.Queries;
-using Overmoney.Api.Features.Categories.Models;
-using Overmoney.Api.Features.Payees.Models;
-using Overmoney.Api.Features.Wallets.Models;
-using Overmoney.Api.Features.Transactions.Models;
-using System.Runtime.InteropServices;
-using Overmoney.Api.Features.Transactions.Queries;
-using Microsoft.AspNetCore.Http;
+using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Categories.Queries;
+using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Payees.Queries;
+using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Transactions.Queries;
+using Overmoney.Domain.Features.Users.Commands;
+using Overmoney.Domain.Features.Wallets.Models;
+using Overmoney.Domain.Features.Wallets.Queries;
 
 namespace Overmoney.Api.Controllers;
 

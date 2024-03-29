@@ -1,11 +1,11 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Overmoney.Api.DataAccess;
-using Overmoney.Api.Features;
 using Overmoney.Api.Infrastructure;
-using Overmoney.Api.Infrastructure.Converters;
 using Overmoney.Api.Infrastructure.Filters;
+using Overmoney.Domain;
+using Overmoney.Domain.DataAccess;
+using Overmoney.DataAccess;
 using System.Reflection;
+using Overmoney.Domain.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -33,27 +32,10 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
-    options.UseSnakeCaseNamingConvention();
-});
-
-builder.Services.AddMediatR(
-    cfg => {
-        cfg.RegisterServicesFromAssemblyContaining<Program>();
-        cfg.AddOpenRequestPreProcessor(typeof(RequestValidationBehavior<>));
-    });
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
-builder.Services.Scan(
-    s => s.FromAssemblyOf<Program>()
-    .AddClasses(classes => classes.AssignableTo<IRepository>())
-    .AsImplementedInterfaces()
-    .WithScopedLifetime());
+builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"));
+builder.Services.AddDomain();
 
 builder.Services.AddScoped<ExceptionHandler>();
-builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
 var app = builder.Build();
 

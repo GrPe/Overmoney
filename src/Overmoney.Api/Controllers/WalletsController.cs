@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Wallets.Models;
-using Overmoney.Api.Features.Wallets.Commands;
-using Overmoney.Api.Features.Wallets.Queries;
+using Overmoney.Domain.Features.Wallets.Commands;
+using Overmoney.Domain.Features.Wallets.Models;
+using Overmoney.Domain.Features.Wallets.Queries;
 
 namespace Overmoney.Api.Controllers;
 

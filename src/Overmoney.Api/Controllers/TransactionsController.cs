@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Transactions.Commands;
-using Overmoney.Api.Features.Transactions.Models;
-using Overmoney.Api.Features.Transactions.Queries;
+using Overmoney.Domain.Features.Transactions.Commands;
+using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Transactions.Queries;
 
 namespace Overmoney.Api.Controllers;
 

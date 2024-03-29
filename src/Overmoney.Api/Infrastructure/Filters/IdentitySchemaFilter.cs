@@ -1,5 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
-using Overmoney.Api.Features.Common.Models;
+using Overmoney.Domain.Features.Common.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Overmoney.Api.Infrastructure.Filters;

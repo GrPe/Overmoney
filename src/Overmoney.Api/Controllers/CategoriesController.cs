@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Overmoney.Api.Features.Categories.Commands;
-using Overmoney.Api.Features.Categories.Queries;
-using Overmoney.Api.Features.Categories.Models;
+using Overmoney.Domain.Features.Categories.Commands;
+using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Categories.Queries;
 
 namespace Overmoney.Api.Controllers;
 
