@@ -7,7 +7,7 @@ namespace Overmoney.DataAccess.Payees;
 
 internal sealed class PayeeEntity
 {
-    public PayeeId Id { get; private set; }
+    public PayeeId Id { get; private set; } = null!;
     public int UserId { get; private set; }
     public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
@@ -38,11 +38,13 @@ internal sealed class PayeeEntityTypeConfiguration : IEntityTypeConfiguration<Pa
             .ToTable("payees")
             .HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
+        builder
+            .Property(x => x.Id)
             .HasConversion(
-            x => x.Value,
-            x => new PayeeId(x))
-            .UseIdentityColumn();
+                x => x.Value,
+                x => new PayeeId(x))
+            .IsRequired()
+            .UseIdentityAlwaysColumn();
 
         builder.Property(x => x.Name)
             .IsRequired();

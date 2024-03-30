@@ -1,5 +1,4 @@
 ﻿using Overmoney.Domain.Converters;
-using Overmoney.Domain.Exceptions;
 using Overmoney.Domain.Features.Common.Models;
 using System.Text.Json.Serialization;
 
@@ -10,12 +9,7 @@ public sealed class PayeeId : Identity<int>
 {
     public PayeeId(int value)
         : base(value)
-    {
-        if (value <= 0)
-        {
-            throw new DomainValidationException("Id must be greater than 0");
-        }
-    }
+    { }
 }
 
 public sealed class Payee

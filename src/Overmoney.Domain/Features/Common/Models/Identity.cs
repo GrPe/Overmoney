@@ -3,14 +3,9 @@
 public abstract class Identity<T> where T : notnull
 {
 
-    public T Value { get; protected set; }
+    public T Value { get; private set; }
 
     public Identity(T id)
-    {
-        Value = id;
-    }
-
-    internal Identity(T id, bool bypassIdentityCheck)
     {
         Value = id;
     }

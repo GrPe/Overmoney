@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Overmoney.Api.DataAccess;
 using Overmoney.Domain.DataAccess;
+using System.Reflection;
 
 namespace Overmoney.DataAccess;
 public static class DataAccessModule
@@ -10,7 +11,7 @@ public static class DataAccessModule
     {
         services.AddDbContext<DatabaseContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString, x => x.MigrationsAssembly(Assembly.GetAssembly(typeof(DatabaseContext))!.FullName));
             options.UseSnakeCaseNamingConvention();
         });
 
