@@ -1,8 +1,19 @@
-﻿namespace Overmoney.Domain.Features.Budgets.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Common.Models;
+using System.Text.Json.Serialization;
+
+namespace Overmoney.Domain.Features.Budgets.Models;
+
+[JsonConverter(typeof(IntIdentityJsonConverter))]
+public sealed class BudgetId : Identity<int>
+{
+    public BudgetId(int id) : base(id)
+    { }
+}
 
 public sealed class Budget
 {
-    public int Id { get; private set; }
+    public BudgetId Id { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public int UserId { get; private set; }
     public int Year { get; private set; }
@@ -11,7 +22,7 @@ public sealed class Budget
 
     private readonly List<BudgetLine> _budgetLines = [];
 
-    public Budget(int id, int userId, string name, int year, int month, List<BudgetLine> budgetLines)
+    public Budget(BudgetId id, int userId, string name, int year, int month, List<BudgetLine> budgetLines)
     {
         Id = id;
         Name = name;

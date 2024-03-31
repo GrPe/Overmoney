@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
-public sealed record DeleteBudgetCommand(int Id) : IRequest;
+public sealed record DeleteBudgetCommand(BudgetId Id) : IRequest;
 
 internal sealed class DeleteBudgetCommandValidator : AbstractValidator<DeleteBudgetCommand>
 {
     public DeleteBudgetCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

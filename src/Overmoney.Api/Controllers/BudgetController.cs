@@ -38,7 +38,7 @@ public class BudgetController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> Delete(int id)
     {
-        await _mediator.Send(new DeleteBudgetCommand(id));
+        await _mediator.Send(new DeleteBudgetCommand(new(id)));
         return NoContent();
     }
 
@@ -48,7 +48,7 @@ public class BudgetController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult<Budget?>> Get(int id)
     {
-        var result = await _mediator.Send(new GetBudgetByIdQuery(id));
+        var result = await _mediator.Send(new GetBudgetByIdQuery(new(id)));
 
         if (result is null)
         {
@@ -78,7 +78,7 @@ public class BudgetController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> DeleteLine(int id, List<int> BudgetLinesIds)
     {
-        await _mediator.Send(new DeleteBudgetLinesCommand(id, BudgetLinesIds));
+        await _mediator.Send(new DeleteBudgetLinesCommand(new(id), BudgetLinesIds));
         return NoContent();
     }
 }

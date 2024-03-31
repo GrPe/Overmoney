@@ -40,7 +40,7 @@ internal class BudgetRepository : IBudgetRepository
         return (await GetAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(BudgetId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Budgets
@@ -48,7 +48,7 @@ internal class BudgetRepository : IBudgetRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<Budget?> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Budget?> GetAsync(BudgetId id, CancellationToken cancellationToken)
     {
         var budget = await _databaseContext
             .Budgets

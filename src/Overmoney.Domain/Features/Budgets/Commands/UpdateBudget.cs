@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
-public sealed record UpdateBudgetCommand(int Id, string Name, int Year, int Month) : IRequest;
+public sealed record UpdateBudgetCommand(BudgetId Id, string Name, int Year, int Month) : IRequest;
 
 internal sealed class UpdateBudgetCommandValidator : AbstractValidator<UpdateBudgetCommand>
 {
     public UpdateBudgetCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.Name)
             .NotEmpty();
         RuleFor(x => x.Year)

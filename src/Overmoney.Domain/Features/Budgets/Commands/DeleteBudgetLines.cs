@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
-public sealed record DeleteBudgetLinesCommand(int BudgetId, IEnumerable<int> BudgetLines) : IRequest;
+public sealed record DeleteBudgetLinesCommand(BudgetId BudgetId, IEnumerable<int> BudgetLines) : IRequest;
 
 internal sealed class DeleteBudgetLinesCommandValidator : AbstractValidator<DeleteBudgetLinesCommand>
 {
     public DeleteBudgetLinesCommandValidator()
     {
         RuleFor(x => x.BudgetId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
 
         RuleForEach(x => x.BudgetLines)
             .GreaterThan(0);

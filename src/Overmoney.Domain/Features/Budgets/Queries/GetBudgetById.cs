@@ -5,14 +5,15 @@ using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Queries;
 
-public sealed record GetBudgetByIdQuery(int Id) : IRequest<Budget?>;
+public sealed record GetBudgetByIdQuery(BudgetId Id) : IRequest<Budget?>;
 
 internal sealed class GetBudgetByIdQueryValidator : AbstractValidator<GetBudgetByIdQuery>
 {
     public GetBudgetByIdQueryValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

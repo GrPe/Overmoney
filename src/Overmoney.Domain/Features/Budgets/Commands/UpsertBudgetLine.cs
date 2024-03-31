@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
-public sealed record UpsertBudgetLineCommand(int BudgetId, IEnumerable<UpsertBudgetLine> BudgetLines) : IRequest;
+public sealed record UpsertBudgetLineCommand(BudgetId BudgetId, IEnumerable<UpsertBudgetLine> BudgetLines) : IRequest;
 public sealed record UpsertBudgetLine(long? BudgetLineId, int CategoryId, double Amount);
 
 internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<UpsertBudgetLineCommand>
@@ -14,7 +14,8 @@ internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<Upser
     public UpsertBudgetLineCommandValidator()
     {
         RuleFor(x => x.BudgetId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.BudgetLines)
             .NotEmpty();
         RuleForEach(x => x.BudgetLines)
