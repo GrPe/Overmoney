@@ -1,16 +1,29 @@
-﻿using Overmoney.Domain.Features.Categories.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Common.Models;
+using System.Text.Json.Serialization;
 
 namespace Overmoney.Domain.Features.Budgets.Models;
 
+[JsonConverter(typeof(LongIdentityJsonConverter))]
+public sealed class BudgetLineId : Identity<long>
+{
+    public BudgetLineId(long id = 0) : base(id)
+    {
+    }
+
+    public bool IsExists() => Value != 0;
+}
+
 public sealed class BudgetLine
 {
-    public long Id { get; private set; }
+    public BudgetLineId Id { get; private set; } = null!;
     public Category Category { get; private set; } = null!;
     public double Amount { get; private set; }
 
-    public BudgetLine(long? id, Category category, double amount)
+    public BudgetLine(BudgetLineId? id, Category category, double amount)
     {
-        Id = id ?? 0;
+        Id = id ?? new BudgetLineId();
         Category = category;
         Amount = amount;
     }

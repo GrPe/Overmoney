@@ -7,7 +7,7 @@ using Overmoney.Domain.Features.Budgets.Models;
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
 public sealed record UpsertBudgetLineCommand(BudgetId BudgetId, IEnumerable<UpsertBudgetLine> BudgetLines) : IRequest;
-public sealed record UpsertBudgetLine(long? BudgetLineId, int CategoryId, double Amount);
+public sealed record UpsertBudgetLine(BudgetLineId? BudgetLineId, int CategoryId, double Amount);
 
 internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<UpsertBudgetLineCommand>
 {
@@ -55,7 +55,7 @@ internal sealed class UpsertBudgetLineCommandHandler : IRequestHandler<UpsertBud
         {
             if (requestBudgetLine.BudgetLineId is not null && requestBudgetLine.Amount == 0)
             {
-                budget.RemoveBudgetLine(requestBudgetLine.BudgetLineId.Value);
+                budget.RemoveBudgetLine(requestBudgetLine.BudgetLineId);
                 continue;
             }
 

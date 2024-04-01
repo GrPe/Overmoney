@@ -78,7 +78,7 @@ public class BudgetController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> DeleteLine(int id, List<int> BudgetLinesIds)
     {
-        await _mediator.Send(new DeleteBudgetLinesCommand(new(id), BudgetLinesIds));
+        await _mediator.Send(new DeleteBudgetLinesCommand(new(id), BudgetLinesIds.Select(x => new BudgetLineId(x))));
         return NoContent();
     }
 }

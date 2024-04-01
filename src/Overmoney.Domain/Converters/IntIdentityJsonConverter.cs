@@ -37,6 +37,6 @@ public sealed class IntIdentityJsonConverter : JsonConverter<Identity<int>>
 
     public override void Write(Utf8JsonWriter writer, Identity<int> value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.Value.ToString());
+        writer.WriteNumberValue(value.Value);
     }
 }

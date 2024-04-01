@@ -108,7 +108,7 @@ internal class BudgetRepository : IBudgetRepository
             entity.BudgetLines.Remove(line);
         }
 
-        foreach (var line in budget.BudgetLines.Where(x => x.Id == 0))
+        foreach (var line in budget.BudgetLines.Where(x => !x.Id.IsExists()))
         {
             var category = await _databaseContext.Categories.SingleAsync(x => x.Id == line.Category.Id, cancellationToken);
             entity.BudgetLines.Add(new BudgetLineEntity(category, line.Amount));

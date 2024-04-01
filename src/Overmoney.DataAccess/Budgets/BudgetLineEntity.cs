@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.DataAccess.Categories;
+using Overmoney.Domain.Features.Budgets.Models;
 
 namespace Overmoney.DataAccess.Budgets;
 
 internal sealed class BudgetLineEntity
 {
-    public long Id { get; private set; }
-    public int BudgetId { get; private set; }
+    public BudgetLineId Id { get; private set; } = null!;
+    public BudgetId BudgetId { get; private set; } = null!;
     public BudgetEntity Budget { get; private set; } = null!;
     public int CategoryId { get; private set; }
     public CategoryEntity Category { get; private set; } = null!;
@@ -44,6 +45,14 @@ internal sealed class BudgetLineEntityTypeConfiguration : IEntityTypeConfigurati
         builder
             .ToTable("budget_lines")
             .HasKey(e => e.Id);
+
+        builder
+            .Property(e => e.Id)
+            .HasConversion(
+                x => x.Value,
+                x => new BudgetLineId(x))
+            .IsRequired()
+            .UseIdentityAlwaysColumn();
 
         builder
             .HasOne(x => x.Budget)

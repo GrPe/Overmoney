@@ -50,7 +50,7 @@ public sealed class Budget
 
     public void UpsertBudgetLine(BudgetLine budgetLine)
     {
-        if (budgetLine.Id is 0)
+        if (budgetLine.Id == new BudgetLineId())
         {
             _budgetLines.Add(budgetLine);
             return;
@@ -67,7 +67,7 @@ public sealed class Budget
         line.Update(budgetLine.Amount);
     }
 
-    public void RemoveBudgetLine(long id)
+    public void RemoveBudgetLine(BudgetLineId id)
     {
         var line = _budgetLines.FirstOrDefault(x => x.Id == id);
 
