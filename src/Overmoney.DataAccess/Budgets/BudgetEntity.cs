@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.DataAccess.Users;
 using Overmoney.Domain.Features.Budgets.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.DataAccess.Budgets;
 
@@ -9,7 +10,7 @@ internal sealed class BudgetEntity
 {
     public BudgetId Id { get; private set; } = null!;
     public string Name { get; private set; } = null!;
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; } = null!;
     public UserEntity User { get; private set; } = null!;
     public int Year { get; private set; }
     public int Month { get; private set; }

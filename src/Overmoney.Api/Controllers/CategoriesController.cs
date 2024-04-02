@@ -25,7 +25,7 @@ public class CategoriesController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Category>> GetById(int id)
     {
-        var result = await _mediator.Send(new GetCategoryByIdQuery(id));
+        var result = await _mediator.Send(new GetCategoryByIdQuery(new(id)));
 
         if (result is null)
         {
@@ -78,7 +78,7 @@ public class CategoriesController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(int id)
     {
-        await _mediator.Send(new DeleteCategoryCommand(id));
+        await _mediator.Send(new DeleteCategoryCommand(new(id)));
         return NoContent();
     }
 }

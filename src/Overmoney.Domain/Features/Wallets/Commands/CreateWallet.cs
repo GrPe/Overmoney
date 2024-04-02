@@ -3,18 +3,20 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Commands;
 
-public sealed record CreateWalletCommand(int UserId, string Name, int CurrencyId) : IRequest<Wallet>;
+public sealed record CreateWalletCommand(UserId UserId, string Name, int CurrencyId) : IRequest<Wallet>;
 
 internal sealed class CreateWalletCommandValidator : AbstractValidator<CreateWalletCommand>
 {
     public CreateWalletCommandValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.CurrencyId)
             .GreaterThan(0);
         RuleFor(x => x.Name)

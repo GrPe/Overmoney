@@ -5,14 +5,15 @@ using Overmoney.Domain.Features.Categories.Models;
 
 namespace Overmoney.Domain.Features.Categories.Queries;
 
-public sealed record GetCategoryByIdQuery(int Id) : IRequest<Category?>;
+public sealed record GetCategoryByIdQuery(CategoryId Id) : IRequest<Category?>;
 
 internal sealed class GetCategoryByIdQueryValidator : AbstractValidator<GetCategoryByIdQuery>
 {
     public GetCategoryByIdQueryValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

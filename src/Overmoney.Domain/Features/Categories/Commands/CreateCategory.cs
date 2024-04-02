@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Categories.Commands;
 
-public sealed record CreateCategoryCommand(int UserId, string Name) : IRequest<Category>;
+public sealed record CreateCategoryCommand(UserId UserId, string Name) : IRequest<Category>;
 
 internal sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
 {
     public CreateCategoryCommandValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.Name)
             .NotEmpty();
     }

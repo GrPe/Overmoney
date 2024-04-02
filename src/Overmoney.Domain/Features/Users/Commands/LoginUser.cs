@@ -2,10 +2,11 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Users.Commands;
 
-public sealed record LoginUserCommand(string? Login, string? Password) : IRequest<int?> { }
+public sealed record LoginUserCommand(string? Login, string? Password) : IRequest<UserId?> { }
 
 internal sealed class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
@@ -18,7 +19,7 @@ internal sealed class LoginUserCommandValidator : AbstractValidator<LoginUserCom
     }
 }
 
-internal sealed class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, int?>
+internal sealed class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserId?>
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<LoginUserCommandHandler> _logger;
@@ -29,7 +30,7 @@ internal sealed class LoginUserCommandHandler : IRequestHandler<LoginUserCommand
         _logger = logger;
     }
 
-    public async Task<int?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserId?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByLoginAsync(request.Login, cancellationToken);
 

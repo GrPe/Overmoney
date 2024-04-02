@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
-public sealed record DeleteTransactionCommand(long Id) : IRequest;
+public sealed record DeleteTransactionCommand(TransactionId Id) : IRequest;
 
 internal sealed class DeleteTransactionCommandValidator : AbstractValidator<DeleteTransactionCommand>
 {
     public DeleteTransactionCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

@@ -6,14 +6,15 @@ using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
-public sealed record AddAttachmentCommand(long TransactionId, string Name, string Path) : IRequest;
+public sealed record AddAttachmentCommand(TransactionId TransactionId, string Name, string Path) : IRequest;
 
 internal sealed class AddAttachmentCommandValidator : AbstractValidator<AddAttachmentCommand>
 {
     public AddAttachmentCommandValidator()
     {
         RuleFor(x => x.TransactionId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.Name)
             .NotEmpty();
         RuleFor(x => x.Path)

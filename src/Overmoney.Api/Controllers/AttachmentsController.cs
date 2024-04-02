@@ -25,7 +25,7 @@ public class AttachmentsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Attachment>> Get(long id)
     {
-        var result = await _mediator.Send(new GetAttachmentByIdQuery(id));
+        var result = await _mediator.Send(new GetAttachmentByIdQuery(new(id)));
         if (result is null)
         {
             return NotFound();
@@ -43,7 +43,7 @@ public class AttachmentsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult> Delete(long id)
     {
-        await _mediator.Send(new DeleteAttachmentCommand(id));
+        await _mediator.Send(new DeleteAttachmentCommand(new(id)));
         return Accepted();
     }
 

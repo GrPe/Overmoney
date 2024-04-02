@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.DataAccess.Users;
 
 internal sealed class UserEntity
 {
-    public int Id { get; private set; }
+    public UserId Id { get; private set; } = null!;
     public string Login { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string Password { get; private set; } = null!;
@@ -30,6 +31,14 @@ internal sealed class UserEntityTypeConfiguration : IEntityTypeConfiguration<Use
         builder
             .ToTable("users")
             .HasKey(t => t.Id);
+
+        builder
+            .Property(t => t.Id)
+            .HasConversion(
+                x => x.Value,
+                x => new UserId(x))
+            .IsRequired()
+            .UseIdentityAlwaysColumn();
 
         builder.Property(t => t.Login)
             .IsRequired();

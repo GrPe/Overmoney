@@ -25,7 +25,7 @@ public class TransactionsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Transaction>> GetById(long id)
     {
-        var result = await _mediator.Send(new GetTransactionByIdQuery(id));
+        var result = await _mediator.Send(new GetTransactionByIdQuery(new(id)));
 
         if (result is null)
         {
@@ -75,7 +75,7 @@ public class TransactionsController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(long id)
     {
-        await _mediator.Send(new DeleteTransactionCommand(id));
+        await _mediator.Send(new DeleteTransactionCommand(new(id)));
         return NoContent();
     }
 
@@ -117,7 +117,7 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> UpdateRecurringTransaction(long id)
     {
-        await _mediator.Send(new UpdateRecurringTransactionNextOccurrenceCommand(id));
+        await _mediator.Send(new UpdateRecurringTransactionNextOccurrenceCommand(new(id)));
         return NoContent();
     }
 
@@ -132,7 +132,7 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult<RecurringTransaction>> GetRecurringById(long id)
     {
-        var result = await _mediator.Send(new GetRecurringTransactionQuery(id));
+        var result = await _mediator.Send(new GetRecurringTransactionQuery(new(id)));
         
         if (result is null)
         {
@@ -172,7 +172,7 @@ public class TransactionsController : BaseController
     [ProducesDefaultResponseType]
     public async Task<IActionResult> DeleteRecurring(long id)
     {
-        await _mediator.Send(new DeleteRecurringTransactionCommand(id));
+        await _mediator.Send(new DeleteRecurringTransactionCommand(new(id)));
         return NoContent();
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.DataAccess.Categories;
 using Overmoney.Domain.Features.Budgets.Models;
+using Overmoney.Domain.Features.Categories.Models;
 
 namespace Overmoney.DataAccess.Budgets;
 
@@ -10,7 +11,7 @@ internal sealed class BudgetLineEntity
     public BudgetLineId Id { get; private set; } = null!;
     public BudgetId BudgetId { get; private set; } = null!;
     public BudgetEntity Budget { get; private set; } = null!;
-    public int CategoryId { get; private set; }
+    public CategoryId CategoryId { get; private set; } = null!;
     public CategoryEntity Category { get; private set; } = null!;
     public double Amount { get; private set; }
 

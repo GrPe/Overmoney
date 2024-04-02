@@ -25,7 +25,7 @@ public class WalletsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Wallet>> GetWallet(int id)
     {
-        var result = await _mediator.Send(new GetWalletQuery(id));
+        var result = await _mediator.Send(new GetWalletQuery(new(id)));
 
         if(result is null)
         {
@@ -77,7 +77,7 @@ public class WalletsController : BaseController
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Delete(int id)
     {
-        await _mediator.Send(new DeleteWalletCommand(id));
+        await _mediator.Send(new DeleteWalletCommand(new(id)));
         return Accepted();
     }
 }

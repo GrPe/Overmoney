@@ -1,13 +1,24 @@
-﻿using Overmoney.Domain.Features.Categories.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Common.Models;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
+using System.Text.Json.Serialization;
 
 namespace Overmoney.Domain.Features.Transactions.Models;
 
+[JsonConverter(typeof(LongIdentityJsonConverter))]
+public sealed class RecurringTransactionId : Identity<long>
+{
+    public RecurringTransactionId(long id) : base(id)
+    { }
+}
+
 public class RecurringTransaction
 {
-    public long Id { get; }
-    public int UserId { get; }
+    public RecurringTransactionId? Id { get; }
+    public UserId UserId { get; } = null!;
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
@@ -19,8 +30,8 @@ public class RecurringTransaction
 
 
     public RecurringTransaction(
-        long id,
-        int userId,
+        RecurringTransactionId id,
+        UserId userId,
         Wallet wallet,
         Payee payee,
         Category category,
@@ -43,7 +54,7 @@ public class RecurringTransaction
     }
 
     public RecurringTransaction(
-        int userId,
+        UserId userId,
         Wallet wallet,
         Payee payee,
         Category category,

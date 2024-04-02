@@ -2,6 +2,7 @@
 using Overmoney.Api.DataAccess;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.DataAccess.Categories;
 internal sealed class CategoryRepository : ICategoryRepository
@@ -22,7 +23,7 @@ internal sealed class CategoryRepository : ICategoryRepository
         return new Category(entity.Entity.Id, entity.Entity.UserId, entity.Entity.Name);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(CategoryId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Categories
@@ -30,7 +31,7 @@ internal sealed class CategoryRepository : ICategoryRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Category>> GetAllByUserAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Category>> GetAllByUserAsync(UserId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext
             .Categories
@@ -40,7 +41,7 @@ internal sealed class CategoryRepository : ICategoryRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Category?> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Category?> GetAsync(CategoryId id, CancellationToken cancellationToken)
     {
         var category = await _databaseContext
             .Categories
@@ -60,7 +61,7 @@ internal sealed class CategoryRepository : ICategoryRepository
         var entity = await _databaseContext
             .Categories
             .Include(x => x.User)
-            .SingleOrDefaultAsync(x => x.Id == category.Id, cancellationToken);
+            .SingleOrDefaultAsync(x => x.Id == category.Id!, cancellationToken);
 
         if (entity is null)
         {

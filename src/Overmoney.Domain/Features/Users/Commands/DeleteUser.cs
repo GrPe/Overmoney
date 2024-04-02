@@ -2,16 +2,19 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Users.Commands;
 
-public sealed record DeleteUserCommand(int UserId) : IRequest { }
+public sealed record DeleteUserCommand(UserId UserId) : IRequest { }
 
 internal sealed class DeleteUserValidator : AbstractValidator<DeleteUserCommand>
 {
     public DeleteUserValidator()
     {
-        RuleFor(x => x.UserId).GreaterThan(0);
+        RuleFor(x => x.UserId)
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

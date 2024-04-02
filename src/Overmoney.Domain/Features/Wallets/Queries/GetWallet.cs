@@ -5,14 +5,15 @@ using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Queries;
 
-public sealed record GetWalletQuery(int Id) : IRequest<Wallet?>;
+public sealed record GetWalletQuery(WalletId Id) : IRequest<Wallet?>;
 
 internal sealed class GetWalletQueryValidator : AbstractValidator<GetWalletQuery>
 {
     public GetWalletQueryValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

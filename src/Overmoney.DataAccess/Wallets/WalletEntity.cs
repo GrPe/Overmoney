@@ -2,13 +2,15 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.DataAccess.Currencies;
 using Overmoney.DataAccess.Users;
+using Overmoney.Domain.Features.Users.Models;
+using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.DataAccess.Wallets;
 
 internal sealed class WalletEntity
 {
-    public int Id { get; private set; }
-    public int UserId { get; private set; }
+    public WalletId Id { get; private set; } = null!;
+    public UserId UserId { get; private set; } = null!;
     public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public int CurrencyId { get; private set; }
@@ -41,6 +43,14 @@ internal sealed class WalletEntityTypeConfiguration : IEntityTypeConfiguration<W
         builder
             .ToTable("wallets")
             .HasKey(t => t.Id);
+
+        builder
+            .Property(t => t.Id)
+            .HasConversion(
+                x => x.Value,
+                x => new WalletId(x))
+            .IsRequired()
+            .UseIdentityAlwaysColumn();
 
         builder.Property(t => t.Name)
             .IsRequired();

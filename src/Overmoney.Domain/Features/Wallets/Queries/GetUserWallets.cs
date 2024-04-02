@@ -1,18 +1,20 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Queries;
 
-public sealed record GetUserWalletsQuery(int UserId) : IRequest<IEnumerable<Wallet>> { }
+public sealed record GetUserWalletsQuery(UserId UserId) : IRequest<IEnumerable<Wallet>> { }
 
 internal sealed class GetUserWalletsQueryValidator : AbstractValidator<GetUserWalletsQuery>
 {
     public GetUserWalletsQueryValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

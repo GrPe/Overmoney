@@ -68,7 +68,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Remove(int id)
     {
-        await _mediator.Send(new DeleteUserCommand(id));
+        await _mediator.Send(new DeleteUserCommand(new(id)));
         return Accepted();
     }
 
@@ -83,7 +83,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<int>> GetUserWallets(int userId)
     {
-        var result = await _mediator.Send(new GetUserWalletsQuery(userId));
+        var result = await _mediator.Send(new GetUserWalletsQuery(new(userId)));
 
         if (result is null || !result.Any())
         {
@@ -103,7 +103,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Category>>> GetUserCategories(int userId)
     {
-        var result = await _mediator.Send(new GetAllCategoriesByUserQuery(userId));
+        var result = await _mediator.Send(new GetAllCategoriesByUserQuery(new(userId)));
 
         if (result is null || !result.Any())
         {
@@ -122,7 +122,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Payee>>> GetUserPayees(int userId)
     {
-        var result = await _mediator.Send(new GetAllPayeesByUserIdQuery(userId));
+        var result = await _mediator.Send(new GetAllPayeesByUserIdQuery(new(userId)));
 
         if(result is null || !result.Any())
         {
@@ -149,7 +149,7 @@ public class UsersController : BaseController
     [ProducesDefaultResponseType]
     public async Task<ActionResult<IEnumerable<RecurringTransaction>>> GetUserRecurringTransactions(int userId)
     {
-        var result = await _mediator.Send(new GetRecurringTransactionsByUserIdQuery(userId));
+        var result = await _mediator.Send(new GetRecurringTransactionsByUserIdQuery(new(userId)));
 
         if (result is null || !result.Any())
         {

@@ -2,6 +2,7 @@
 using Overmoney.Api.DataAccess;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.DataAccess.Payees;
 internal sealed class PayeeRepository : IPayeeRepository
@@ -30,7 +31,7 @@ internal sealed class PayeeRepository : IPayeeRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Payee>> GetAllByUserIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Payee>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext
             .Payees

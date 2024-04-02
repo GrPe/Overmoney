@@ -3,7 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Overmoney.Domain.Converters;
-internal class LongIdentityJsonConverter : JsonConverter<Identity<long>>
+
+public class LongIdentityJsonConverter : JsonConverter<Identity<long>>
 {
     public override bool CanConvert(Type typeToConvert)
     {
@@ -16,7 +17,6 @@ internal class LongIdentityJsonConverter : JsonConverter<Identity<long>>
 
         return type == typeof(Identity<long>);
     }
-
 
     public override Identity<long>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

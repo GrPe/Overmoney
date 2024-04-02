@@ -1,17 +1,29 @@
-﻿namespace Overmoney.Domain.Features.Categories.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Common.Models;
+using Overmoney.Domain.Features.Users.Models;
+using System.Text.Json.Serialization;
 
+namespace Overmoney.Domain.Features.Categories.Models;
+
+[JsonConverter(typeof(IntIdentityJsonConverter))]
+public sealed class CategoryId : Identity<int>
+{
+    public CategoryId(int value) : base(value)
+    {
+    }
+}
 public sealed class Category
 {
-    public int? Id { get; init; }
-    public int UserId { get; init; }
+    public CategoryId? Id { get; init; }
+    public UserId UserId { get; init; } = null!;
     public string Name { get; init; } = null!;
 
-    public Category(int id, int userId, string name) : this(userId, name)
+    public Category(CategoryId id, UserId userId, string name) : this(userId, name)
     {
         Id = id;
     }
 
-    public Category(int userId, string name)
+    public Category(UserId userId, string name)
     {
         if(string.IsNullOrEmpty(name))
         {

@@ -3,11 +3,12 @@ using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
 using Overmoney.Domain.Features.Budgets.Models;
+using Overmoney.Domain.Features.Categories.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
 public sealed record UpsertBudgetLineCommand(BudgetId BudgetId, IEnumerable<UpsertBudgetLine> BudgetLines) : IRequest;
-public sealed record UpsertBudgetLine(BudgetLineId? BudgetLineId, int CategoryId, double Amount);
+public sealed record UpsertBudgetLine(BudgetLineId? BudgetLineId, CategoryId CategoryId, double Amount);
 
 internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<UpsertBudgetLineCommand>
 {
@@ -22,7 +23,8 @@ internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<Upser
             .ChildRules(x =>
             {
                 x.RuleFor(x => x.CategoryId)
-                    .GreaterThan(0);
+                    .NotEmpty()
+                    .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
             });
     }
 }

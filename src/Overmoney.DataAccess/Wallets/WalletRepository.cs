@@ -2,6 +2,7 @@
 using Overmoney.Api.DataAccess;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Currencies.Models;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.DataAccess.Wallets;
@@ -26,7 +27,7 @@ internal sealed class WalletRepository : IWalletRepository
         return new Wallet(entity.Entity.Id, entity.Entity.Name, new Currency(currency.Id, currency.Code, currency.Name), entity.Entity.UserId);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(WalletId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Wallets
@@ -34,7 +35,7 @@ internal sealed class WalletRepository : IWalletRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<Wallet?> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Wallet?> GetAsync(WalletId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .Wallets
@@ -50,7 +51,7 @@ internal sealed class WalletRepository : IWalletRepository
         return new Wallet(entity.Id, entity.Name, new Currency(entity.Currency.Id, entity.Currency.Code, entity.Currency.Name), entity.UserId);
     }
 
-    public async Task<IEnumerable<Wallet>> GetByUserAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Wallet>> GetByUserAsync(UserId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext.Wallets
             .AsNoTracking()

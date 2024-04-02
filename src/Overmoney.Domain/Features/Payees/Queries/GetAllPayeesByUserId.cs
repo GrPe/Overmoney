@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Payees.Queries;
 
-public sealed record GetAllPayeesByUserIdQuery(int UserId) : IRequest<IEnumerable<Payee>>;
+public sealed record GetAllPayeesByUserIdQuery(UserId UserId) : IRequest<IEnumerable<Payee>>;
 
 internal sealed class GetAllPayeesByUserIdQueryValidator : AbstractValidator<GetAllPayeesByUserIdQuery>
 {
     public GetAllPayeesByUserIdQueryValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

@@ -14,7 +14,7 @@ internal sealed class UserRepository : IUserRepository
         _databaseContext = databaseContext;
     }
 
-    public async Task<int> CreateAsync(User user, CancellationToken token)
+    public async Task<UserId> CreateAsync(User user, CancellationToken token)
     {
         var entity = _databaseContext.Add(new UserEntity(user.Login, user.Email, user.Password));
         await _databaseContext.SaveChangesAsync(token);
@@ -22,7 +22,7 @@ internal sealed class UserRepository : IUserRepository
         return entity.Entity.Id;
     }
 
-    public async Task DeleteByIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task DeleteByIdAsync(UserId userId, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Users
@@ -44,7 +44,7 @@ internal sealed class UserRepository : IUserRepository
         return new User(user.Id, user.Login, user.Email, user.Password);
     }
 
-    public async Task<User?> GetByIdAsync(int userId, CancellationToken token)
+    public async Task<User?> GetByIdAsync(UserId userId, CancellationToken token)
     {
         var user = await _databaseContext.Users
             .AsNoTracking()

@@ -1,5 +1,6 @@
 ﻿using Overmoney.Domain.Converters;
 using Overmoney.Domain.Features.Common.Models;
+using Overmoney.Domain.Features.Users.Models;
 using System.Text.Json.Serialization;
 
 namespace Overmoney.Domain.Features.Budgets.Models;
@@ -13,16 +14,16 @@ public sealed class BudgetId : Identity<int>
 
 public sealed class Budget
 {
-    public BudgetId Id { get; private set; } = null!;
+    public BudgetId? Id { get; private set; }
     public string Name { get; private set; } = null!;
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; } = null!;
     public int Year { get; private set; }
     public int Month { get; private set; }
     public IEnumerable<BudgetLine> BudgetLines { get => _budgetLines; }
 
     private readonly List<BudgetLine> _budgetLines = [];
 
-    public Budget(BudgetId id, int userId, string name, int year, int month, List<BudgetLine> budgetLines)
+    public Budget(BudgetId id, UserId userId, string name, int year, int month, List<BudgetLine> budgetLines)
     {
         Id = id;
         Name = name;
@@ -32,7 +33,7 @@ public sealed class Budget
         _budgetLines = budgetLines;
     }
 
-    public Budget(int userId, string name, int year, int month, List<BudgetLine>? budgetLines = null)
+    public Budget(UserId userId, string name, int year, int month, List<BudgetLine>? budgetLines = null)
     {
         Name = name;
         Year = year;

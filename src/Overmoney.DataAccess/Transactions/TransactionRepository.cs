@@ -5,6 +5,7 @@ using Overmoney.Domain.Features.Categories.Models;
 using Overmoney.Domain.Features.Currencies.Models;
 using Overmoney.Domain.Features.Payees.Models;
 using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.DataAccess.Transactions;
@@ -37,7 +38,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         return (await GetAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public async Task DeleteAsync(long id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(TransactionId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Transactions
@@ -45,7 +46,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task DeleteAttachmentAsync(long id, CancellationToken cancellationToken)
+    public async Task DeleteAttachmentAsync(AttachmentId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .Attachments
@@ -53,7 +54,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<Transaction?> GetAsync(long id, CancellationToken cancellationToken)
+    public async Task<Transaction?> GetAsync(TransactionId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .Transactions
@@ -83,7 +84,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             entity.Attachments.Select(x => new Attachment(x.Id, x.Name, x.FilePath)).ToList());
     }
 
-    public async Task<Attachment?> GetAttachmentAsync(long id, CancellationToken cancellationToken)
+    public async Task<Attachment?> GetAttachmentAsync(AttachmentId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .Attachments
@@ -98,7 +99,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         return new Attachment(entity.Id, entity.Name, entity.FilePath);
     }
 
-    public async Task<bool> IsExists(long id, CancellationToken cancellationToken)
+    public async Task<bool> IsExists(TransactionId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .Transactions
@@ -106,7 +107,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             .Select(x => x.Id)
             .SingleOrDefaultAsync(x => x == id, cancellationToken);
 
-        return entity != 0;
+        return entity is not null && entity.Value != 0;
     }
 
     public async Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken)
@@ -143,7 +144,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task AddAttachmentAsync(long transactionId, Attachment attachment, CancellationToken cancellationToken)
+    public async Task AddAttachmentAsync(TransactionId transactionId, Attachment attachment, CancellationToken cancellationToken)
     {
         var transaction = await _databaseContext
             .Transactions
@@ -168,7 +169,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         return (await GetRecurringTransactionAsync(entity.Entity.Id, cancellationToken))!;
     }
 
-    public async Task<RecurringTransaction?> GetRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    public async Task<RecurringTransaction?> GetRecurringTransactionAsync(RecurringTransactionId id, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext
             .RecurringTransactions
@@ -197,7 +198,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             entity.NextOccurrence);
     }
 
-    public async Task DeleteRecurringTransactionAsync(long id, CancellationToken cancellationToken)
+    public async Task DeleteRecurringTransactionAsync(RecurringTransactionId id, CancellationToken cancellationToken)
     {
         await _databaseContext
             .RecurringTransactions
@@ -238,7 +239,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(UserId userId, CancellationToken cancellationToken)
     {
         var entities = await _databaseContext
             .RecurringTransactions
@@ -263,8 +264,19 @@ internal sealed class TransactionRepository : ITransactionRepository
             x.NextOccurrence));
     }
 
-    public Task UpdateAttachmentAsync(Attachment attachment, CancellationToken cancellationToken)
+    public async Task UpdateAttachmentAsync(Attachment attachment, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var entity = await _databaseContext
+            .Attachments
+            .SingleOrDefaultAsync(x => x.Id == attachment.Id, cancellationToken);
+
+        if (entity is null)
+        {
+            return;
+        }
+
+        entity.Update(attachment.Name);
+
+        await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -5,14 +5,15 @@ using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Queries;
 
-public sealed record GetTransactionByIdQuery(long Id) : IRequest<Transaction?>;
+public sealed record GetTransactionByIdQuery(TransactionId Id) : IRequest<Transaction?>;
 
 internal sealed class GetTransactionByIdQueryValidator : AbstractValidator<GetTransactionByIdQuery>
 {
     public GetTransactionByIdQueryValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

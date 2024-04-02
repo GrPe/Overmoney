@@ -4,21 +4,24 @@ using Overmoney.DataAccess.Categories;
 using Overmoney.DataAccess.Payees;
 using Overmoney.DataAccess.Users;
 using Overmoney.DataAccess.Wallets;
+using Overmoney.Domain.Features.Categories.Models;
 using Overmoney.Domain.Features.Payees.Models;
 using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Users.Models;
+using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.DataAccess.Transactions;
 
 internal sealed class RecurringTransactionEntity
 {
-    public long Id { get; private set; }
-    public int WalletId { get; private set; }
+    public RecurringTransactionId Id { get; private set; } = null!;
+    public WalletId WalletId { get; private set; } = null!;
     public WalletEntity Wallet { get; private set; } = null!;
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; } = null!;
     public UserEntity User { get; private set; } = null!;
     public PayeeId PayeeId { get; private set; } = null!;
     public PayeeEntity Payee { get; private set; } = null!;
-    public int CategoryId { get; private set; }
+    public CategoryId CategoryId { get; private set; } = null!;
     public CategoryEntity Category { get; private set; } = null!;
     public DateTime NextOccurrence { get; private set; }
     public TransactionType TransactionType { get; private set; }
@@ -81,6 +84,14 @@ internal sealed class RecurringTransactionEntityConfiguration : IEntityTypeConfi
         builder
             .ToTable("recurring_transactions")
             .HasKey(x => x.Id);
+
+        builder
+            .Property(x => x.Id)
+            .HasConversion(
+                x => x.Value,
+                x => new RecurringTransactionId(x))
+            .IsRequired()
+            .UseIdentityAlwaysColumn();
 
         builder.Property(x => x.NextOccurrence)
             .IsRequired();

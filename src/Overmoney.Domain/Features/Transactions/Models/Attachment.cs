@@ -1,12 +1,23 @@
-﻿namespace Overmoney.Domain.Features.Transactions.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Common.Models;
+using System.Text.Json.Serialization;
+
+namespace Overmoney.Domain.Features.Transactions.Models;
+
+[JsonConverter(typeof(LongIdentityJsonConverter))]
+public sealed class AttachmentId : Identity<long>
+{
+    public AttachmentId(long id) : base(id)
+    { }
+}
 
 public sealed class Attachment
 {
-    public long? Id { get; }
+    public AttachmentId? Id { get; }
     public string Name { get; private set; }
     public string FilePath { get; private set; }
 
-    public Attachment(long? id, string name, string filePath)
+    public Attachment(AttachmentId? id, string name, string filePath)
     {
         Id = id;
         Name = name;

@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Commands;
 
-public sealed record DeleteWalletCommand(int Id) : IRequest;
+public sealed record DeleteWalletCommand(WalletId Id) : IRequest;
 
 internal sealed class DeleteWalletCommandValidator : AbstractValidator<DeleteWalletCommand>
 {
     public DeleteWalletCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

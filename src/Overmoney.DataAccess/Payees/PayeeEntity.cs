@@ -2,13 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Overmoney.DataAccess.Users;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.DataAccess.Payees;
 
 internal sealed class PayeeEntity
 {
     public PayeeId Id { get; private set; } = null!;
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; } = null!;
     public UserEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
 

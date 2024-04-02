@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Payees.Commands;
 
-public sealed record CreatePayeeCommand(int UserId, string Name) : IRequest<Payee>;
+public sealed record CreatePayeeCommand(UserId UserId, string Name) : IRequest<Payee>;
 
 internal sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeCommand>
 {
     public CreatePayeeCommandValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.Name)
             .NotEmpty();
     }

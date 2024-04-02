@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Categories.Queries;
 
-public sealed record GetAllCategoriesByUserQuery(int UserId) : IRequest<IEnumerable<Category>>;
+public sealed record GetAllCategoriesByUserQuery(UserId UserId) : IRequest<IEnumerable<Category>>;
 
 internal sealed class GetAllCategoriesByUserQueryValidator : AbstractValidator<GetAllCategoriesByUserQuery>
 {
     public GetAllCategoriesByUserQueryValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

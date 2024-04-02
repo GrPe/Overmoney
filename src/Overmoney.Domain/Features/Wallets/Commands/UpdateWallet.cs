@@ -2,20 +2,23 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Commands;
 
-public sealed record UpdateWalletCommand(int Id, int UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
+public sealed record UpdateWalletCommand(WalletId Id, UserId UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
 
 internal sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalletCommand>
 {
     public UpdateWalletCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.CurrencyId)
             .GreaterThan(0);
         RuleFor(x => x.Name)
@@ -59,10 +62,10 @@ internal sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletC
 
         if (wallet is null)
         {
-            return await _walletRepository.CreateAsync(new(request.Name, currency, user!.Id!.Value), cancellationToken);
+            return await _walletRepository.CreateAsync(new(request.Name, currency, user.Id), cancellationToken);
         }
 
-        await _walletRepository.UpdateAsync(new Wallet(request.Id, request.Name, currency, user!.Id!.Value), cancellationToken);
+        await _walletRepository.UpdateAsync(new Wallet(request.Id, request.Name, currency, user.Id), cancellationToken);
         return null;
     }
 }

@@ -5,14 +5,15 @@ using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Queries;
 
-public sealed record GetAttachmentByIdQuery(long Id) : IRequest<Attachment?>;
+public sealed record GetAttachmentByIdQuery(AttachmentId Id) : IRequest<Attachment?>;
 
 internal sealed class GetAttachmentByIdQueryValidator : AbstractValidator<GetAttachmentByIdQuery>
 {
     public GetAttachmentByIdQueryValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Categories.Models;
 
 namespace Overmoney.Domain.Features.Categories.Commands;
 
-public sealed record DeleteCategoryCommand(int Id) : IRequest;
+public sealed record DeleteCategoryCommand(CategoryId Id) : IRequest;
 
 internal sealed class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
 {
     public DeleteCategoryCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

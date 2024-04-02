@@ -2,16 +2,18 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Categories.Models;
 using Overmoney.Domain.Features.Payees.Models;
 using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
 public sealed record UpdateTransactionCommand(
-    long Id,
-    int WalletId,
-    int PayeeId,
-    int CategoryId,
+    TransactionId Id,
+    WalletId WalletId,
+    PayeeId PayeeId,
+    CategoryId CategoryId,
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
@@ -22,13 +24,17 @@ internal sealed class UpdateTransactionCommandValidator : AbstractValidator<Upda
     public UpdateTransactionCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.WalletId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.PayeeId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.CategoryId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.TransactionDate)
             .NotEmpty();
     }
@@ -74,7 +80,7 @@ internal sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTr
             throw new DomainValidationException($"Category of id {request.CategoryId} does not exists.");
         }
 
-        var payee = await _payeeRepository.GetAsync(new PayeeId(request.PayeeId), cancellationToken);
+        var payee = await _payeeRepository.GetAsync(request.PayeeId, cancellationToken);
 
         if (payee is null)
         {

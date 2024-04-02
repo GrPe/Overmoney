@@ -3,10 +3,11 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Users.Commands;
 
-public sealed record RegisterUserCommand : IRequest<int>
+public sealed record RegisterUserCommand : IRequest<UserId>
 {
     public string? UserName { get; init; }
     public string? Email { get; init; }
@@ -26,7 +27,7 @@ internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterU
     }
 }
 
-internal class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, int>
+internal class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, UserId>
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<RegisterUserCommandHandler> _logger;
@@ -37,7 +38,7 @@ internal class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand,
         _logger = logger;
     }
 
-    public async Task<int> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserId> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(request.Email!, cancellationToken);
         if (user is not null)

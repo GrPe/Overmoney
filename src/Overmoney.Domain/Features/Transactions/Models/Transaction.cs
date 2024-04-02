@@ -1,13 +1,25 @@
-﻿using Overmoney.Domain.Features.Categories.Models;
+﻿using Overmoney.Domain.Converters;
+using Overmoney.Domain.Features.Categories.Models;
+using Overmoney.Domain.Features.Common.Models;
 using Overmoney.Domain.Features.Payees.Models;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
+using System.Text.Json.Serialization;
 
 namespace Overmoney.Domain.Features.Transactions.Models;
 
+[JsonConverter(typeof(LongIdentityJsonConverter))]
+public sealed class TransactionId : Identity<long>
+{
+    public TransactionId(long id) : base(id)
+    {
+    }
+}
+
 public class Transaction
 {
-    public long Id { get; }
-    public int UserId { get; }
+    public TransactionId? Id { get; }
+    public UserId UserId { get; } = null!;
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
@@ -18,8 +30,8 @@ public class Transaction
     public List<Attachment> Attachments { get; }
 
     public Transaction(
-        long id,
-        int userId,
+        TransactionId id,
+        UserId userId,
         Wallet wallet,
         Payee payee,
         Category category,
@@ -42,7 +54,7 @@ public class Transaction
     }
 
     public Transaction(
-        int userId,
+        UserId userId,
         Wallet wallet,
         Payee payee,
         Category category,

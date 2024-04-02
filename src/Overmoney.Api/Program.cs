@@ -1,8 +1,6 @@
-using FluentValidation;
 using Overmoney.Api.Infrastructure;
 using Overmoney.Api.Infrastructure.Filters;
 using Overmoney.Domain;
-using Overmoney.Domain.DataAccess;
 using Overmoney.DataAccess;
 using System.Reflection;
 using Overmoney.Domain.Converters;
@@ -14,6 +12,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new ScheduleJsonConverter());
     options.SerializerOptions.Converters.Add(new IntIdentityJsonConverter());
+    options.SerializerOptions.Converters.Add(new LongIdentityJsonConverter());
 });
 
 builder.Services.AddEndpointsApiExplorer();

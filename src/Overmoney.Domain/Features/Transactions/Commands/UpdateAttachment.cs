@@ -1,17 +1,19 @@
 ﻿using FluentValidation;
 using MediatR;
 using Overmoney.Domain.DataAccess;
+using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
-public sealed record UpdateAttachmentCommand(long Id, string Name) : IRequest;
+public sealed record UpdateAttachmentCommand(AttachmentId Id, string Name) : IRequest;
 
 internal sealed class UpdateAttachmentCommandValidator : AbstractValidator<UpdateAttachmentCommand>
 {
     public UpdateAttachmentCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
         RuleFor(x => x.Name)
             .NotEmpty();
     }

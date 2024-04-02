@@ -3,17 +3,19 @@ using MediatR;
 using Overmoney.Domain;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
+using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
-public sealed record UpdateRecurringTransactionNextOccurrenceCommand(long Id) : IRequest;
+public sealed record UpdateRecurringTransactionNextOccurrenceCommand(RecurringTransactionId Id) : IRequest;
 
 internal sealed class UpdateRecurringTransactionNextOccurrenceCommandValidator : AbstractValidator<UpdateRecurringTransactionNextOccurrenceCommand>
 {
     public UpdateRecurringTransactionNextOccurrenceCommandValidator()
     {
         RuleFor(x => x.Id)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 

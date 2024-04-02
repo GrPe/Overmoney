@@ -2,17 +2,19 @@
 using MediatR;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Features.Transactions.Models;
+using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Queries;
 
-public sealed record GetRecurringTransactionsByUserIdQuery(int UserId) : IRequest<IEnumerable<RecurringTransaction>>;
+public sealed record GetRecurringTransactionsByUserIdQuery(UserId UserId) : IRequest<IEnumerable<RecurringTransaction>>;
 
 internal sealed class GetRecurringTransactionsByUserIdQueryValidator : AbstractValidator<GetRecurringTransactionsByUserIdQuery>
 {
     public GetRecurringTransactionsByUserIdQueryValidator()
     {
         RuleFor(x => x.UserId)
-            .GreaterThan(0);
+            .NotEmpty()
+            .ChildRules(x => { x.RuleFor(x => x.Value).GreaterThan(0); });
     }
 }
 
