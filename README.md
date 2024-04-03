@@ -12,8 +12,8 @@ Inspiration: https://moneymanagerex.org/
 - [x] Detailed transaction log including date, payee, category etc.
 - [ ] Ability to add attachment to each transaction (eg. invoices, photos)
 - [ ] Dashboards to easy track current expenses
-- [ ] Support for reccuring transaction
-- [ ] Budget planner
+- [x] Support for reccuring transaction
+- [x] Budget planner
 - [ ] Weekly/Monthly summaries send to email
 
 ![features](docs/features.drawio.png)
@@ -26,16 +26,16 @@ Inspiration: https://moneymanagerex.org/
 
 ## Roadmap
 
-| Name                                                             | Deadline   | Status      |
-| ---------------------------------------------------------------- | ---------- | ----------- |
-| README + plan                                                    | 2024.03.04 | ✅ Done     |
-| Features without dashboards & budget planner & files (API only)  | 2024.03.15 | ✅ Done     |
-| Features (files, reccuring transactions, budget planner) + tests | 2024.03.30 | In progress |
-| Database, Security, Observability, CI/CD (build)                 | 2024.04.14 | Todo        |
-| CI/CD + IaC (containers, networking)                             | 2024.04.21 | Todo        |
-| Frontend ?                                                       | 2024.05.12 | Todo        |
-| dashboards, summaries                                            | 2024.05.19 | Todo        |
-| Nice to have feature                                             | 2024.05.31 | Todo        |
+| Name                                                                | Deadline   | Status      |
+| ------------------------------------------------------------------- | ---------- | ----------- |
+| README + plan                                                       | 2024.03.04 | ✅ Done     |
+| Features without dashboards & budget planner & files (API only)     | 2024.03.15 | ✅ Done     |
+| Features (files, reccuring transactions, budget planner) + database | 2024.04.03 | ✅ Done     |
+| CI/CD (build), tests, Frontend (setup)                              | 2024.04.14 | In Progress |
+| CI/CD + IaC (containers, networking), Security, Observability,      | 2024.04.21 | Todo        |
+| Frontend ?                                                          | 2024.05.12 | Todo        |
+| dashboards, summaries                                               | 2024.05.19 | Todo        |
+| Nice to have feature                                                | 2024.05.31 | Todo        |
 
 ## Technology
 
@@ -44,7 +44,13 @@ List of technologies, frameworks, libraries used for implementation:
 - [.NET 8.0](https://dotnet.microsoft.com/en-us/) (platform)
 - [Docker](https://www.docker.com/)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/) - ORM
-- [Posgresql](https://www.postgresql.org.pl/) - database engine
+- [Posgresql](https://www.postgresql.org.pl/) - Database engine
+- [Fluent Validation](https://fluentvalidation.net/) - Initial endpoint data validation
+- Mediatr - CQRS pattern implementation
+- XUnit - Testing framework
+- [Fluent Assertion](https://fluentassertions.com/) - Unit & Integration tests
+- [Shouldly](https://shouldly.org) - Unit & Integration tests
+- [Test Containers](https://dotnet.testcontainers.org/) - Integration tests (emulating database etc.)
 - more in future...
 
 ## Containers
