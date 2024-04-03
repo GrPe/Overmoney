@@ -27,12 +27,22 @@ public abstract class Identity<T> where T : notnull
         return Value.GetHashCode();
     }
 
-    public static bool operator ==(Identity<T> left, Identity<T> right)
+    public static bool operator ==(Identity<T>? left, Identity<T>? right)
     {
-        return left.Equals(right);
+        if (left is null && right is null)
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left!.Equals(right);
     }
 
-    public static bool operator !=(Identity<T> left, Identity<T> right)
+    public static bool operator !=(Identity<T>? left, Identity<T>? right)
     {
         return !(left == right);
     }

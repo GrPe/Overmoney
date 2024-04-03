@@ -102,7 +102,7 @@ internal sealed class UpdateRecurringTransactionCommandHandler : IRequestHandler
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        await _transactionRepository.UpdateAsync(new RecurringTransaction(transaction.Id, wallet.UserId, wallet, payee, category, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule), request.FirstOccurrence), cancellationToken);
+        await _transactionRepository.UpdateAsync(new RecurringTransaction(transaction.Id!, wallet.UserId, wallet, payee, category, request.TransactionType, request.Note, request.Amount, new Schedule(request.Schedule), request.FirstOccurrence), cancellationToken);
         return null;
     }
 }

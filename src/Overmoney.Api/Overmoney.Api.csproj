@@ -33,4 +33,10 @@
 	  <ProjectReference Include="..\Overmoney.Domain\Overmoney.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

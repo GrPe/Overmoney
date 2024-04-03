@@ -8,6 +8,9 @@ using Overmoney.Domain.Converters;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new ScheduleJsonConverter());
@@ -54,3 +57,5 @@ app.UseMiddleware<ExceptionHandler>();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

@@ -87,7 +87,7 @@ internal sealed class UpdateTransactionCommandHandler : IRequestHandler<UpdateTr
             throw new DomainValidationException($"Payee of id {request.PayeeId} does not exists.");
         }
 
-        await _transactionRepository.UpdateAsync(new Transaction(transaction.Id, wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
+        await _transactionRepository.UpdateAsync(new Transaction(transaction.Id!, wallet.UserId, wallet, payee, category, request.TransactionDate, request.TransactionType, request.Note, request.Amount), cancellationToken);
         return null;
     }
 }

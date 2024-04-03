@@ -22,11 +22,11 @@ internal sealed class UpdateRecurringTransactionNextOccurrenceCommandValidator :
 internal sealed class UpdateRecurringTransactionNextOccurrenceCommandHandler : IRequestHandler<UpdateRecurringTransactionNextOccurrenceCommand>
 {
     private readonly ITransactionRepository _transactionRepository;
-    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly TimeProvider _dateTimeProvider;
 
     public UpdateRecurringTransactionNextOccurrenceCommandHandler(
         ITransactionRepository transactionRepository,
-        IDateTimeProvider dateTimeProvider)
+        TimeProvider dateTimeProvider)
     {
         _transactionRepository = transactionRepository;
         _dateTimeProvider = dateTimeProvider;
@@ -41,7 +41,7 @@ internal sealed class UpdateRecurringTransactionNextOccurrenceCommandHandler : I
             throw new DomainValidationException("Recurring transaction not found");
         }
 
-        transaction.UpdateSchedule(_dateTimeProvider.UtcNow);
+        transaction.UpdateSchedule(_dateTimeProvider.GetUtcNow().DateTime);
         await _transactionRepository.UpdateAsync(transaction, cancellationToken);
     }
 }

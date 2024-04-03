@@ -14,7 +14,7 @@ public static class DomainModule
             });
         services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>(includeInternalTypes: true);
 
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<TimeProvider>(TimeProvider.System);
 
         return services;
     }

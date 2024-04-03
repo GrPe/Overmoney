@@ -9,9 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B09A9939
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.Api.Tests", "Overmoney.Api.Tests\Overmoney.Api.Tests.csproj", "{56334AF7-F6D9-4088-A6AA-1132A23B0B55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overmoney.DataAccess", "Overmoney.DataAccess\Overmoney.DataAccess.csproj", "{6732C44C-588E-40F4-A91D-C7FF84449742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.DataAccess", "Overmoney.DataAccess\Overmoney.DataAccess.csproj", "{6732C44C-588E-40F4-A91D-C7FF84449742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overmoney.Domain", "Overmoney.Domain\Overmoney.Domain.csproj", "{87ADB2ED-6712-414B-8078-3167CA74A716}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.Domain", "Overmoney.Domain\Overmoney.Domain.csproj", "{87ADB2ED-6712-414B-8078-3167CA74A716}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overmoney.IntegrationTests", "Overmoney.IntegrationTests\Overmoney.IntegrationTests.csproj", "{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +37,17 @@ Global
 		{87ADB2ED-6712-414B-8078-3167CA74A716}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87ADB2ED-6712-414B-8078-3167CA74A716}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87ADB2ED-6712-414B-8078-3167CA74A716}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{56334AF7-F6D9-4088-A6AA-1132A23B0B55} = {B09A9939-C158-405F-8B2F-D1875EC2A24C}
+		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105} = {B09A9939-C158-405F-8B2F-D1875EC2A24C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B544BC82-7CC1-4731-A3E2-65D8079AB68F}

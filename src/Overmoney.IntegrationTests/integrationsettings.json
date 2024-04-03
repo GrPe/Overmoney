@@ -1,0 +1,6 @@
+{
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "Database": "Host=localhost:5433;Database=dev;Username=dev;Password=dev"
+  }
+}
