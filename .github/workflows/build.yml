@@ -1,0 +1,29 @@
+name: build
+on: push
+
+env:
+    PROJECT_NAME: src/
+
+
+jobs:
+
+    build-api:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup dotnet
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: '8.0.x'
+            
+            - name: Dotnet restore
+              run: dotnet restore ${{ env.PROJECT_NAME }}
+
+            - name: Dotnet build
+              run: dotnet build --no-restore ${{ env.PROJECT_NAME }}
+
+            - name: Run tests
+              run: dotnet test --no-restore ${{ env.PROJECT_NAME }}
+
