@@ -10,6 +10,8 @@ namespace Overmoney.IntegrationTests;
 public class UserTests
 {
     readonly IContainer _postgresContainer;
+    readonly ApiWebApplicationFactory _application;
+    readonly HttpClient _client;
 
     public UserTests()
     {
@@ -21,16 +23,14 @@ public class UserTests
             .Build();
 
         _postgresContainer.StartAsync().GetAwaiter().GetResult();
+        _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(5432));
+        _client = _application.CreateClient();
     }
 
     [Fact]
     public async Task When_correct_data_are_provided_user_should_be_created()
     {
-        await using var application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(5432));
-
-        using var client = application.CreateClient();
-
-        var response = await client
+        var response = await _client
             .PostAsJsonAsync("users/register", new { UserName = "test", Email = "test@test.test", Password = "test" });
 
         response.IsSuccessStatusCode.Should().BeTrue();
@@ -43,11 +43,7 @@ public class UserTests
     [Fact]
     public async Task When_incorrect_data_are_provided_error_400_should_be_throw()
     {
-        await using var application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(5432));
-
-        using var client = application.CreateClient();
-
-        var response = await client
+        var response = await _client
             .PostAsJsonAsync("users/register", new { UserName = "test", Email = "not.an.test.email", Password = "test" });
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
