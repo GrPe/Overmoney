@@ -10,4 +10,10 @@ internal static class DataFaker
         var password = new Faker().Internet.Password();
         return (userName, email, password);
     }
+
+    public static (string Name, string Code) GenerateCurrency()
+    {
+        var currency = new Faker().Finance.Currency();
+        return (currency.Description, currency.Code);
+    }
 }

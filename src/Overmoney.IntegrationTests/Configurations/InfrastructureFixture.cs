@@ -32,3 +32,9 @@ public class InfrastructureFixture : IDisposable
         _postgresContainer.DisposeAsync().GetAwaiter().GetResult();
     }
 }
+
+[CollectionDefinition("Infrastructure")]
+public class  InfrastructureCollection : ICollectionFixture<InfrastructureFixture>
+{
+    // Should be empty
+}

@@ -5,7 +5,8 @@ using System.Net.Http.Json;
 
 namespace Overmoney.IntegrationTests.ControllerTests;
 
-public class UserTests : IClassFixture<InfrastructureFixture>
+[Collection("Infrastructure")]
+public class UserTests
 {
     readonly HttpClient _client;
 
