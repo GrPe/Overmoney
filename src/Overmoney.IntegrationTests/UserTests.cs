@@ -7,24 +7,13 @@ using System.Net.Http.Json;
 
 namespace Overmoney.IntegrationTests;
 
-public class UserTests
+public class UserTests : IClassFixture<InfrastructureFixture>
 {
-    readonly IContainer _postgresContainer;
-    readonly ApiWebApplicationFactory _application;
     readonly HttpClient _client;
 
-    public UserTests()
+    public UserTests(InfrastructureFixture fixture)
     {
-        _postgresContainer = new ContainerBuilder()
-            .WithImage("postgres")
-            .WithPortBinding(5432, true)
-            .WithEnvironment("POSTGRES_USER", "dev")
-            .WithEnvironment("POSTGRES_PASSWORD", "dev")
-            .Build();
-
-        _postgresContainer.StartAsync().GetAwaiter().GetResult();
-        _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(5432));
-        _client = _application.CreateClient();
+        _client = fixture.GetClient();
     }
 
     [Fact]
