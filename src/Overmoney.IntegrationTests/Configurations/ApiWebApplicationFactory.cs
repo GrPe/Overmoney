@@ -19,7 +19,7 @@ internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
         {
             services.Remove(services.FirstOrDefault(x => x.ServiceType.Name.Contains("DatabaseContext")));
             services.Remove(services.FirstOrDefault(x => x.ServiceType.Name.Contains("ContextOptions")));
-            services.AddDataAccess($"Host=localhost:{_posgresPort};Database=overmoney;Username=dev;Password=dev", applyMigrations: true);
+            services.AddDataAccess($"Host=localhost:{_posgresPort};Database=overmoney;Username=dev;Password=dev;Timeout=300;CommandTimeout=300", applyMigrations: true);
         });
     }
 }
