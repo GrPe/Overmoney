@@ -16,4 +16,9 @@ internal static class DataFaker
         var currency = new Faker().Finance.Currency();
         return (currency.Description, currency.Code);
     }
+
+    public static string GeneratePayee()
+    {
+        return new Faker().Company.CompanyName();
+    }
 }
