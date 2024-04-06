@@ -5,22 +5,25 @@ using System.Net.Http.Json;
 namespace Overmoney.IntegrationTests.Configurations;
 public class InfrastructureFixture : IDisposable
 {
+    const int POSTGRES_PORT = 5432;
+    const int USER_COUNT = 10;
+
     readonly IContainer _postgresContainer;
     readonly ApiWebApplicationFactory _application;
     readonly HttpClient _client;
-    int[] _userIds;
+    int[]? _userIds;
 
     public InfrastructureFixture()
     {
         _postgresContainer = new ContainerBuilder()
             .WithImage("postgres")
-            .WithPortBinding(5432, true)
+            .WithPortBinding(POSTGRES_PORT, true)
             .WithEnvironment("POSTGRES_USER", "dev")
             .WithEnvironment("POSTGRES_PASSWORD", "dev")
             .Build();
 
         _postgresContainer.StartAsync().GetAwaiter().GetResult();
-        _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(5432));
+        _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(POSTGRES_PORT));
         _client = _application.CreateClient();
     }
 
@@ -30,8 +33,8 @@ public class InfrastructureFixture : IDisposable
     {
         if(_userIds is null || _userIds.Length == 0)
         {
-            _userIds = new int[10];
-            for (int i = 0; i < 10;)
+            _userIds = new int[USER_COUNT];
+            for (int i = 0; i < USER_COUNT;)
             {
                 var user = DataFaker.GenerateUser();
                 var response = await _client
@@ -55,7 +58,7 @@ public class InfrastructureFixture : IDisposable
         {
             _userIds = await GetUsers();
         }
-        return _userIds[Random.Shared.Next(10)];
+        return _userIds[Random.Shared.Next(USER_COUNT)];
     }
 
     public void Dispose()
