@@ -1,5 +1,6 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
+using System.Net.Http.Json;
 
 namespace Overmoney.IntegrationTests.Configurations;
 public class InfrastructureFixture : IDisposable
@@ -7,6 +8,7 @@ public class InfrastructureFixture : IDisposable
     readonly IContainer _postgresContainer;
     readonly ApiWebApplicationFactory _application;
     readonly HttpClient _client;
+    int[] _userIds;
 
     public InfrastructureFixture()
     {
@@ -23,6 +25,38 @@ public class InfrastructureFixture : IDisposable
     }
 
     public HttpClient GetClient() => _client;
+
+    public async Task<int[]> GetUsers()
+    {
+        if(_userIds is null || _userIds.Length == 0)
+        {
+            _userIds = new int[10];
+            for (int i = 0; i < 10;)
+            {
+                var user = DataFaker.GenerateUser();
+                var response = await _client
+                    .PostAsJsonAsync("users/register", new { user.UserName, user.Email, user.Password });
+
+                if(response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    _userIds[i] = Convert.ToInt32(content);
+                    i++;
+                }
+            }
+        }
+
+        return _userIds;
+    }
+
+    public async Task<int> GetRandomUser()
+    {
+        if(_userIds is null || _userIds.Length == 0)
+        {
+            _userIds = await GetUsers();
+        }
+        return _userIds[Random.Shared.Next(10)];
+    }
 
     public void Dispose()
     {
