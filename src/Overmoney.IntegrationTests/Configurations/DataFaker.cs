@@ -26,4 +26,9 @@ internal static class DataFaker
     {
         return new Faker().Commerce.Categories(1).First();
     }
+
+    public static string GenerateWallet()
+    {
+        return new Faker().Finance.AccountName();
+    }
 }

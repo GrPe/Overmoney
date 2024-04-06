@@ -99,7 +99,7 @@ public class CurrencyTests
     }
 }
 
-file class CurrencyResponse
+class CurrencyResponse
 {
     public int Id { get; set; }
     public string? Name { get; set; }

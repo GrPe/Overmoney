@@ -94,6 +94,23 @@ public class CategoryTests
         categories.Count.ShouldBeGreaterThan(2);
     }
 
+    [Fact]
+    public async Task When_category_exists_and_delete_request_is_sent_then_category_should_be_deleted()
+    {
+        var userId = await _fixture.GetRandomUser();
+
+        var category = DataFaker.GenerateCategory();
+        var response = await _client
+            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+
+        var content = await response.Content.ReadFromJsonAsync<CategoryResponse>();
+
+        var deleteResponse = await _client
+            .DeleteAsync($"categories/{content!.Id}");
+
+        deleteResponse.IsSuccessStatusCode.ShouldBeTrue();
+    }
+
 }
 
 file record CategoryResponse(int Id, string Name);

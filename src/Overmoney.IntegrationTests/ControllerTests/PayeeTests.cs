@@ -94,6 +94,23 @@ public class PayeeTests
         payees.Count.ShouldBeGreaterThan(2);
     }
 
+    [Fact]
+    public async Task When_payee_exists_and_delete_request_is_sent_then_payee_should_be_deleted()
+    {
+        var userId = await _fixture.GetRandomUser();
+
+        var payee = DataFaker.GeneratePayee();
+        var response = await _client
+            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+
+        var content = await response.Content.ReadFromJsonAsync<PayeeResponse>();
+
+        var deleteResponse = await _client
+            .DeleteAsync($"payees/{content!.Id}");
+
+        deleteResponse.IsSuccessStatusCode.ShouldBeTrue();
+    }
+
 }
 
 file class PayeeResponse
