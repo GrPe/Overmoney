@@ -21,4 +21,9 @@ internal static class DataFaker
     {
         return new Faker().Company.CompanyName();
     }
+
+    public static string GenerateCategory()
+    {
+        return new Faker().Commerce.Categories(1).First();
+    }
 }
