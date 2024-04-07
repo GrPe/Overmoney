@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.DataAccess", "Ove
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.Domain", "Overmoney.Domain\Overmoney.Domain.csproj", "{87ADB2ED-6712-414B-8078-3167CA74A716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overmoney.IntegrationTests", "Overmoney.IntegrationTests\Overmoney.IntegrationTests.csproj", "{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.IntegrationTests", "Overmoney.IntegrationTests\Overmoney.IntegrationTests.csproj", "{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "overmoney.portal", "Overmoney.Portal\overmoney.portal.esproj", "{CD259894-92D3-49AE-BE7A-74315C48B75F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,12 @@ Global
 		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6759FD5-D5C2-43C3-83C5-F5D98A8BC105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD259894-92D3-49AE-BE7A-74315C48B75F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
