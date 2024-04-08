@@ -3,14 +3,14 @@ using Overmoney.IntegrationTests.Configurations;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace Overmoney.IntegrationTests.ControllerTests;
+namespace Overmoney.IntegrationTests.ControllerTestCollections;
 
 [Collection("Infrastructure")]
-public class UserTests
+public class UserControllerTestCollection
 {
     readonly HttpClient _client;
 
-    public UserTests(InfrastructureFixture fixture)
+    public UserControllerTestCollection(InfrastructureFixture fixture)
     {
         _client = fixture.GetClient();
     }

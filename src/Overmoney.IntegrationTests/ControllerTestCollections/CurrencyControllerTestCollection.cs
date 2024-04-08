@@ -4,14 +4,14 @@ using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace Overmoney.IntegrationTests.ControllerTests;
+namespace Overmoney.IntegrationTests.ControllerTestCollections;
 
 [Collection("Infrastructure")]
-public class CurrencyTests
+public class CurrencyControllerTestCollection
 {
     readonly HttpClient _client;
 
-    public CurrencyTests(InfrastructureFixture fixture)
+    public CurrencyControllerTestCollection(InfrastructureFixture fixture)
     {
         _client = fixture.GetClient();
     }

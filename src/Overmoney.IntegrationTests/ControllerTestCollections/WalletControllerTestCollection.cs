@@ -3,15 +3,15 @@ using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace Overmoney.IntegrationTests.ControllerTests;
+namespace Overmoney.IntegrationTests.ControllerTestCollections;
 
 [Collection("Infrastructure")]
-public class WalletTests
+public class WalletControllerTestCollection
 {
     readonly HttpClient _client;
     readonly InfrastructureFixture _fixture;
 
-    public WalletTests(InfrastructureFixture fixture)
+    public WalletControllerTestCollection(InfrastructureFixture fixture)
     {
         _client = fixture.GetClient();
         _fixture = fixture;
