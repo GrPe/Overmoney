@@ -1,47 +1,52 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script lang="ts">
+export default {
+    data() {
+        return {
+            items: [
+                {
+                    label: 'New',
+                    icon: 'pi pi-plus',
+                    // command: () => {
+                    //     this.$toast.add({ severity: 'success', summary: 'Success', detail: 'File created', life: 3000 });
+                    // }
+                },
+                {
+                    label: 'Search',
+                    icon: 'pi pi-search',
+                    // command: () => {
+                    //     this.$toast.add({ severity: 'warn', summary: 'Search Completed', detail: 'No results found', life: 3000 });
+                    // }
+                }
+            ]
+        };
+    }
+};
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <div class="card flex justify-content-center">
+      <PrimeMenu :model="items"></PrimeMenu>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <main>
+      test test test
+      <p>test test</p>
+      tes test test
+    </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+body #app header {
+  margin: 0;
+  padding: 0;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+header{
+  height: 100vh;
+  width: 100vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.wrapper{
+  padding-left: 30px;
 }
 </style>
