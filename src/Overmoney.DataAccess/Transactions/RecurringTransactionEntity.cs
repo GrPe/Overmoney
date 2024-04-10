@@ -26,7 +26,7 @@ internal sealed class RecurringTransactionEntity
     public DateTime NextOccurrence { get; private set; }
     public TransactionType TransactionType { get; private set; }
     public string? Note { get; private set; }
-    public double Amount { get; private set; }
+    public decimal Amount { get; private set; }
     public Schedule Schedule { get; private set; }
 
     public RecurringTransactionEntity(
@@ -37,7 +37,7 @@ internal sealed class RecurringTransactionEntity
         DateTime nextOccurrence,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         Schedule schedule)
     {
         Wallet = wallet;
@@ -58,7 +58,7 @@ internal sealed class RecurringTransactionEntity
         DateTime nextOccurrence,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         Schedule schedule)
     {
         Wallet = wallet;

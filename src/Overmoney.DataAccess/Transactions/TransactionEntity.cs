@@ -26,7 +26,7 @@ internal class TransactionEntity
     public DateTime TransactionDate { get; private set; }
     public TransactionType TransactionType { get; private set; }
     public string? Note { get; private set; }
-    public double Amount { get; private set; }
+    public decimal Amount { get; private set; }
     public ICollection<AttachmentEntity> Attachments { get; private set; } = [];
 
     public TransactionEntity(
@@ -37,7 +37,7 @@ internal class TransactionEntity
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount)
+        decimal amount)
     {
         Wallet = wallet;
         User = user;
@@ -56,7 +56,7 @@ internal class TransactionEntity
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount)
+        decimal amount)
     {
         Wallet = wallet;
         Payee = payee;

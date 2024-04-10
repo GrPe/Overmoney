@@ -19,22 +19,22 @@ public sealed class BudgetLine
 {
     public BudgetLineId Id { get; private set; } = null!;
     public Category Category { get; private set; } = null!;
-    public double Amount { get; private set; }
+    public decimal Amount { get; private set; }
 
-    public BudgetLine(BudgetLineId? id, Category category, double amount)
+    public BudgetLine(BudgetLineId? id, Category category, decimal amount)
     {
         Id = id ?? new BudgetLineId();
         Category = category;
         Amount = amount;
     }
 
-    public BudgetLine(Category category, double amount)
+    public BudgetLine(Category category, decimal amount)
     {
         Category = category;
         Amount = amount;
     }
 
-    public void Update(double amount)
+    public void Update(decimal amount)
     {
         Amount = amount;
     }

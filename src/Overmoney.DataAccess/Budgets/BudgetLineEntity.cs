@@ -13,22 +13,22 @@ internal sealed class BudgetLineEntity
     public BudgetEntity Budget { get; private set; } = null!;
     public CategoryId CategoryId { get; private set; } = null!;
     public CategoryEntity Category { get; private set; } = null!;
-    public double Amount { get; private set; }
+    public decimal Amount { get; private set; }
 
-    public BudgetLineEntity(BudgetEntity budget, CategoryEntity category, double amount)
+    public BudgetLineEntity(BudgetEntity budget, CategoryEntity category, decimal amount)
     {
         Budget = budget;
         Category = category;
         Amount = amount;
     }
 
-    public BudgetLineEntity(CategoryEntity category, double amount)
+    public BudgetLineEntity(CategoryEntity category, decimal amount)
     {
         Category = category;
         Amount = amount;
     }
 
-    public void Update(double amount)
+    public void Update(decimal amount)
     {
         Amount = amount;
     }

@@ -17,7 +17,7 @@ public sealed record UpdateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount) : IRequest<Transaction?>;
+    decimal Amount) : IRequest<Transaction?>;
 
 internal sealed class UpdateTransactionCommandValidator : AbstractValidator<UpdateTransactionCommand>
 {

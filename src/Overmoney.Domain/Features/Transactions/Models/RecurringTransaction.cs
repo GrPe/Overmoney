@@ -24,7 +24,7 @@ public class RecurringTransaction
     public Category Category { get; }
     public TransactionType TransactionType { get; }
     public string? Note { get; }
-    public double Amount { get; }
+    public decimal Amount { get; }
     public Schedule Schedule { get; }
     public DateTime NextOccurrence { get; private set; }
 
@@ -37,7 +37,7 @@ public class RecurringTransaction
         Category category,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         Schedule schedule,
         DateTime nextOccurrence)
     {
@@ -60,7 +60,7 @@ public class RecurringTransaction
         Category category,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         Schedule schedule,
         DateTime nextOccurrence)
     {

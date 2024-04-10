@@ -26,7 +26,7 @@ public class Transaction
     public DateTime TransactionDate { get; }
     public TransactionType TransactionType { get; }
     public string? Note { get; }
-    public double Amount { get; }
+    public decimal Amount { get; }
     public List<Attachment> Attachments { get; }
 
     public Transaction(
@@ -38,7 +38,7 @@ public class Transaction
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         List<Attachment>? attachments = null)
     {
         Id = id;
@@ -61,7 +61,7 @@ public class Transaction
         DateTime transactionDate,
         TransactionType transactionType,
         string? note,
-        double amount,
+        decimal amount,
         List<Attachment>? attachments = null)
     {
         UserId = userId;

@@ -16,7 +16,7 @@ public sealed record CreateTransactionCommand(
     DateTime TransactionDate,
     TransactionType TransactionType,
     string? Note,
-    double Amount,
+    decimal Amount,
     TransactionAttachment[]? Attachments) : IRequest<Transaction>;
 
 public sealed record TransactionAttachment(string Name, string Path);

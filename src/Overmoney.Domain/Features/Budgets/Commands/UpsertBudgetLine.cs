@@ -8,7 +8,7 @@ using Overmoney.Domain.Features.Categories.Models;
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
 public sealed record UpsertBudgetLineCommand(BudgetId BudgetId, IEnumerable<UpsertBudgetLine> BudgetLines) : IRequest;
-public sealed record UpsertBudgetLine(BudgetLineId? BudgetLineId, CategoryId CategoryId, double Amount);
+public sealed record UpsertBudgetLine(BudgetLineId? BudgetLineId, CategoryId CategoryId, decimal Amount);
 
 internal sealed class UpsertBudgetLineCommandValidator : AbstractValidator<UpsertBudgetLineCommand>
 {

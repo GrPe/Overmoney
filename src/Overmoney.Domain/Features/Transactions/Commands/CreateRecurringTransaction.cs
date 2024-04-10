@@ -15,7 +15,7 @@ public sealed record CreateRecurringTransactionCommand(
     CategoryId CategoryId,
     TransactionType TransactionType,
     string? Note,
-    double Amount,
+    decimal Amount,
     DateTime FirstOccurrence,
     string Schedule) : IRequest<RecurringTransaction>;
 
