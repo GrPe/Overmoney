@@ -31,9 +31,9 @@ Inspiration: https://moneymanagerex.org/
 | README + plan                                                       | 2024.03.04 | ✅ Done     |
 | Features without dashboards & budget planner & files (API only)     | 2024.03.15 | ✅ Done     |
 | Features (files, reccuring transactions, budget planner) + database | 2024.04.03 | ✅ Done     |
-| CI/CD (build), tests, Frontend (setup)                              | 2024.04.14 | In Progress |
-| CI/CD + IaC (containers, networking), Security, Observability,      | 2024.04.21 | Todo        |
-| Frontend ?                                                          | 2024.05.12 | Todo        |
+| CI/CD (build), tests, Frontend (setup)                              | 2024.04.14 | ✅ Done     |
+| Frontend - all view                                                 | 2024.04.28 | In Progress |
+| CI/CD + IaC (containers, networking), Security, Observability,      | 2024.05.12 | Todo        |
 | dashboards, summaries                                               | 2024.05.19 | Todo        |
 | Nice to have feature                                                | 2024.05.31 | Todo        |
 
