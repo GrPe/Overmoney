@@ -51,6 +51,7 @@ List of technologies, frameworks, libraries used for implementation:
 - [Fluent Assertion](https://fluentassertions.com/) - Unit & Integration tests
 - [Shouldly](https://shouldly.org) - Unit & Integration tests
 - [Test Containers](https://dotnet.testcontainers.org/) - Integration tests (emulating database etc.)
+- [VueJS](https://vuejs.org/) - Frontend framework
 - more in future...
 
 ## Containers
