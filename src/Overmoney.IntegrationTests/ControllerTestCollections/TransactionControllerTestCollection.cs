@@ -143,4 +143,4 @@ public class TransactionControllerTestCollection
 
 }
 
-record TransactionResponse(int Id, int UserId, WalletResponse Wallet, CategoryResponse Category, PayeeResponse Payee, double Amount, DateTime TransactionDate, string Note);
+record TransactionResponse(int Id, int UserId, WalletResponse Wallet, CategoryResponse Category, PayeeResponse Payee, decimal Amount, DateTime TransactionDate, string Note);

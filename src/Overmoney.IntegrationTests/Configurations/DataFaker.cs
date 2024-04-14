@@ -32,11 +32,20 @@ internal static class DataFaker
         return new Faker().Finance.AccountName();
     }
 
-    public static (double Amount, string Note, DateTime TransactionDate) GenerateTransaction()
+    public static (decimal Amount, string Note, DateTime TransactionDate) GenerateTransaction()
     {
         var amount = new Faker().Finance.Amount();
         var note = new Faker().Lorem.Sentence();
         var date = new Faker().Date.Past().ToUniversalTime();
-        return (((double)amount), note, date);
+        return (amount, note, date);
+    }
+
+    public static (decimal Amount, string Note, DateTime FirstOccurrence, string Schedule) GenerateRecurringTransaction()
+    {
+        var amount = new Faker().Finance.Amount();
+        var note = new Faker().Lorem.Sentence();
+        var date = new Faker().Date.Soon(days: 60).ToUniversalTime();
+        var schedule = new Faker().Random.ArrayElement(DataCollections.CRONS);
+        return (amount, note, date, schedule);
     }
 }

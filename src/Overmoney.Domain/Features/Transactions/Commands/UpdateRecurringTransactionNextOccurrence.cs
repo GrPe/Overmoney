@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using Overmoney.Domain;
 using Overmoney.Domain.DataAccess;
 using Overmoney.Domain.Exceptions;
 using Overmoney.Domain.Features.Transactions.Models;
@@ -41,7 +40,7 @@ internal sealed class UpdateRecurringTransactionNextOccurrenceCommandHandler : I
             throw new DomainValidationException("Recurring transaction not found");
         }
 
-        transaction.UpdateSchedule(_dateTimeProvider.GetUtcNow().DateTime);
+        transaction.UpdateSchedule(_dateTimeProvider.GetUtcNow().DateTime.ToUniversalTime());
         await _transactionRepository.UpdateAsync(transaction, cancellationToken);
     }
 }

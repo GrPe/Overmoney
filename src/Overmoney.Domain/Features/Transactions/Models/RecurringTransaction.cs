@@ -77,6 +77,9 @@ public class RecurringTransaction
 
     public void UpdateSchedule(DateTime currentDate)
     {
-        NextOccurrence = Schedule.NextOccurrence(currentDate);
+        if (currentDate >= NextOccurrence)
+        {
+            NextOccurrence = Schedule.NextOccurrence(currentDate);
+        }
     }
 }
