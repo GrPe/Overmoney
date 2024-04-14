@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 using Overmoney.Domain.Features.Common.Models;
+using Overmoney.Domain.Features.Transactions.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Overmoney.Api.Infrastructure.Filters;
@@ -22,6 +23,12 @@ public class IdentitySchemaFilter : ISchemaFilter
             schema.Format = "int64";
             schema.Minimum = 1;
             schema.Description = $"Unique identifier of type long";
+        }
+
+        if(context.Type == typeof(Schedule))
+        {
+            schema.Type = "string";
+            schema.Description = "Cron expression";
         }
     }
 }
