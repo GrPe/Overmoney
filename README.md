@@ -41,6 +41,8 @@ Inspiration: https://moneymanagerex.org/
 
 List of technologies, frameworks, libraries used for implementation:
 
+### Backend:
+
 - [.NET 8.0](https://dotnet.microsoft.com/en-us/) (platform)
 - [Docker](https://www.docker.com/)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/) - ORM
@@ -51,6 +53,10 @@ List of technologies, frameworks, libraries used for implementation:
 - [Fluent Assertion](https://fluentassertions.com/) - Unit & Integration tests
 - [Shouldly](https://shouldly.org) - Unit & Integration tests
 - [Test Containers](https://dotnet.testcontainers.org/) - Integration tests (emulating database etc.)
+- more in future...
+
+### Frontend:
+
 - [VueJS](https://vuejs.org/) - Frontend framework
 - more in future...
 
