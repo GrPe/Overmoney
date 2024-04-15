@@ -18,6 +18,10 @@ Inspiration: https://moneymanagerex.org/
 
 ![features](docs/features.drawio.png)
 
+## Layout
+
+- For layout check [here](/docs/Layouts.md)
+
 ### Nice to have
 
 - [ ] Login via Google/Microsoft
