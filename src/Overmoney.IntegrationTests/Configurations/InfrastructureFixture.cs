@@ -4,7 +4,7 @@ using Overmoney.IntegrationTests.ControllerTestCollections;
 using System.Net.Http.Json;
 
 namespace Overmoney.IntegrationTests.Configurations;
-public class InfrastructureFixture : IDisposable
+public class InfrastructureFixture : IDisposable, IAsyncLifetime
 {
     const int POSTGRES_PORT = 5432;
     const int USER_COUNT = 10;
@@ -13,9 +13,9 @@ public class InfrastructureFixture : IDisposable
     const int PAYEE_COUNT = 10;
     const int WALLET_COUNT = 3;
 
-    readonly IContainer _postgresContainer;
-    readonly ApiWebApplicationFactory _application;
-    readonly HttpClient _client;
+    IContainer _postgresContainer = null!;
+    ApiWebApplicationFactory _application = null!;
+    HttpClient _client = null!;
 
     int[]? _userIds;
     int[]? _currencyIds;
@@ -23,18 +23,28 @@ public class InfrastructureFixture : IDisposable
     readonly Dictionary<int, int[]> _payeeIds = [];
     readonly Dictionary<int, int[]> _walletIds = [];
 
-    public InfrastructureFixture()
+    public async Task InitializeAsync()
     {
         _postgresContainer = new ContainerBuilder()
             .WithImage("postgres")
             .WithPortBinding(POSTGRES_PORT, true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(POSTGRES_PORT))
             .WithEnvironment("POSTGRES_USER", "dev")
             .WithEnvironment("POSTGRES_PASSWORD", "dev")
             .Build();
 
-        _postgresContainer.StartAsync().GetAwaiter().GetResult();
+        await _postgresContainer
+            .StartAsync();
+
         _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(POSTGRES_PORT));
         _client = _application.CreateClient();
+    }
+
+    public async Task DisposeAsync()
+    {
+        _client.Dispose();
+        _application.Dispose();
+        await _postgresContainer.StopAsync();
     }
 
     public HttpClient GetClient() => _client;
