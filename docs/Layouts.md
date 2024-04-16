@@ -9,3 +9,7 @@
 ## Sign in Confirmation
 
 ![sign in confirmation](/docs/imgs/Confirmation%20screen.png)
+
+## Main Panel
+
+![main panel](/docs/imgs/Main%20Panel%20Categories.png)
