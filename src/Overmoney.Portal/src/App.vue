@@ -28,9 +28,6 @@ export default {
       <PrimeMenu :model="items"></PrimeMenu>
     </div>
     <main>
-      test test test
-      <p>test test</p>
-      tes test test
     </main>
 </template>
 
