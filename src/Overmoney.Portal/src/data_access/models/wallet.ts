@@ -1,6 +1,6 @@
 import type { Currency } from "./currency";
 
-export interface Wallet {
+export type Wallet = {
     id: number;
     userId: number;
     name: string;
