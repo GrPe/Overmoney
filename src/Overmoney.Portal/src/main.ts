@@ -10,8 +10,11 @@ import PrimeVue from 'primevue/config'
 import PrimeMenu from "primevue/menubar";
 import Panel from "primevue/panel"
 
+import router from './router';
+
 const app = createApp(App);
 app.use(PrimeVue)
+app.use(router);
 
 app.component("PrimeMenu", PrimeMenu);
 app.component("PrimePanel", Panel);

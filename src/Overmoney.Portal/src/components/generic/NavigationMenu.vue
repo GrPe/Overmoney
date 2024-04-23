@@ -1,7 +1,7 @@
 <template>
     <nav>
-        <a href="#">Dashobards</a> |
-        <a href="#">Payees</a> |
+        <router-link to="/">Dashobards</router-link> |
+        <router-link to="/payees">Payees</router-link> |
         <a href="#">Categories</a> |
         <a href="#">Transactions</a> |
         <a v-for="wallet in wallets" :key="wallet.id" href="#">{{ wallet.name }}</a> |
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import type { Wallet } from '../data_access/models/wallet'
+import type { Wallet } from '../../data_access/models/wallet'
 
 export default {
     props: {
