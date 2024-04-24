@@ -1,4 +1,4 @@
-export interface Category {
+export type Category = {
     id: number;
     userId: number;
     name: string;
