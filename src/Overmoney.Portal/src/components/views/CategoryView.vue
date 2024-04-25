@@ -5,7 +5,7 @@
 <script lang="ts">
 import type { Category } from '../../data_access/models/category'
 import type { Wallet} from '../../data_access/models/wallet'
-import CategoryList from '../category/CategoryList.vue';
+import CategoryList from '../lists/CategoryList.vue';
 
 export default {
     data() {

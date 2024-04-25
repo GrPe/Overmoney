@@ -3,7 +3,7 @@ import type { Category } from "./category";
 import type { Payee } from "./payee";
 import type { Wallet } from "./wallet";
 
-export interface Transaction {
+export type Transaction = {
     id: number;
     userId: number;
     wallet: Wallet;

@@ -3,7 +3,7 @@
 </template>
   
 <script lang="ts">
-import PayeesList from '../payees/PayeesList.vue'
+import PayeesList from '../lists/PayeesList.vue'
 import type { Wallet } from '../../data_access/models/wallet'
 import type { Payee } from '../../data_access/models/payee'
 
