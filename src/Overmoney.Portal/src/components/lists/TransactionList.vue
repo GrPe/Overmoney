@@ -18,7 +18,7 @@
             <td>{{ transaction.transactionType }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.note }}</td>
-            <td>{{ transaction.attachments.length == 0 ? "Yes" : "No" }}</td>
+            <td>{{ transaction.attachments?.length == 0 ? "Yes" : "No" }}</td>
         </tr>
     </table>
 </template>
@@ -33,4 +33,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+table, th, td {
+    border: 1px solid pink
+}
+</style>

@@ -3,7 +3,7 @@
         <router-link to="/">Dashobards</router-link> |
         <router-link to="/payees">Payees</router-link> |
         <router-link to="/categories">Categories</router-link> |
-        <a href="#">Transactions</a> |
+        <router-link to="/transactions">Transactions</router-link> |
         <!-- <a v-for="wallet in wallets" :key="wallet.id" href="#">{{ wallet.name }}</a> | -->
         <a href="#">Settings</a> |
         <a href="#">Log out</a> |

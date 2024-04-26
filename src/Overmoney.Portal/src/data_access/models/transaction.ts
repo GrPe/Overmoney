@@ -11,9 +11,9 @@ export type Transaction = {
     category: Category;
     transactionDate: Date;
     transactionType: TransactionType;
-    note: string;
+    note?: string;
     amount: number;
-    attachments: Array<Attachment>;
+    attachments?: Array<Attachment>;
 }
 
 export enum TransactionType {
