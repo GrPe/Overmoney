@@ -1,5 +1,6 @@
 <template>
     <TransactionList :transactions="transactions" ></TransactionList>
+    
 </template>
   
 <script lang="ts">
@@ -29,7 +30,11 @@ data() {
     ];
 
     let transactions: Array<Transaction> = [
-        { id: 1, userId: 1, wallet: wallets[0], payee: payees[0], category: categories[0], transactionDate: new Date(), transactionType: 0, note: "aaa", amount: 132.4 }
+        { id: 1, userId: 1, wallet: wallets[0], payee: payees[0], category: categories[0], transactionDate: new Date(), transactionType: 0, note: "Lorem, ipsum.", amount: 526.4 },
+        { id: 2, userId: 1, wallet: wallets[0], payee: payees[1], category: categories[0], transactionDate: new Date(), transactionType: 0, note: "Lorem ipsum dolor sit.", amount: 1.4 },
+        { id: 3, userId: 1, wallet: wallets[0], payee: payees[1], category: categories[0], transactionDate: new Date(), transactionType: 0, note: "", amount: 132.47 },
+        { id: 4, userId: 1, wallet: wallets[0], payee: payees[2], category: categories[1], transactionDate: new Date(), transactionType: 0, note: "Lorem ipsum dolor sit.", amount: 185.40 },
+        { id: 5, userId: 1, wallet: wallets[0], payee: payees[2], category: categories[2], transactionDate: new Date(), transactionType: 1, note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil libero eos esse sapiente labore delectus vero facere totam suscipit sint!", amount: 132.4 },
     ]
 
     return {

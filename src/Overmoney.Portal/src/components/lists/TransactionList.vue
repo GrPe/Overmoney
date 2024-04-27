@@ -14,7 +14,7 @@
             <td>{{ transaction.id }}</td>
             <td>{{ transaction.payee.name }}</td>
             <td>{{ transaction.category.name }}</td>
-            <td>{{ transaction.transactionDate }}</td>
+            <td>{{ transaction.transactionDate.toLocaleString() }}</td>
             <td>{{ transaction.transactionType }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.note }}</td>

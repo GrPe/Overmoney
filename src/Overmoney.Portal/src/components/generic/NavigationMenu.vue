@@ -5,7 +5,7 @@
         <router-link to="/categories">Categories</router-link> |
         <router-link to="/transactions">Transactions</router-link> |
         <!-- <a v-for="wallet in wallets" :key="wallet.id" href="#">{{ wallet.name }}</a> | -->
-        <a href="#">Settings</a> |
+        <router-link to="/settings">Settings</router-link> |
         <a href="#">Log out</a> |
     </nav>
 </template>
