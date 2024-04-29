@@ -3,12 +3,17 @@
 </template>
   
 <script lang="ts">
+import { Client } from '@/data_access/client';
 import type { Category } from '../../data_access/models/category'
 import type { Wallet} from '../../data_access/models/wallet'
 import CategoryList from '../lists/CategoryList.vue';
 
 export default {
     data() {
+
+        let client = new Client();
+        var response = client.getCategories(1);
+
         let wallets: Array<Wallet> = [
             { name: "Test", id: 1, userId: 1, currency: { id: 1, code: "PLN", name: "PLN" } },
             { name: "Wallet 2", id: 2, userId: 1, currency: { id: 1, code: "PLN", name: "PLN" } }
