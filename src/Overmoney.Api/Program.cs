@@ -34,7 +34,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"));
+builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"), true);
 builder.Services.AddDomain();
 
 builder.Services.AddScoped<ExceptionHandler>();
@@ -42,13 +42,13 @@ builder.Services.AddScoped<ExceptionHandler>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

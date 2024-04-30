@@ -1,0 +1,34 @@
+version: "3.9"
+
+volumes:
+    postgress_data:
+
+networks:
+    overmoney:
+    
+services:
+    db:
+        image: postgres
+        container_name: overmoney_db
+        volumes:
+            - postgress_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: dev
+            POSTGRES_PASSWORD: dev
+            POSTGRES_DB: dev
+        networks:
+            - overmoney
+        ports:
+            - "5432:5432"
+    api:
+        build: 
+            context: .
+            dockerfile: ./Overmoney.Api/Dockerfile
+        container_name: overmoney_api
+        environment:
+            ConnectionStrings__Database: Host=overmoney_db:5432;Database=dev;Username=dev;Password=dev
+            ASPNETCORE_HTTP_PORTS: 80
+        networks:
+            - overmoney
+        ports:
+            - "8085:80"
