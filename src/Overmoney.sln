@@ -17,6 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overmoney.IntegrationTests"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "overmoney.portal", "Overmoney.Portal\overmoney.portal.esproj", "{CD259894-92D3-49AE-BE7A-74315C48B75F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{E4EAAE1D-6A3A-4D2E-A20B-EE548BD16567}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

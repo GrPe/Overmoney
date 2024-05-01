@@ -90,4 +90,15 @@ List of technologies, frameworks, libraries that I want to learn/test:
 
 ## How to run
 
-todo
+Configure developer SSL certificate [link](https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-8.0#starting-a-container-with-https-support-using-docker-compose)
+
+```bash
+dotnet dev-certs https -ep "$env:USERPROFILE\.aspnet\https\aspnetapp.pfx"  -p $CREDENTIAL_PLACEHOLDER$
+dotnet dev-certs https --trust
+```
+
+Then start docker compose using:
+
+```bash
+docker compose up
+```

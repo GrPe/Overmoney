@@ -26,9 +26,16 @@ services:
             dockerfile: ./Overmoney.Api/Dockerfile
         container_name: overmoney_api
         environment:
-            ConnectionStrings__Database: Host=overmoney_db:5432;Database=dev;Username=dev;Password=dev
-            ASPNETCORE_HTTP_PORTS: 80
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__Database=Host=overmoney_db:5432;Database=dev;Username=dev;Password=dev
+            - ASPNETCORE_HTTP_PORTS=80
+            - ASPNETCORE_HTTPS_PORTS=8081
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
         networks:
             - overmoney
         ports:
             - "8085:80"
+            - "8081:8081"
+        volumes:
+            - ~/.aspnet/https:/https:ro

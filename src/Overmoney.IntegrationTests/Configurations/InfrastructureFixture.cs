@@ -4,7 +4,7 @@ using Overmoney.IntegrationTests.ControllerTestCollections;
 using System.Net.Http.Json;
 
 namespace Overmoney.IntegrationTests.Configurations;
-public class InfrastructureFixture : IDisposable, IAsyncLifetime
+public class InfrastructureFixture : IAsyncLifetime
 {
     const int POSTGRES_PORT = 5432;
     const int USER_COUNT = 10;
@@ -42,8 +42,8 @@ public class InfrastructureFixture : IDisposable, IAsyncLifetime
 
     public async Task DisposeAsync()
     {
-        _client.Dispose();
-        _application.Dispose();
+        _client?.Dispose();
+        _application?.Dispose();
         await _postgresContainer.StopAsync();
     }
 
@@ -207,13 +207,13 @@ public class InfrastructureFixture : IDisposable, IAsyncLifetime
         return walletIds[Random.Shared.Next(WALLET_COUNT)];
     }
 
-    public void Dispose()
-    {
-        _client.Dispose();
-        _application.Dispose();
-        _postgresContainer.StopAsync().GetAwaiter().GetResult();
-        _postgresContainer.DisposeAsync().GetAwaiter().GetResult();
-    }
+    //public void Dispose()
+    //{
+    //    _client.Dispose();
+    //    _application.Dispose();
+    //    _postgresContainer.StopAsync().GetAwaiter().GetResult();
+    //    _postgresContainer.DisposeAsync().GetAwaiter().GetResult();
+    //}
 }
 
 [CollectionDefinition("Infrastructure")]
