@@ -48,6 +48,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin();
+});
 
 app.UseAuthorization();
 

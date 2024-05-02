@@ -1,34 +1,22 @@
 <template>
-    <CategoryList :categories="categoriesList" ></CategoryList>
+    <CategoryList :categories="categories" ></CategoryList>
 </template>
   
 <script lang="ts">
 import { Client } from '@/data_access/client';
-import type { Category } from '../../data_access/models/category'
-import type { Wallet} from '../../data_access/models/wallet'
+import type { Category }  from '../../data_access/models/category'
 import CategoryList from '../lists/CategoryList.vue';
 
 export default {
     data() {
-
-        let client = new Client();
-        var response = client.getCategories(1);
-
-        let wallets: Array<Wallet> = [
-            { name: "Test", id: 1, userId: 1, currency: { id: 1, code: "PLN", name: "PLN" } },
-            { name: "Wallet 2", id: 2, userId: 1, currency: { id: 1, code: "PLN", name: "PLN" } }
-            ];
-        let categoriesList: Array<Category> = [
-            { name: "Test Category", id: 1, userId: 1},
-            { name: "Food", id: 2, userId: 1},
-            { name: "Home", id: 3, userId: 1},
-            { name: "Horse", id: 4, userId: 1},
-        ];
-
         return {
-            wallets,
-            categoriesList,
-        };
+            categories: [] as Array<Category>
+        }  
+    },
+    mounted() {
+        let client = new Client();
+        client.getCategories(1)
+            .then((x) => { this.categories = x });
     },
     components: {
         CategoryList,
