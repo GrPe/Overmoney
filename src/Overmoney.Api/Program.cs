@@ -52,7 +52,10 @@ app.UseRouting();
 
 app.UseCors(options =>
 {
+    //for development purposes
     options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+    options.AllowAnyHeader();
 });
 
 app.UseAuthorization();

@@ -17,9 +17,6 @@ import type { Category }  from '../../data_access/models/category';
 export default {
     props: {
         categories: Array<Category>
-    },
-    created() {
-        console.log(this.categories)
     }
 }
 
