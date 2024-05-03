@@ -21,30 +21,19 @@
 </template>
 
 <script lang="ts">
-import { Client } from '@/data_access/client';
-import type { UserContext } from '@/data_access/userContext'
-import type { PropType } from 'vue';
 
 export default {
     props: {
-        show: Boolean,
-        context: {
-            type: Object as PropType<UserContext>,
-            default: null
-        }
+        show: Boolean
     },
     data() {
-        const client = new Client();
-
         return {
-            categoryName: '',
-            client
+            categoryName: this.currentValue?.name ?? '',
         }
     },
     methods: {
         async createCategory() {
-            var result = await this.client.createCategory({name: this.categoryName, userId: this.$props.context.userId})
-            this.$emit('close', result)
+            this.$emit('created', this.categoryName)
         }
     }
 }

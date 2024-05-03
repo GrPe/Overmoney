@@ -19,4 +19,8 @@ export class Client {
         return response.data
     }
 
+    async removeCategory(categoryId: number) : Promise<void> { 
+        await axios.delete(import.meta.env.VITE_API_URL + 'categories/' + categoryId.toString())
+    }
+
 }

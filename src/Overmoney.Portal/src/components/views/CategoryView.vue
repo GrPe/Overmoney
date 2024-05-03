@@ -1,7 +1,7 @@
 <template>
     <button @click="showModal = true">Add new</button>
-    <CategoryList :categories="categories"></CategoryList>
-    <CreateCategoryModal :show="showModal" @close="onModalClose" :context="userContext"/>
+    <CategoryList :categories="categories" @removeCategory="onRemoveCategory"></CategoryList>
+    <CreateCategoryModal :show="showModal" @created="onCreateCategory" :context="userContext" :currentValue="categoryToUpdate"/>
 </template>
 
 <script lang="ts">
@@ -13,15 +13,17 @@ import type { UserContext } from '@/data_access/userContext';
 
 export default {
     data() {
+        const client = new Client();
         return {
+            client,
             categories: [] as Array<Category>,
             showModal: false,
+            categoryToUpdate: {} as Category | undefined,
             userContext: { userId: 1 } as UserContext
         }
     },
     mounted() {
-        let client = new Client();
-        client.getCategories(this.userContext.userId)
+        this.client.getCategories(this.userContext.userId)
             .then((x) => { this.categories = x });
     },
     components: {
@@ -29,9 +31,14 @@ export default {
         CreateCategoryModal
     },
     methods: {
-        onModalClose(category : Category) {
+        async onCreateCategory(categoryName : string) {
             this.showModal = false;
-            this.categories.push(category);
+            let result = await this.client.createCategory({name: categoryName, userId: this.userContext.userId})
+            this.categories.push(result);
+        },
+        async onRemoveCategory(id: number) {
+            this.categories = this.categories.filter(x=> x.id != id);
+            await this.client.removeCategory(id);
         }
     }
 };
