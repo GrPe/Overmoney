@@ -28,12 +28,13 @@ export default {
     },
     data() {
         return {
-            categoryName: this.currentValue?.name ?? '',
+            categoryName: '',
         }
     },
     methods: {
         async createCategory() {
-            this.$emit('created', this.categoryName)
+            this.$emit('created', this.categoryName);
+            this.categoryName = '';
         }
     }
 }
