@@ -12,7 +12,6 @@
                         <button type="submit">Create</button>
                     </form>
                 </div>
-
                 <div class="modal-footer">
                 </div>
             </div>
