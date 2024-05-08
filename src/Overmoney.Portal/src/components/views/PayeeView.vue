@@ -1,25 +1,65 @@
 <template>
-    <PayeesList :payees="payess"></PayeesList>
+    <button @click="showModal = true">Add new</button>
+    <PayeesList :payees="payees" @removePayee="onRemovePayee" @updatePayee="onUpdatePayee">
+    </PayeesList>
+    <CreatePayeeModal :show="showModal" @created="onCreatePayee" />
+    <UpdatePayeeModal :show="showUpdateModal" @updated="updatePayee" :currentValue="payeeToUpdate" />
 </template>
 
 <script lang="ts">
-import PayeesList from '../lists/PayeesList.vue'
-import type { Payee } from '../../data_access/models/payee'
 import { Client } from '@/data_access/client';
+import type { Payee } from '../../data_access/models/payee'
+import CreatePayeeModal from '../modals/CreatePayeeModal.vue';
+import UpdatePayeeModal from '../modals/UpdatePayeeModal.vue';
+import type { UserContext } from '@/data_access/userContext';
+import PayeesList from '../lists/PayeesList.vue';
 
 export default {
     data() {
+        const client = new Client();
         return {
-            payess: [] as Array<Payee>
-        };
+            client,
+            payees: [] as Array<Payee>,
+            showModal: false,
+            showUpdateModal: false,
+            payeeToUpdate: {} as Payee | undefined,
+            userContext: { userId: 1 } as UserContext
+        }
     },
     mounted() {
-        let client = new Client();
-        client.getPayees(1)
-            .then((x) => this.payess = x)
+        this.client.getPayees(this.userContext.userId)
+            .then((x) => { this.payees = x });
     },
     components: {
         PayeesList,
+        CreatePayeeModal,
+        UpdatePayeeModal,
+    },
+    methods: {
+        async onCreatePayee(payeeName: string) {
+            this.showModal = false;
+            let result = await this.client.createPayee({ name: payeeName, userId: this.userContext.userId })
+            this.payees.push(result);
+        },
+        async onRemovePayee(id: number) {
+            this.payees = this.payees.filter(x => x.id != id);
+            await this.client.removePayee(id);
+        },
+        async onUpdatePayee(id: number) {
+            let payee = this.payees.find(x => x.id == id);
+            this.payeeToUpdate = payee;
+            this.showUpdateModal = true;
+        },
+        async updatePayee(payee: Payee, newName: string) {
+            this.showUpdateModal = false;
+            let pay = this.payees.find(x => x.id == payee.id);
+
+            if (pay == null || pay == undefined) {
+                console.log("Payee cannot be null");
+            }
+            pay!.name = newName;
+            await this.client.updatePayee({ name: newName, userId: payee.userId, id: payee.id });
+        }
     }
 };
 </script>
