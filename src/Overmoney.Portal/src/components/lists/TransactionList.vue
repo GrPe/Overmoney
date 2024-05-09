@@ -2,6 +2,7 @@
     <table>
         <tr>
             <th>Id</th>
+            <th>Wallet</th>
             <th>Payee</th>
             <th>Category</th>
             <th>Date</th>
@@ -12,6 +13,7 @@
         </tr>
         <tr v-for="transaction in transactions" :key="transaction.id">
             <td>{{ transaction.id }}</td>
+            <td>{{ transaction.wallet.name }}</td>
             <td>{{ transaction.payee.name }}</td>
             <td>{{ transaction.category.name }}</td>
             <td>{{ transaction.transactionDate.toLocaleString() }}</td>
