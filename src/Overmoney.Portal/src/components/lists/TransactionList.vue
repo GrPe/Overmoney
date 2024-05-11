@@ -21,7 +21,8 @@
             <td>{{ transaction.transactionType }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.note }}</td>
-            <td>{{ transaction.attachments?.length == 0 ? "Yes" : "No" }}</td>            
+            <td>{{ transaction.attachments?.length == 0 ? "Yes" : "No" }}</td> 
+                       
             <td>
                 <button @click="updateTransaction(transaction.id)">
                     Edit
