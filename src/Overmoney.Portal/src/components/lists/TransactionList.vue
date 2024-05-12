@@ -10,7 +10,7 @@
             <th>Amount</th>
             <th>Note</th>
             <th>Attachments?</th>
-            <th>Actions.</th>
+            <th>Actions</th>
         </tr>
         <tr v-for="transaction in transactions" :key="transaction.id">
             <td>{{ transaction.id }}</td>
