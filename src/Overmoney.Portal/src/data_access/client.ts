@@ -5,6 +5,7 @@ import type { createCategoryRequest } from "./models/requests/createCategoryRequ
 import type { updateCategoryRequest } from "./models/requests/createCategoryRequest";
 import type { createPayeeReqeuest } from "./models/requests/createPayeeReqeuest";
 import type { updatePayeeRequest } from "./models/requests/updatePayeeRequest";
+import type { createTransactionRequest } from "./models/requests/createTransactionRequest";
 import type { Wallet } from "./models/wallet";
 import type { Transaction } from "./models/transaction";
 
@@ -69,6 +70,16 @@ export class Client {
   async getTransactions(userId: number): Promise<Array<Transaction>> {
     const response = await axios.get<Array<Transaction>>(
       import.meta.env.VITE_API_URL + `users/${userId}/transactions`
+    );
+    return response.data;
+  }
+
+  async createTransaction(
+    request: createTransactionRequest
+  ): Promise<Transaction> {
+    const response = await axios.post(
+      import.meta.env.VITE_API_URL + "transactions",
+      request
     );
     return response.data;
   }

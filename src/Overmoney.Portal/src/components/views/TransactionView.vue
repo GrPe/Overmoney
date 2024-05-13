@@ -1,6 +1,8 @@
 <template>
+    <button @click="showModal = true">Add new</button>
     <TransactionList :transactions="transactions"></TransactionList>
-
+    <CreateTransactionModal :show="showModal" :wallets="wallets" :payees="payees" :categories="categories"
+        @created="onCreateTransaction" />
 </template>
 
 <script lang="ts">
@@ -9,8 +11,10 @@ import type { Wallet } from '../../data_access/models/wallet'
 import type { Payee } from '../../data_access/models/payee';
 import type { Transaction } from '../../data_access/models/transaction'
 import type { Category } from '../../data_access/models/category';
+import type { createTransactionRequest } from '@/data_access/models/requests/createTransactionRequest';
 import { Client } from '@/data_access/client';
 import type { UserContext } from '@/data_access/userContext';
+import CreateTransactionModal from '@/components/modals/CreateTransactionModal.vue';
 
 export default {
     data() {
@@ -21,7 +25,7 @@ export default {
             payees: [] as Array<Payee>,
             transactions: [] as Array<Transaction>,
             wallets: [] as Array<Wallet>,
-            // showModal: false,
+            showModal: false,
             // showUpdateModal: false,
             // categoryToUpdate: {} as Category | undefined,
             userContext: { userId: 1 } as UserContext
@@ -48,8 +52,17 @@ export default {
                 console.log(this.transactions);
             });
     },
+    methods: {
+        async onCreateTransaction(transaction: createTransactionRequest) {
+            this.showModal = false;
+            transaction.userId = this.userContext.userId;
+            let result = await this.client.createTransaction(transaction);
+            this.transactions.push(result);
+        }
+    },
     components: {
         TransactionList,
+        CreateTransactionModal,
     }
 };
 </script>

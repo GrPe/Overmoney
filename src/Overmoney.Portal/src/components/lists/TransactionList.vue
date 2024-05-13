@@ -30,6 +30,9 @@
                 <button @click="removeTransaction(transaction.id)">
                     Delete
                 </button>
+                <button @click="addAttachment(transaction.id)">
+                    Add Attachment
+                </button>
             </td>
         </tr>
     </table>
@@ -48,6 +51,9 @@ export default {
         },
         async removeTransaction(id: number) {
             this.$emit('removeTransaction', id);
+        },
+        async addAttachment(id: number) {
+            this.$emit('addAttachment', id)
         }
     }
 }
