@@ -29,11 +29,7 @@ public class InfrastructureFixture : IAsyncLifetime
     {
         _postgresContainer = new PostgreSqlBuilder()
             .WithPortBinding(POSTGRES_PORT, true)
-            .WithWaitStrategy(
-                Wait
-                .ForUnixContainer()
-                .UntilPortIsAvailable(POSTGRES_PORT)
-                .UntilMessageIsLogged(new Regex(".*database system is ready to accept connections.*\\s")))
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("pg_isready"))
             .WithUsername("dev")
             .WithPassword("dev")
             .Build();
