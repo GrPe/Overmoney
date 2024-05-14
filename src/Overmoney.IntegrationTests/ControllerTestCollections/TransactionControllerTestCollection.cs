@@ -36,7 +36,7 @@ public class TransactionControllerTestCollection
         content.ShouldNotBeNull();
         content.Id.ShouldBeGreaterThan(0);
         content.Amount.ShouldBe(transaction.Amount);
-        content.TransactionDate.ShouldBe(transaction.TransactionDate, TimeSpan.FromSeconds(1));
+        content.TransactionDate.ShouldBe(new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc));
         content.Note.ShouldBe(transaction.Note);
         content.UserId.ShouldBe(userId);
         content.Wallet?.Id.ShouldBe(walletId);
@@ -65,7 +65,7 @@ public class TransactionControllerTestCollection
             content.ShouldNotBeNull();
             content.Id.ShouldBeGreaterThan(0);
             content.Amount.ShouldBe(transaction.Amount);
-            content.TransactionDate.ShouldBe(transaction.TransactionDate, TimeSpan.FromSeconds(1));
+            content.TransactionDate.ShouldBe(new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc));
             content.Note.ShouldBe(transaction.Note);
             content.UserId.ShouldBe(userId);
             content.Wallet?.Id.ShouldBe(walletId);
@@ -113,7 +113,7 @@ public class TransactionControllerTestCollection
         transactionResponse.ShouldNotBeNull();
         transactionResponse.Id.ShouldBe(content.Id);
         transactionResponse.Amount.ShouldBe(updatedTransaction.Amount);
-        transactionResponse.TransactionDate.ShouldBe(updatedTransaction.TransactionDate, TimeSpan.FromSeconds(1));
+        transactionResponse.TransactionDate.ShouldBe(new DateTime(updatedTransaction.TransactionDate, new(), DateTimeKind.Utc));
         transactionResponse.Note.ShouldBe(updatedTransaction.Note);
         transactionResponse.UserId.ShouldBe(userId);
         transactionResponse.Wallet?.Id.ShouldBe(walletId);

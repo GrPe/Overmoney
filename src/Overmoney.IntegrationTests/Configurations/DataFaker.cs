@@ -32,11 +32,11 @@ internal static class DataFaker
         return new Faker().Finance.AccountName();
     }
 
-    public static (decimal Amount, string Note, DateTime TransactionDate) GenerateTransaction()
+    public static (decimal Amount, string Note, DateOnly TransactionDate) GenerateTransaction()
     {
         var amount = new Faker().Finance.Amount();
         var note = new Faker().Lorem.Sentence();
-        var date = new Faker().Date.Past().ToUniversalTime();
+        var date = DateOnly.FromDateTime(new Faker().Date.Past().ToUniversalTime());
         return (amount, note, date);
     }
 
