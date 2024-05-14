@@ -3,6 +3,7 @@ using DotNet.Testcontainers.Containers;
 using Overmoney.IntegrationTests.ControllerTestCollections;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
+using Testcontainers.PostgreSql;
 
 namespace Overmoney.IntegrationTests.Configurations;
 public class InfrastructureFixture : IAsyncLifetime
@@ -26,16 +27,15 @@ public class InfrastructureFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        _postgresContainer = new ContainerBuilder()
-            .WithImage("postgres")
+        _postgresContainer = new PostgreSqlBuilder()
             .WithPortBinding(POSTGRES_PORT, true)
             .WithWaitStrategy(
                 Wait
                 .ForUnixContainer()
                 .UntilPortIsAvailable(POSTGRES_PORT)
                 .UntilMessageIsLogged(new Regex(".*database system is ready to accept connections.*\\s")))
-            .WithEnvironment("POSTGRES_USER", "dev")
-            .WithEnvironment("POSTGRES_PASSWORD", "dev")
+            .WithUsername("dev")
+            .WithPassword("dev")
             .Build();
 
         await _postgresContainer
