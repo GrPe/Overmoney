@@ -36,7 +36,7 @@ public class InfrastructureFixture : IAsyncLifetime
         await _postgresContainer
             .StartAsync();
 
-        _application = new ApiWebApplicationFactory(_postgresContainer.GetMappedPublicPort(POSTGRES_PORT));
+        _application = new ApiWebApplicationFactory(_postgresContainer.Hostname, _postgresContainer.GetMappedPublicPort(POSTGRES_PORT));
         _client = _application.CreateClient();
     }
 
@@ -206,14 +206,6 @@ public class InfrastructureFixture : IAsyncLifetime
         var walletIds = await GetRandomWallets(userId);
         return walletIds[Random.Shared.Next(WALLET_COUNT)];
     }
-
-    //public void Dispose()
-    //{
-    //    _client.Dispose();
-    //    _application.Dispose();
-    //    _postgresContainer.StopAsync().GetAwaiter().GetResult();
-    //    _postgresContainer.DisposeAsync().GetAwaiter().GetResult();
-    //}
 }
 
 [CollectionDefinition("Infrastructure")]

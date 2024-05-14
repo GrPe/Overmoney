@@ -7,10 +7,12 @@ namespace Overmoney.IntegrationTests.Configurations;
 internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly int _postgresPort;
+    private readonly string _postgresHostname;
 
-    public ApiWebApplicationFactory(int postgresPort)
+    public ApiWebApplicationFactory(string hostname, int postgresPort)
     {
         _postgresPort = postgresPort;
+        _postgresHostname = hostname;
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -29,7 +31,7 @@ internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(dbContextOptions);
             }
 
-            services.AddDataAccess($"Host=localhost:{_postgresPort};Database=overmoney;Username=dev;Password=dev;Timeout=300;CommandTimeout=300", applyMigrations: true);
+            services.AddDataAccess($"Host={_postgresHostname}:{_postgresPort};Database=overmoney;Username=dev;Password=dev;Timeout=300;CommandTimeout=300", applyMigrations: true);
         });
     }
 }
