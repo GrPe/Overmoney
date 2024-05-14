@@ -26,7 +26,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         var payee = await _databaseContext.Payees.SingleAsync(x => x.Id == transaction.Payee.Id, cancellationToken);
         var wallet = await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
 
-        var entity = _databaseContext.Add(new TransactionEntity(wallet, user, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount));
+        var entity = _databaseContext.Add(new TransactionEntity(wallet, user, payee, category, new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc), transaction.TransactionType, transaction.Note, transaction.Amount));
 
         foreach (var attachment in transaction.Attachments)
         {
@@ -77,7 +77,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             new Wallet(entity.Wallet.Id, entity.Wallet.Name, new Currency(entity.Wallet.CurrencyId, entity.Wallet.Currency.Code, entity.Wallet.Currency.Name), entity.Wallet.UserId),
             new Payee(entity.Payee.Id, entity.Payee.UserId, entity.Payee.Name),
             new Category(entity.Category.Id, entity.Category.UserId, entity.Category.Name),
-            entity.TransactionDate,
+            DateOnly.FromDateTime(entity.TransactionDate),
             entity.TransactionType,
             entity.Note,
             entity.Amount,
@@ -137,7 +137,7 @@ internal sealed class TransactionRepository : ITransactionRepository
             ? entity.Wallet
             : await _databaseContext.Wallets.SingleAsync(x => x.Id == transaction.Wallet.Id, cancellationToken);
 
-        entity.Update(wallet, payee, category, transaction.TransactionDate, transaction.TransactionType, transaction.Note, transaction.Amount);
+        entity.Update(wallet, payee, category, new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc), transaction.TransactionType, transaction.Note, transaction.Amount);
         _databaseContext.Update(entity);
 
 
@@ -278,5 +278,34 @@ internal sealed class TransactionRepository : ITransactionRepository
         entity.Update(attachment.Name);
 
         await _databaseContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserId userId, CancellationToken cancellationToken)
+    {
+        return await _databaseContext
+            .Transactions
+            .AsNoTracking()
+            .Include(x => x.Wallet)
+            .ThenInclude(w => w.Currency)
+            .Include(x => x.Category)
+            .Include(x => x.Payee)
+            .Include(x => x.Attachments)
+            .Where(x => x.UserId == userId)
+            .Select(x => new Transaction(
+                x.Id,
+                x.UserId,
+                new Wallet(
+                    x.Wallet.Id, 
+                    x.Wallet.Name, 
+                    new Currency(x.Wallet.CurrencyId, x.Wallet.Currency.Code, x.Wallet.Currency.Name), 
+                    x.Wallet.UserId),
+                new Payee(x.Payee.Id, x.Payee.UserId, x.Payee.Name),
+                new Category(x.Category.Id, x.Category.UserId, x.Category.Name),
+                DateOnly.FromDateTime(x.TransactionDate),
+                x.TransactionType,
+                x.Note,
+                x.Amount,
+                x.Attachments.Select(a => new Attachment(a.Id, a.Name, a.FilePath)).ToList()))
+            .ToListAsync(cancellationToken);
     }
 }

@@ -131,11 +131,18 @@ public class UsersController : BaseController
         return Ok(result);
     }
 
+    /// <summary>
+    /// Retrieve user's transactions by query
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     [HttpGet("{userId}/transactions")]
+    [ProducesResponseType<IEnumerable<Transaction>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Transaction>>> GetUserTransactions(int userId)
     {
-        var result = await _mediator.Send(userId);
-        return null; //todo
+        var result = await _mediator.Send(new GetUserTransactionsQuery(new(userId)));
+        return result is null || !result.Any() ? NotFound() : Ok(result);
     }
 
     /// <summary>

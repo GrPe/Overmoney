@@ -13,7 +13,7 @@ public sealed record CreateTransactionCommand(
     WalletId WalletId,
     PayeeId PayeeId,
     CategoryId CategoryId,
-    DateTime TransactionDate,
+    DateOnly TransactionDate,
     TransactionType TransactionType,
     string? Note,
     decimal Amount,

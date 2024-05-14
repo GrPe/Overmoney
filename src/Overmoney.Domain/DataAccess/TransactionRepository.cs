@@ -7,6 +7,7 @@ public interface ITransactionRepository : IRepository
 {
     Task<bool> IsExists(TransactionId id, CancellationToken cancellationToken);
     Task<Transaction?> GetAsync(TransactionId id, CancellationToken cancellationToken);
+    Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserId userId, CancellationToken cancellationToken);
     Task<Transaction> CreateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task DeleteAsync(TransactionId id, CancellationToken cancellationToken);

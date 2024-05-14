@@ -34,9 +34,9 @@
 
                         <label for="transactionType">Type</label>
                         <select v-model="transaction.transactionType" id="transactionType">
-                            <option value="0">Outcome</option>
-                            <option value="1">Income</option>
-                            <option value="2">Transfer</option>
+                            <option :value="0">Outcome</option>
+                            <option :value="1">Income</option>
+                            <option :value="2">Transfer</option>
                         </select>
 
                         <label for="amount">Amount</label>

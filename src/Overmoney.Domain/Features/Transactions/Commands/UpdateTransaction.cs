@@ -14,7 +14,7 @@ public sealed record UpdateTransactionCommand(
     WalletId WalletId,
     PayeeId PayeeId,
     CategoryId CategoryId,
-    DateTime TransactionDate,
+    DateOnly TransactionDate,
     TransactionType TransactionType,
     string? Note,
     decimal Amount) : IRequest<Transaction?>;

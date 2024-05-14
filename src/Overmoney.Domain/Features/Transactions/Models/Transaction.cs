@@ -23,7 +23,7 @@ public class Transaction
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
-    public DateTime TransactionDate { get; }
+    public DateOnly TransactionDate { get; }
     public TransactionType TransactionType { get; }
     public string? Note { get; }
     public decimal Amount { get; }
@@ -35,7 +35,7 @@ public class Transaction
         Wallet wallet,
         Payee payee,
         Category category,
-        DateTime transactionDate,
+        DateOnly transactionDate,
         TransactionType transactionType,
         string? note,
         decimal amount,
@@ -58,7 +58,7 @@ public class Transaction
         Wallet wallet,
         Payee payee,
         Category category,
-        DateTime transactionDate,
+        DateOnly transactionDate,
         TransactionType transactionType,
         string? note,
         decimal amount,

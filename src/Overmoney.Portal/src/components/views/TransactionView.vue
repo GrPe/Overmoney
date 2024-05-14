@@ -35,22 +35,12 @@ export default {
     mounted() {
         this.client.getWallets(this.userContext.userId)
             .then(x => { this.wallets = x })
-            .then(x => this.client.getCategories(this.userContext.userId))
+            .then(() => this.client.getCategories(this.userContext.userId))
             .then(x => { this.categories = x })
-            .then(x => this.client.getPayees(this.userContext.userId))
+            .then(() => this.client.getPayees(this.userContext.userId))
             .then(x => { this.payees = x })
-            .then(x => this.client.getTransactions(this.userContext.userId))
-            .then(x => {
-                this.transactions = x
-                this.transactions = [
-                    { id: 1, userId: 1, wallet: this.wallets[0], payee: this.payees[0], category: this.categories[0], transactionDate: new Date(), transactionType: 0, note: "Lorem, ipsum.", amount: 526.4 },
-                    { id: 2, userId: 1, wallet: this.wallets[0], payee: this.payees[1], category: this.categories[0], transactionDate: new Date(), transactionType: 0, note: "Lorem ipsum dolor sit.", amount: 1.4 },
-                    { id: 3, userId: 1, wallet: this.wallets[0], payee: this.payees[1], category: this.categories[0], transactionDate: new Date(), transactionType: 0, note: "", amount: 132.47 },
-                    { id: 4, userId: 1, wallet: this.wallets[0], payee: this.payees[2], category: this.categories[1], transactionDate: new Date(), transactionType: 0, note: "Lorem ipsum dolor sit.", amount: 185.40 },
-                    { id: 5, userId: 1, wallet: this.wallets[0], payee: this.payees[2], category: this.categories[2], transactionDate: new Date(), transactionType: 1, note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil libero eos esse sapiente labore delectus vero facere totam suscipit sint!", amount: 132.4 },
-                ]
-                console.log(this.transactions);
-            });
+            .then(() => this.client.getTransactions(this.userContext.userId))
+            .then(x => { this.transactions = x });
     },
     methods: {
         async onCreateTransaction(transaction: createTransactionRequest) {
