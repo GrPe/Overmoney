@@ -1,5 +1,5 @@
-export type createTransactionRequest = {
-    userId: number;
+export type updateTransactionRequest = {
+    id: number;
     walletId: number;
     payeeId: number;
     categoryId: number;

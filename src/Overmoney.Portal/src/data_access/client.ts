@@ -8,6 +8,7 @@ import type { updatePayeeRequest } from "./models/requests/updatePayeeRequest";
 import type { createTransactionRequest } from "./models/requests/createTransactionRequest";
 import type { Wallet } from "./models/wallet";
 import type { Transaction } from "./models/transaction";
+import type { updateTransactionRequest } from "./models/requests/updateTransactionRequest";
 
 export class Client {
   async getWallets(userId: number): Promise<Array<Wallet>> {
@@ -82,5 +83,15 @@ export class Client {
       request
     );
     return response.data;
+  }
+
+  async updateTransaction(request: updateTransactionRequest): Promise<void> {
+    await axios.put(import.meta.env.VITE_API_URL + "transactions", request);
+  }
+
+  async removeTransaction(transactionId: number): Promise<void> {
+    await axios.delete(
+      import.meta.env.VITE_API_URL + "transactions/" + transactionId.toString()
+    );
   }
 }
