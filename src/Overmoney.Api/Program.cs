@@ -4,6 +4,8 @@ using Overmoney.Domain;
 using Overmoney.DataAccess;
 using System.Reflection;
 using Overmoney.Domain.Converters;
+using Microsoft.AspNetCore.Identity;
+using Overmoney.DataAccess.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,9 @@ builder.Services.AddDomain();
 
 builder.Services.AddScoped<ExceptionHandler>();
 
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -59,6 +64,7 @@ app.UseCors(options =>
 });
 
 app.UseAuthorization();
+app.MapIdentityApi<IdentityUser>();
 
 app.UseMiddleware<ExceptionHandler>();
 

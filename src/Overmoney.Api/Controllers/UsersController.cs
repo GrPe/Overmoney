@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Categories.Models;
 using Overmoney.Domain.Features.Categories.Queries;
@@ -12,6 +13,7 @@ using Overmoney.Domain.Features.Wallets.Queries;
 
 namespace Overmoney.Api.Controllers;
 
+[Authorize]
 public class UsersController : BaseController
 {
     private readonly IMediator _mediator;

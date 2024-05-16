@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Overmoney.Api.DataAccess;
+using Overmoney.DataAccess.Identity;
 using Overmoney.Domain.DataAccess;
 using System.Reflection;
 
@@ -26,6 +27,11 @@ public static class DataAccessModule
             .AddClasses(classes => classes.AssignableTo<IRepository>())
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+
+        services.AddDbContext<ApplicationIdentityDbContext>(options =>
+        {
+            options.UseInMemoryDatabase("Identity");
+        });
 
         return services;
     }
