@@ -5,7 +5,7 @@ using Overmoney.Domain.Features.Transactions.Models;
 using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Queries;
-public record GetUserTransactionsQuery(UserId UserId) : IRequest<IEnumerable<Transaction>>;
+public record GetUserTransactionsQuery(UserProfileId UserId) : IRequest<IEnumerable<Transaction>>;
 
 public class GetUserTransactionsQueryValidator : AbstractValidator<GetUserTransactionsQuery>
 {

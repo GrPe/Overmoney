@@ -239,7 +239,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(UserProfileId userId, CancellationToken cancellationToken)
     {
         var entities = await _databaseContext
             .RecurringTransactions
@@ -280,7 +280,7 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserProfileId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext
             .Transactions

@@ -9,17 +9,17 @@ namespace Overmoney.DataAccess.Payees;
 internal sealed class PayeeEntity
 {
     public PayeeId Id { get; private set; } = null!;
-    public UserId UserId { get; private set; } = null!;
-    public UserEntity User { get; private set; } = null!;
+    public UserProfileId UserId { get; private set; } = null!;
+    public UserProfileEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
 
-    public PayeeEntity(UserEntity user, string name)
+    public PayeeEntity(UserProfileEntity user, string name)
     {
         User = user;
         Name = name;
     }
 
-    public void Update(UserEntity user, string name)
+    public void Update(UserProfileEntity user, string name)
     {
         Name = name;
         User = user;

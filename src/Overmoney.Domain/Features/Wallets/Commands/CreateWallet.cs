@@ -8,7 +8,7 @@ using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Commands;
 
-public sealed record CreateWalletCommand(UserId UserId, string Name, int CurrencyId) : IRequest<Wallet>;
+public sealed record CreateWalletCommand(UserProfileId UserId, string Name, int CurrencyId) : IRequest<Wallet>;
 
 internal sealed class CreateWalletCommandValidator : AbstractValidator<CreateWalletCommand>
 {
@@ -27,13 +27,13 @@ internal sealed class CreateWalletCommandValidator : AbstractValidator<CreateWal
 internal sealed class CreateWalletCommandHandler : IRequestHandler<CreateWalletCommand, Wallet>
 {
     private readonly IWalletRepository _walletRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserProfileRepository _userRepository;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly ILogger<CreateWalletCommandHandler> _logger;
 
     public CreateWalletCommandHandler(
         IWalletRepository walletRepository,
-        IUserRepository userRepository,
+        IUserProfileRepository userRepository,
         ILogger<CreateWalletCommandHandler> logger,
         ICurrencyRepository currencyRepository)
     {

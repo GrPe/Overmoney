@@ -7,13 +7,13 @@ public interface ITransactionRepository : IRepository
 {
     Task<bool> IsExists(TransactionId id, CancellationToken cancellationToken);
     Task<Transaction?> GetAsync(TransactionId id, CancellationToken cancellationToken);
-    Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserId userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserProfileId userId, CancellationToken cancellationToken);
     Task<Transaction> CreateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task UpdateAsync(Transaction transaction, CancellationToken cancellationToken);
     Task DeleteAsync(TransactionId id, CancellationToken cancellationToken);
 
     Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);
-    Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(UserId userId, CancellationToken cancellationToken);
+    Task<IEnumerable<RecurringTransaction>> GetRecurringTransactionsByUserIdAsync(UserProfileId userId, CancellationToken cancellationToken);
     Task<RecurringTransaction?> GetRecurringTransactionAsync(RecurringTransactionId id, CancellationToken cancellationToken);
     Task DeleteRecurringTransactionAsync(RecurringTransactionId id, CancellationToken cancellationToken);
     Task UpdateAsync(RecurringTransaction transaction, CancellationToken cancellationToken);

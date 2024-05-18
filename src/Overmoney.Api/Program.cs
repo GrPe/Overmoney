@@ -32,6 +32,31 @@ builder.Services.AddSwaggerGen(options =>
 
     options.SchemaFilter<IdentitySchemaFilter>();
 
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Bearer token",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -64,7 +89,9 @@ app.UseCors(options =>
 });
 
 app.UseAuthorization();
-app.MapIdentityApi<IdentityUser>();
+app.MapGroup("Identity")
+    .MapIdentityApi<IdentityUser>()
+    .WithTags("Identity");
 
 app.UseMiddleware<ExceptionHandler>();
 

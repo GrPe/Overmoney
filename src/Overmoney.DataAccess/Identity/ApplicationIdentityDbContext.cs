@@ -8,4 +8,10 @@ public class ApplicationIdentityDbContext : IdentityDbContext<IdentityUser>
     public ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options) 
         : base(options)
     { }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.HasDefaultSchema("identity");
+    }
 }

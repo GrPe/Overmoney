@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Transactions.Commands;
 using Overmoney.Domain.Features.Transactions.Models;
@@ -6,6 +7,7 @@ using Overmoney.Domain.Features.Transactions.Queries;
 
 namespace Overmoney.Api.Controllers;
 
+[Authorize]
 public class AttachmentsController : BaseController
 {
     private readonly IMediator _mediator;

@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Queries;
 
-public sealed record GetUserWalletsQuery(UserId UserId) : IRequest<IEnumerable<Wallet>> { }
+public sealed record GetUserWalletsQuery(UserProfileId UserId) : IRequest<IEnumerable<Wallet>> { }
 
 internal sealed class GetUserWalletsQueryValidator : AbstractValidator<GetUserWalletsQuery>
 {

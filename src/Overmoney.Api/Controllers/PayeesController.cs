@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Payees.Commands;
 using Overmoney.Domain.Features.Payees.Models;
@@ -6,6 +7,7 @@ using Overmoney.Domain.Features.Payees.Queries;
 
 namespace Overmoney.Api.Controllers;
 
+[Authorize]
 public class PayeesController : BaseController
 {
     private readonly IMediator _mediator;

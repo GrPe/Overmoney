@@ -12,7 +12,7 @@ public static class DomainModule
                 cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
                 cfg.AddOpenRequestPreProcessor(typeof(RequestValidationBehavior<>));
             });
-        services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>(includeInternalTypes: true);
+        services.AddValidatorsFromAssemblyContaining<CreateUserProfileCommandValidator>(includeInternalTypes: true);
 
         services.AddSingleton<TimeProvider>(TimeProvider.System);
 

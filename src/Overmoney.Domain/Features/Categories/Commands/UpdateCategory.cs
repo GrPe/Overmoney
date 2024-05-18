@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Categories.Commands;
 
-public sealed record UpdateCategoryCommand(CategoryId Id, UserId UserId, string Name) : IRequest<Category?>;
+public sealed record UpdateCategoryCommand(CategoryId Id, UserProfileId UserId, string Name) : IRequest<Category?>;
 
 internal sealed class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
 {

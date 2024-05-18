@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Categories.Commands;
 
-public sealed record CreateCategoryCommand(UserId UserId, string Name) : IRequest<Category>;
+public sealed record CreateCategoryCommand(UserProfileId UserId, string Name) : IRequest<Category>;
 
 internal sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
 {

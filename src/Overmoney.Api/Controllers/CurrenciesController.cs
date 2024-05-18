@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Currencies.Commands;
 using Overmoney.Domain.Features.Currencies.Models;
@@ -6,6 +7,7 @@ using Overmoney.Domain.Features.Currencies.Queries;
 
 namespace Overmoney.Api.Controllers;
 
+[Authorize]
 public class CurrenciesController : BaseController
 {
     private readonly IMediator _mediator;

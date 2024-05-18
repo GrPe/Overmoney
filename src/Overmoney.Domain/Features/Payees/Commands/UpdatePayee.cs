@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Payees.Commands;
 
-public sealed record UpdatePayeeCommand(PayeeId Id, UserId UserId, string Name) : IRequest<Payee?>;
+public sealed record UpdatePayeeCommand(PayeeId Id, UserProfileId UserId, string Name) : IRequest<Payee?>;
 
 internal sealed class UpdatePayeeCommandValidator : AbstractValidator<UpdatePayeeCommand>
 {

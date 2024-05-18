@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Payees.Queries;
 
-public sealed record GetAllPayeesByUserIdQuery(UserId UserId) : IRequest<IEnumerable<Payee>>;
+public sealed record GetAllPayeesByUserIdQuery(UserProfileId UserId) : IRequest<IEnumerable<Payee>>;
 
 internal sealed class GetAllPayeesByUserIdQueryValidator : AbstractValidator<GetAllPayeesByUserIdQuery>
 {

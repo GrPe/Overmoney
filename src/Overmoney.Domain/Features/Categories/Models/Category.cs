@@ -15,15 +15,15 @@ public sealed class CategoryId : Identity<int>
 public sealed class Category
 {
     public CategoryId? Id { get; init; }
-    public UserId UserId { get; init; } = null!;
+    public UserProfileId UserId { get; init; } = null!;
     public string Name { get; init; } = null!;
 
-    public Category(CategoryId id, UserId userId, string name) : this(userId, name)
+    public Category(CategoryId id, UserProfileId userId, string name) : this(userId, name)
     {
         Id = id;
     }
 
-    public Category(UserId userId, string name)
+    public Category(UserProfileId userId, string name)
     {
         if(string.IsNullOrEmpty(name))
         {

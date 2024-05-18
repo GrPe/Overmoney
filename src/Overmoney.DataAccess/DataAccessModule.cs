@@ -30,7 +30,8 @@ public static class DataAccessModule
 
         services.AddDbContext<ApplicationIdentityDbContext>(options =>
         {
-            options.UseInMemoryDatabase("Identity");
+            options.UseNpgsql(connectionString, x => x.MigrationsAssembly(Assembly.GetAssembly(typeof(DatabaseContext))!.FullName));
+            options.UseSnakeCaseNamingConvention();
         });
 
         return services;

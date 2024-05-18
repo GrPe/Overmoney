@@ -12,7 +12,7 @@ namespace Overmoney.Api.DataAccess;
 internal sealed class DatabaseContext : DbContext
 {
     public DbSet<WalletEntity> Wallets { get; set; }
-    public DbSet<UserEntity> Users { get; set; }
+    public DbSet<UserProfileEntity> Users { get; set; }
     public DbSet<PayeeEntity> Payees { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<CurrencyEntity> Currencies { get; set; }

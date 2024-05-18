@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Categories.Models;
 using Overmoney.Domain.Features.Categories.Queries;
@@ -8,6 +9,7 @@ using Overmoney.Domain.Features.Payees.Queries;
 using Overmoney.Domain.Features.Transactions.Models;
 using Overmoney.Domain.Features.Transactions.Queries;
 using Overmoney.Domain.Features.Users.Commands;
+using Overmoney.Domain.Features.Users.Models;
 using Overmoney.Domain.Features.Wallets.Models;
 using Overmoney.Domain.Features.Wallets.Queries;
 
@@ -17,47 +19,62 @@ namespace Overmoney.Api.Controllers;
 public class UsersController : BaseController
 {
     private readonly IMediator _mediator;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public UsersController(IMediator mediator)
+    public UsersController(
+        IMediator mediator, 
+        SignInManager<IdentityUser> signInManager)
     {
         _mediator = mediator;
+        _signInManager = signInManager;
     }
 
-
     /// <summary>
-    /// Register new user
+    /// Create new user profile
     /// </summary>
     /// <param name="command"></param>
-    /// <returns>TBD</returns>
+    /// <returns>User profile</returns>
     [HttpPost]
-    [Route("register")]
-    [ProducesResponseType<int>(StatusCodes.Status202Accepted)]
-    public async Task<ActionResult<int>> Register(RegisterUserCommand command)
+    [Route("profile")]
+    [ProducesResponseType<UserProfile>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<UserProfile>> CreateUserProfile(CreateUserProfileCommand command)
     {
         var response = await _mediator.Send(command);
 
-        return Accepted(response);
+        return CreatedAtAction(nameof(GetUserProfile), response);
     }
 
     /// <summary>
-    /// Authorize user
+    /// Get user profile
     /// </summary>
-    /// <param name="command"></param>
-    /// <returns>TBD</returns>
-    [HttpPost]
-    [Route("login")]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    /// <returns>User profile</returns>
+    [HttpGet]
+    [Route("profile")]
+    [ProducesResponseType<UserProfile>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> Login(LoginUserCommand command)
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<UserProfile>> GetUserProfile()
     {
-        var response = await _mediator.Send(command);
+        if( _signInManager.Context.Request.HttpContext.User?.Identity?.IsAuthenticated == false)
+        {
+            return Unauthorized();
+        }
 
-        if (response is null)
+        var userName =_signInManager.Context.Request.HttpContext.User?.Identity?.Name;
+
+        if (userName is null)
+        {
+            return Unauthorized();
+        }
+
+        var userProfile = await _mediator.Send(new GetUserProfile(userName));
+
+        if (userProfile is null)
         {
             return NotFound();
         }
 
-        return Ok(response);
+        return Ok(userProfile);
     }
 
     /// <summary>

@@ -17,17 +17,17 @@ public sealed class WalletId : Identity<int>
 public sealed class Wallet
 {
     public WalletId? Id { get; }
-    public UserId UserId { get; } = null!;
+    public UserProfileId UserId { get; } = null!;
     public string Name { get; }
     public Currency Currency { get; }
 
-    public Wallet(WalletId id, string name, Currency currency, UserId userId)
+    public Wallet(WalletId id, string name, Currency currency, UserProfileId userId)
         : this(name, currency, userId)
     {
         Id = id;
     }
 
-    public Wallet(string name, Currency currency, UserId userId)
+    public Wallet(string name, Currency currency, UserProfileId userId)
     {
         Name = name;
         Currency = currency;

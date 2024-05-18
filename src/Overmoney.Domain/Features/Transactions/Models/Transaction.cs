@@ -19,7 +19,7 @@ public sealed class TransactionId : Identity<long>
 public class Transaction
 {
     public TransactionId? Id { get; }
-    public UserId UserId { get; } = null!;
+    public UserProfileId UserId { get; } = null!;
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
@@ -31,7 +31,7 @@ public class Transaction
 
     public Transaction(
         TransactionId id,
-        UserId userId,
+        UserProfileId userId,
         Wallet wallet,
         Payee payee,
         Category category,
@@ -54,7 +54,7 @@ public class Transaction
     }
 
     public Transaction(
-        UserId userId,
+        UserProfileId userId,
         Wallet wallet,
         Payee payee,
         Category category,

@@ -7,7 +7,7 @@ using Overmoney.Domain.Features.Wallets.Models;
 
 namespace Overmoney.Domain.Features.Wallets.Commands;
 
-public sealed record UpdateWalletCommand(WalletId Id, UserId UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
+public sealed record UpdateWalletCommand(WalletId Id, UserProfileId UserId, string Name, int CurrencyId) : IRequest<Wallet?>;
 
 internal sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWalletCommand>
 {
@@ -29,12 +29,12 @@ internal sealed class UpdateWalletCommandValidator : AbstractValidator<UpdateWal
 internal sealed class UpdateWalletCommandHandler : IRequestHandler<UpdateWalletCommand, Wallet?>
 {
     private readonly IWalletRepository _walletRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserProfileRepository _userRepository;
     private readonly ICurrencyRepository _currencyRepository;
 
     public UpdateWalletCommandHandler(
         IWalletRepository walletRepository,
-        IUserRepository userRepository,
+        IUserProfileRepository userRepository,
         ICurrencyRepository currencyRepository)
     {
         _walletRepository = walletRepository;

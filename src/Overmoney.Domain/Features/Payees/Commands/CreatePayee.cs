@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Payees.Commands;
 
-public sealed record CreatePayeeCommand(UserId UserId, string Name) : IRequest<Payee>;
+public sealed record CreatePayeeCommand(UserProfileId UserId, string Name) : IRequest<Payee>;
 
 internal sealed class CreatePayeeCommandValidator : AbstractValidator<CreatePayeeCommand>
 {

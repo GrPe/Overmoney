@@ -16,17 +16,17 @@ public sealed class PayeeId : Identity<int>
 public sealed class Payee
 {
     public PayeeId? Id { get; }
-    public UserId UserId { get; } = null!;
+    public UserProfileId UserId { get; } = null!;
     public string Name { get; }
 
-    public Payee(PayeeId id, UserId userId, string name) : this(userId, name)
+    public Payee(PayeeId id, UserProfileId userId, string name) : this(userId, name)
     {
         Id = id;
         UserId = userId;
         Name = name;
     }
 
-    public Payee(UserId userId, string name)
+    public Payee(UserProfileId userId, string name)
     {
         if (string.IsNullOrEmpty(name))
         {

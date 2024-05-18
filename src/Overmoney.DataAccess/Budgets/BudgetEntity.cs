@@ -10,13 +10,13 @@ internal sealed class BudgetEntity
 {
     public BudgetId Id { get; private set; } = null!;
     public string Name { get; private set; } = null!;
-    public UserId UserId { get; private set; } = null!;
-    public UserEntity User { get; private set; } = null!;
+    public UserProfileId UserId { get; private set; } = null!;
+    public UserProfileEntity User { get; private set; } = null!;
     public int Year { get; private set; }
     public int Month { get; private set; }
     public ICollection<BudgetLineEntity> BudgetLines { get; private set; } = [];
 
-    public BudgetEntity(UserEntity user, string name, int year, int month)
+    public BudgetEntity(UserProfileEntity user, string name, int year, int month)
     {
         User = user;
         Name = name;

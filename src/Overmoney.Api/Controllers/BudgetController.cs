@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Overmoney.Domain.Features.Budgets.Commands;
 using Overmoney.Domain.Features.Budgets.Models;
@@ -6,6 +7,7 @@ using Overmoney.Domain.Features.Budgets.Queries;
 
 namespace Overmoney.Api.Controllers;
 
+[Authorize]
 public class BudgetController : BaseController
 {
     private readonly IMediator _mediator;

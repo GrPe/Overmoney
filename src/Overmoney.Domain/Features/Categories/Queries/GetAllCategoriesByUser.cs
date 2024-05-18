@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Categories.Queries;
 
-public sealed record GetAllCategoriesByUserQuery(UserId UserId) : IRequest<IEnumerable<Category>>;
+public sealed record GetAllCategoriesByUserQuery(UserProfileId UserId) : IRequest<IEnumerable<Category>>;
 
 internal sealed class GetAllCategoriesByUserQueryValidator : AbstractValidator<GetAllCategoriesByUserQuery>
 {

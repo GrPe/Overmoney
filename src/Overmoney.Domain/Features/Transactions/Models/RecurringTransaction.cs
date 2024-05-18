@@ -18,7 +18,7 @@ public sealed class RecurringTransactionId : Identity<long>
 public class RecurringTransaction
 {
     public RecurringTransactionId? Id { get; }
-    public UserId UserId { get; } = null!;
+    public UserProfileId UserId { get; } = null!;
     public Wallet Wallet { get; }
     public Payee Payee { get; }
     public Category Category { get; }
@@ -31,7 +31,7 @@ public class RecurringTransaction
 
     public RecurringTransaction(
         RecurringTransactionId id,
-        UserId userId,
+        UserProfileId userId,
         Wallet wallet,
         Payee payee,
         Category category,
@@ -54,7 +54,7 @@ public class RecurringTransaction
     }
 
     public RecurringTransaction(
-        UserId userId,
+        UserProfileId userId,
         Wallet wallet,
         Payee payee,
         Category category,

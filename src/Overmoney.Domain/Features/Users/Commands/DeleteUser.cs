@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Users.Commands;
 
-public sealed record DeleteUserCommand(UserId UserId) : IRequest { }
+public sealed record DeleteUserCommand(UserProfileId UserId) : IRequest { }
 
 internal sealed class DeleteUserValidator : AbstractValidator<DeleteUserCommand>
 {
@@ -20,10 +20,10 @@ internal sealed class DeleteUserValidator : AbstractValidator<DeleteUserCommand>
 
 internal sealed class DeleteUserHandler : IRequestHandler<DeleteUserCommand>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserProfileRepository _userRepository;
     private readonly ILogger<DeleteUserHandler> _logger;
 
-    public DeleteUserHandler(IUserRepository userRepository, ILogger<DeleteUserHandler> logger)
+    public DeleteUserHandler(IUserProfileRepository userRepository, ILogger<DeleteUserHandler> logger)
     {
         _userRepository = userRepository;
         _logger = logger;

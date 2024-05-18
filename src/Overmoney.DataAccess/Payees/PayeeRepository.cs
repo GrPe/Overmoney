@@ -31,7 +31,7 @@ internal sealed class PayeeRepository : IPayeeRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Payee>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Payee>> GetAllByUserIdAsync(UserProfileId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext
             .Payees

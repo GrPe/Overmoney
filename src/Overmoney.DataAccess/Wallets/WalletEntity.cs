@@ -10,20 +10,20 @@ namespace Overmoney.DataAccess.Wallets;
 internal sealed class WalletEntity
 {
     public WalletId Id { get; private set; } = null!;
-    public UserId UserId { get; private set; } = null!;
-    public UserEntity User { get; private set; } = null!;
+    public UserProfileId UserId { get; private set; } = null!;
+    public UserProfileEntity User { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public int CurrencyId { get; private set; }
     public CurrencyEntity Currency { get; private set; } = null!;
 
-    public WalletEntity(UserEntity user, string name, CurrencyEntity currency)
+    public WalletEntity(UserProfileEntity user, string name, CurrencyEntity currency)
     {
         User = user;
         Name = name;
         Currency = currency;
     }
 
-    public void Update(string name, CurrencyEntity currency, UserEntity user)
+    public void Update(string name, CurrencyEntity currency, UserProfileEntity user)
     {
         User = user;
         Currency = currency;

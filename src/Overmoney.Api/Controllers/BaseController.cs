@@ -8,6 +8,7 @@ namespace Overmoney.Api.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class BaseController : Controller
 {
 }

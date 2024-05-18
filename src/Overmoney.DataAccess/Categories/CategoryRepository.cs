@@ -31,7 +31,7 @@ internal sealed class CategoryRepository : ICategoryRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Category>> GetAllByUserAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Category>> GetAllByUserAsync(UserProfileId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext
             .Categories

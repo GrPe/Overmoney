@@ -2,11 +2,10 @@
 
 namespace Overmoney.Domain.DataAccess;
 
-public interface IUserRepository : IRepository
+public interface IUserProfileRepository : IRepository
 {
-    Task<UserId> CreateAsync(User user, CancellationToken token);
-    Task DeleteByIdAsync(UserId userId, CancellationToken cancellationToken);
-    Task<User?> GetByEmailAsync(string email, CancellationToken token);
-    Task<User?> GetByIdAsync(UserId userId, CancellationToken token);
-    Task<User?> GetByLoginAsync(string? login, CancellationToken cancellationToken);
+    Task<UserProfile> CreateAsync(UserProfile user, CancellationToken token);
+    Task DeleteByIdAsync(UserProfileId userId, CancellationToken cancellationToken);
+    Task<UserProfile?> GetByEmailAsync(string email, CancellationToken token);
+    Task<UserProfile?> GetByIdAsync(UserProfileId userId, CancellationToken token);
 }

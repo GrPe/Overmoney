@@ -51,7 +51,7 @@ internal sealed class WalletRepository : IWalletRepository
         return new Wallet(entity.Id, entity.Name, new Currency(entity.Currency.Id, entity.Currency.Code, entity.Currency.Name), entity.UserId);
     }
 
-    public async Task<IEnumerable<Wallet>> GetByUserAsync(UserId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Wallet>> GetByUserAsync(UserProfileId userId, CancellationToken cancellationToken)
     {
         return await _databaseContext.Wallets
             .AsNoTracking()

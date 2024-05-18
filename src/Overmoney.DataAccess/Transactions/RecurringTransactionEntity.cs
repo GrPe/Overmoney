@@ -17,8 +17,8 @@ internal sealed class RecurringTransactionEntity
     public RecurringTransactionId Id { get; private set; } = null!;
     public WalletId WalletId { get; private set; } = null!;
     public WalletEntity Wallet { get; private set; } = null!;
-    public UserId UserId { get; private set; } = null!;
-    public UserEntity User { get; private set; } = null!;
+    public UserProfileId UserId { get; private set; } = null!;
+    public UserProfileEntity User { get; private set; } = null!;
     public PayeeId PayeeId { get; private set; } = null!;
     public PayeeEntity Payee { get; private set; } = null!;
     public CategoryId CategoryId { get; private set; } = null!;
@@ -31,7 +31,7 @@ internal sealed class RecurringTransactionEntity
 
     public RecurringTransactionEntity(
         WalletEntity wallet,
-        UserEntity user,
+        UserProfileEntity user,
         PayeeEntity payee,
         CategoryEntity category,
         DateTime nextOccurrence,

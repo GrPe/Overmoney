@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Budgets.Commands;
 
-public sealed record CreateBudgetCommand(UserId UserId, string Name, int Year, int Month) : IRequest<Budget>;
+public sealed record CreateBudgetCommand(UserProfileId UserId, string Name, int Year, int Month) : IRequest<Budget>;
 
 internal sealed class CreateBudgetCommandValidator : AbstractValidator<CreateBudgetCommand>
 {

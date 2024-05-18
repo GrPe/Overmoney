@@ -16,14 +16,14 @@ public sealed class Budget
 {
     public BudgetId? Id { get; private set; }
     public string Name { get; private set; } = null!;
-    public UserId UserId { get; private set; } = null!;
+    public UserProfileId UserId { get; private set; } = null!;
     public int Year { get; private set; }
     public int Month { get; private set; }
     public IEnumerable<BudgetLine> BudgetLines { get => _budgetLines; }
 
     private readonly List<BudgetLine> _budgetLines = [];
 
-    public Budget(BudgetId id, UserId userId, string name, int year, int month, List<BudgetLine> budgetLines)
+    public Budget(BudgetId id, UserProfileId userId, string name, int year, int month, List<BudgetLine> budgetLines)
     {
         Id = id;
         Name = name;
@@ -33,7 +33,7 @@ public sealed class Budget
         _budgetLines = budgetLines;
     }
 
-    public Budget(UserId userId, string name, int year, int month, List<BudgetLine>? budgetLines = null)
+    public Budget(UserProfileId userId, string name, int year, int month, List<BudgetLine>? budgetLines = null)
     {
         Name = name;
         Year = year;

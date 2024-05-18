@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Users.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Queries;
 
-public sealed record GetRecurringTransactionsByUserIdQuery(UserId UserId) : IRequest<IEnumerable<RecurringTransaction>>;
+public sealed record GetRecurringTransactionsByUserIdQuery(UserProfileId UserId) : IRequest<IEnumerable<RecurringTransaction>>;
 
 internal sealed class GetRecurringTransactionsByUserIdQueryValidator : AbstractValidator<GetRecurringTransactionsByUserIdQuery>
 {
