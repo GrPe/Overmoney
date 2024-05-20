@@ -2,7 +2,7 @@ import axios, { isCancel, AxiosError } from "axios";
 import type { Category } from "./models/category";
 import type { Payee } from "./models/payee";
 import type { createCategoryRequest } from "./models/requests/createCategoryRequest";
-import type { updateCategoryRequest } from "./models/requests/createCategoryRequest";
+import type { updateCategoryRequest } from "./models/requests/updateCategoryRequest";
 import type { createPayeeReqeuest } from "./models/requests/createPayeeReqeuest";
 import type { updatePayeeRequest } from "./models/requests/updatePayeeRequest";
 import type { createTransactionRequest } from "./models/requests/createTransactionRequest";

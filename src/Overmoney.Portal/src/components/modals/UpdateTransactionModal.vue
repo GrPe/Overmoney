@@ -61,8 +61,8 @@ import type { Wallet } from '../../data_access/models/wallet'
 import type { Payee } from '../../data_access/models/payee'
 import type { Category } from '../../data_access/models/category'
 import type { Transaction } from '../../data_access/models/transaction'
-import { updateTransactionRequest } from '@/data_access/models/requests/updateTransactionRequest'
-import { PropType } from 'vue';
+import type { updateTransactionRequest } from '@/data_access/models/requests/updateTransactionRequest'
+import type { PropType } from 'vue';
 
 export default {
     props: {

@@ -1,22 +1,61 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
+import axios from "axios";
+import { userSessionStore } from "./data_access/sessionStore";
 
-import MainView from './components/views/testComp.vue'
-import PayeeView from './components/views/PayeeView.vue'
-import CategoryView from './components/views/CategoryView.vue'
-import TransactionView from './components/views/TransactionView.vue'
-import SettingsView from './components/views/SettingsView.vue'
+import MainView from "./components/views/testComp.vue";
+import PayeeView from "./components/views/PayeeView.vue";
+import CategoryView from "./components/views/CategoryView.vue";
+import TransactionView from "./components/views/TransactionView.vue";
+import SettingsView from "./components/views/SettingsView.vue";
+import LoginView from "./components/views/LoginView.vue";
 
 const routes = [
-  { path: '/', component: MainView },
-  { path: '/payees', component: PayeeView },
-  { path: '/categories', component: CategoryView },
-  { path: '/transactions', component: TransactionView },
-  { path: '/settings', component: SettingsView }
-]
+  { path: "/login", component: LoginView, meta: { requiresAuth: false } },
+  { path: "/", component: MainView, meta: { requiresAuth: true } },
+  { path: "/payees", component: PayeeView, meta: { requiresAuth: true } },
+  {
+    path: "/categories",
+    component: CategoryView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/transactions",
+    component: TransactionView,
+    meta: { requiresAuth: true },
+  },
+  { path: "/settings", component: SettingsView, meta: { requiresAuth: true } },
+];
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes,
-})
+});
+
+const setAuthorization = (token: string) => {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const session = userSessionStore();
+  if (session.isAuthenticated) {
+    setAuthorization(session.apiToken!);
+  }
+  if (requiresAuth && !session.isAuthenticated) {
+    next("/login");
+  } else if (to.path === "/login" && session.isAuthenticated) {
+    next("/");
+  } else {
+    next();
+  }
+});
+
+axios.interceptors.response.use(null, (error) => {
+  if (error.response.status == 403 || error.response.status == 401) {
+    router.push("/login");
+  }
+
+  return Promise.reject(error);
+});
 
 export default router;

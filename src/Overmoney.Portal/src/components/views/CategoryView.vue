@@ -58,7 +58,7 @@ export default {
                 console.log("Category cannot be null");
             }
             cat!.name = newName;
-            await this.client.updateCategory({ name: newName, userid: category.userId, id: category.id });
+            await this.client.updateCategory({ name: newName, userId: category.userId, id: category.id });
         }
     }
 };
