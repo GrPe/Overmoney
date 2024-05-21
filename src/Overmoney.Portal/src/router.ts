@@ -8,9 +8,11 @@ import CategoryView from "./components/views/CategoryView.vue";
 import TransactionView from "./components/views/TransactionView.vue";
 import SettingsView from "./components/views/SettingsView.vue";
 import LoginView from "./components/views/LoginView.vue";
+import RegisterView from "./components/views/RegisterView.vue";
 
 const routes = [
   { path: "/login", component: LoginView, meta: { requiresAuth: false } },
+  { path: "/register", component: RegisterView, meta: { requiresAuth: false } },
   { path: "/", component: MainView, meta: { requiresAuth: true } },
   { path: "/payees", component: PayeeView, meta: { requiresAuth: true } },
   {

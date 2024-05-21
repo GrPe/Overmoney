@@ -36,6 +36,7 @@ public class UsersController : BaseController
     /// <returns>User profile</returns>
     [HttpPost]
     [Route("profile")]
+    [AllowAnonymous]
     [ProducesResponseType<UserProfile>(StatusCodes.Status201Created)]
     public async Task<ActionResult<UserProfile>> CreateUserProfile(CreateUserProfileCommand command)
     {
