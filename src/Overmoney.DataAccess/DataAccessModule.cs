@@ -16,10 +16,19 @@ public static class DataAccessModule
             options.UseSnakeCaseNamingConvention();
         });
 
-        if(applyMigrations)
+        services.AddDbContext<ApplicationIdentityDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString, x => x.MigrationsAssembly(Assembly.GetAssembly(typeof(DatabaseContext))!.FullName));
+            options.UseSnakeCaseNamingConvention();
+        });
+
+        if (applyMigrations)
         {
             var context = services.BuildServiceProvider().GetRequiredService<DatabaseContext>();
             context.Database.Migrate();
+
+            var identityContext = services.BuildServiceProvider().GetRequiredService<ApplicationIdentityDbContext>();
+            identityContext.Database.Migrate();
         }
 
         services.Scan(
@@ -27,12 +36,6 @@ public static class DataAccessModule
             .AddClasses(classes => classes.AssignableTo<IRepository>())
             .AsImplementedInterfaces()
             .WithScopedLifetime());
-
-        services.AddDbContext<ApplicationIdentityDbContext>(options =>
-        {
-            options.UseNpgsql(connectionString, x => x.MigrationsAssembly(Assembly.GetAssembly(typeof(DatabaseContext))!.FullName));
-            options.UseSnakeCaseNamingConvention();
-        });
 
         return services;
     }
