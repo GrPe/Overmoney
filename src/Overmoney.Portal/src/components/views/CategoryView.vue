@@ -12,22 +12,23 @@ import type { Category } from '../../data_access/models/category'
 import CategoryList from '../lists/CategoryList.vue';
 import CreateCategoryModal from '../modals/CreateCategoryModal.vue';
 import UpdateCategoryModal from '../modals/UpdateCategoryModal.vue';
-import type { UserContext } from '@/data_access/userContext';
+import { userSessionStore } from '@/data_access/sessionStore';
 
 export default {
     data() {
         const client = new Client();
+        const session = userSessionStore();
         return {
             client,
             categories: [] as Array<Category>,
             showModal: false,
             showUpdateModal: false,
             categoryToUpdate: {} as Category | undefined,
-            userContext: { userId: 1 } as UserContext
+            session
         }
     },
     mounted() {
-        this.client.getCategories(this.userContext.userId)
+        this.client.getCategories(this.session.userId)
             .then((x) => { this.categories = x });
     },
     components: {
@@ -38,7 +39,7 @@ export default {
     methods: {
         async onCreateCategory(categoryName: string) {
             this.showModal = false;
-            let result = await this.client.createCategory({ name: categoryName, userId: this.userContext.userId })
+            let result = await this.client.createCategory({ name: categoryName, userId: this.session.userId })
             this.categories.push(result);
         },
         async onRemoveCategory(id: number) {

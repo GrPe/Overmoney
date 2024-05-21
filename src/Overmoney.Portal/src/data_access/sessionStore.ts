@@ -12,8 +12,8 @@ export const userSessionStore = defineStore("user", {
     apiToken(): string | undefined {
       return this.userContext?.token;
     },
-    getUserId(): number | undefined {
-      return this.userContext?.userId;
+    userId(): number {
+      return this.userContext!.userId;
     },
     isAuthenticated(): boolean {
       //no token

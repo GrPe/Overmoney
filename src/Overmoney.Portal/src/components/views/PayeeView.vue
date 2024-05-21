@@ -11,23 +11,24 @@ import { Client } from '@/data_access/client';
 import type { Payee } from '../../data_access/models/payee'
 import CreatePayeeModal from '../modals/CreatePayeeModal.vue';
 import UpdatePayeeModal from '../modals/UpdatePayeeModal.vue';
-import type { UserContext } from '@/data_access/userContext';
 import PayeesList from '../lists/PayeesList.vue';
+import { userSessionStore } from '@/data_access/sessionStore';
 
 export default {
     data() {
         const client = new Client();
+        const session = userSessionStore();
         return {
             client,
             payees: [] as Array<Payee>,
             showModal: false,
             showUpdateModal: false,
             payeeToUpdate: {} as Payee | undefined,
-            userContext: { userId: 1 } as UserContext
+            session
         }
     },
     mounted() {
-        this.client.getPayees(this.userContext.userId)
+        this.client.getPayees(this.session.userId)
             .then((x) => { this.payees = x });
     },
     components: {
@@ -38,7 +39,7 @@ export default {
     methods: {
         async onCreatePayee(payeeName: string) {
             this.showModal = false;
-            let result = await this.client.createPayee({ name: payeeName, userId: this.userContext.userId })
+            let result = await this.client.createPayee({ name: payeeName, userId: this.session.userId })
             this.payees.push(result);
         },
         async onRemovePayee(id: number) {

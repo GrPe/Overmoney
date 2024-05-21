@@ -18,13 +18,14 @@ import type { Category } from '../../data_access/models/category';
 import type { createTransactionRequest } from '@/data_access/models/requests/createTransactionRequest';
 import type { updateTransactionRequest } from '@/data_access/models/requests/updateTransactionRequest';
 import { Client } from '@/data_access/client';
-import type { UserContext } from '@/data_access/userContext';
 import CreateTransactionModal from '@/components/modals/CreateTransactionModal.vue';
 import UpdateTransactionModal from '@/components/modals/UpdateTransactionModal.vue';
+import { userSessionStore } from '@/data_access/sessionStore';
 
 export default {
     data() {
         const client = new Client();
+        const session = userSessionStore();
         return {
             client,
             categories: [] as Array<Category>,
@@ -34,24 +35,24 @@ export default {
             showModal: false,
             showUpdateModal: false,
             transactionToUpdate: {} as Transaction | undefined,
-            userContext: { userId: 1 } as UserContext
+            session
         }
 
     },
     mounted() {
-        this.client.getWallets(this.userContext.userId)
+        this.client.getWallets(this.session.userId)
             .then(x => { this.wallets = x })
-            .then(() => this.client.getCategories(this.userContext.userId))
+            .then(() => this.client.getCategories(this.session.userId))
             .then(x => { this.categories = x })
-            .then(() => this.client.getPayees(this.userContext.userId))
+            .then(() => this.client.getPayees(this.session.userId))
             .then(x => { this.payees = x })
-            .then(() => this.client.getTransactions(this.userContext.userId))
+            .then(() => this.client.getTransactions(this.session.userId))
             .then(x => { this.transactions = x });
     },
     methods: {
         async onCreateTransaction(transaction: createTransactionRequest) {
             this.showModal = false;
-            transaction.userId = this.userContext.userId;
+            transaction.userId = this.session.userId;
             let result = await this.client.createTransaction(transaction);
             this.transactions.push(result);
         },
