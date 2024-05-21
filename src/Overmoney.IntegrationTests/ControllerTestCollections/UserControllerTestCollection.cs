@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Overmoney.IntegrationTests.Configurations;
+using Overmoney.IntegrationTests.Models;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -20,8 +21,13 @@ public class UserControllerTestCollection
     {
         var user = DataFaker.GenerateUser();
 
+        var createUserResponse = await _client
+            .PostAsJsonAsync("identity/register", new { user.Email, user.Password });
+
+        createUserResponse.IsSuccessStatusCode.Should().BeTrue();
+
         var response = await _client
-            .PostAsJsonAsync("users/register", new { user.UserName, user.Email, user.Password });
+            .PostAsJsonAsync("users/profile", new { user.Email });
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -34,7 +40,7 @@ public class UserControllerTestCollection
     public async Task When_incorrect_data_are_provided_error_400_should_be_throw()
     {
         var response = await _client
-            .PostAsJsonAsync("users/register", new { UserName = "test", Email = "not.an.test.email", Password = "test" });
+            .PostAsJsonAsync("identity/register", new { UserName = "test", Email = "not.an.test.email", Password = "test" });
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -44,16 +50,30 @@ public class UserControllerTestCollection
     {
         var user = DataFaker.GenerateUser();
 
-        var response = await _client
-            .PostAsJsonAsync("users/register", new { user.UserName, user.Email, user.Password });
+        var createUserResponse = await _client
+            .PostAsJsonAsync("identity/register", new { user.Email, user.Password });
 
-        response.IsSuccessStatusCode.Should().BeTrue();
+        createUserResponse.IsSuccessStatusCode.Should().BeTrue();
+
+        var userProfile = await _client
+            .PostAsJsonAsync("users/profile", new { user.Email, user.Password });
+
+        userProfile.IsSuccessStatusCode.Should().BeTrue();
 
         var loginResponse = await _client
-            .PostAsJsonAsync("users/login", new { Login = user.UserName, user.Password });
+            .PostAsJsonAsync("identity/login?useCookies=false&useSessionCookies=false",
+            new { user.Email, user.Password });
 
-        loginResponse.IsSuccessStatusCode.Should().BeTrue();
-        var content = await loginResponse.Content.ReadAsStringAsync();
+        var token = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+
+        token.Should().NotBeNull();
+
+        var request = new HttpRequestMessage(HttpMethod.Get, "users/profile");
+        request.Headers.Add("Authorization", $"Bearer {token!.AccessToken}");
+        var userProfileResponse = await _client.SendAsync(request);
+
+        userProfileResponse.IsSuccessStatusCode.Should().BeTrue();
+        var content = await userProfileResponse.Content.ReadAsStringAsync();
 
         content.Should().NotBeNullOrWhiteSpace();
     }
@@ -63,16 +83,31 @@ public class UserControllerTestCollection
     {
         var user = DataFaker.GenerateUser();
 
-        var response = await _client
-            .PostAsJsonAsync("users/register", new { user.UserName, user.Email, user.Password });
+        var createUserResponse = await _client
+            .PostAsJsonAsync("identity/register", new { user.Email, user.Password });
 
-        response.IsSuccessStatusCode.Should().BeTrue();
+        createUserResponse.IsSuccessStatusCode.Should().BeTrue();
 
-        var userId = await response.Content.ReadAsStringAsync();
+        var userProfile = await _client
+            .PostAsJsonAsync("users/profile", new { user.Email, user.Password });
+
+        userProfile.IsSuccessStatusCode.Should().BeTrue();
 
         var loginResponse = await _client
-            .DeleteAsync($"users/{userId}");
+            .PostAsJsonAsync("identity/login?useCookies=false&useSessionCookies=false",
+            new { user.Email, user.Password });
 
-        loginResponse.IsSuccessStatusCode.Should().BeTrue();
+        var token = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+
+        token.Should().NotBeNull();
+
+        var userProfileContent = await userProfile.Content.ReadFromJsonAsync<UserProfileResponse>();
+
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"users/{userProfileContent!.Id}");
+        request.Headers.Add("Authorization", $"Bearer {token!.AccessToken}");
+
+        var deleteResponse = await _client.SendAsync(request);
+
+        deleteResponse.IsSuccessStatusCode.Should().BeTrue();
     }
 }

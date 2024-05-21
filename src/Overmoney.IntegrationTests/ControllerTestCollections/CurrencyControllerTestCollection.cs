@@ -13,7 +13,7 @@ public class CurrencyControllerTestCollection
 
     public CurrencyControllerTestCollection(InfrastructureFixture fixture)
     {
-        _client = fixture.GetClient();
+        _client = fixture.GetClientForRandomUser();
     }
 
     [Fact]

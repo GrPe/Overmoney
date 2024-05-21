@@ -1,4 +1,5 @@
 ﻿using Overmoney.IntegrationTests.Configurations;
+using Overmoney.IntegrationTests.Models;
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
@@ -10,21 +11,21 @@ public class CategoryControllerTestCollection
 {
     readonly HttpClient _client;
     readonly InfrastructureFixture _fixture;
+    readonly UserContext _userContext;
 
     public CategoryControllerTestCollection(InfrastructureFixture fixture)
     {
-        _client = fixture.GetClient();
         _fixture = fixture;
+        _userContext = _fixture.GetRandomUser();
+        _client = fixture.GetClientForUser(_userContext);
     }
 
     [Fact]
     public async Task When_correct_data_are_provided_category_should_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var category = DataFaker.GenerateCategory();
         var response = await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         response.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -37,10 +38,8 @@ public class CategoryControllerTestCollection
     [Fact]
     public async Task When_incorrect_data_are_provided_api_should_return_bad_request()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var response = await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = "" });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = "" });
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
@@ -48,17 +47,15 @@ public class CategoryControllerTestCollection
     [Fact]
     public async Task When_category_exists_and_update_request_is_sent_then_category_should_be_updated()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var category = DataFaker.GenerateCategory();
         var response = await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         var content = await response.Content.ReadFromJsonAsync<CategoryResponse>();
 
         var updatedCategory = DataFaker.GenerateCategory();
         var putResponse = await _client
-            .PutAsJsonAsync($"categories", new { content!.Id, UserId = userId, Name = updatedCategory });
+            .PutAsJsonAsync($"categories", new { content!.Id, UserId = _userContext.Id, Name = updatedCategory });
 
         putResponse.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -73,22 +70,20 @@ public class CategoryControllerTestCollection
     [Fact]
     public async Task When_categories_exists_api_should_return_a_list_of_categories()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var category = DataFaker.GenerateCategory();
         await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         category = DataFaker.GenerateCategory();
         await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         category = DataFaker.GenerateCategory();
         await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         var categories = await _client
-            .GetFromJsonAsync<List<CategoryResponse>>($"users/{userId}/categories");
+            .GetFromJsonAsync<List<CategoryResponse>>($"users/{_userContext.Id}/categories");
 
         categories.ShouldNotBeNull();
         categories.Count.ShouldBeGreaterThan(2);
@@ -97,11 +92,9 @@ public class CategoryControllerTestCollection
     [Fact]
     public async Task When_category_exists_and_delete_request_is_sent_then_category_should_be_deleted()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var category = DataFaker.GenerateCategory();
         var response = await _client
-            .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            .PostAsJsonAsync("categories", new { UserId = _userContext.Id, Name = category });
 
         var content = await response.Content.ReadFromJsonAsync<CategoryResponse>();
 

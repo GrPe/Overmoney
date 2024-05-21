@@ -1,4 +1,5 @@
 ﻿using Overmoney.IntegrationTests.Configurations;
+using Overmoney.IntegrationTests.Models;
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
@@ -9,22 +10,22 @@ namespace Overmoney.IntegrationTests.ControllerTestCollections;
 public class PayeeControllerTestCollection
 {
     readonly HttpClient _client;
-    InfrastructureFixture _fixture;
+    readonly InfrastructureFixture _fixture;
+    readonly UserContext _userContext;
 
     public PayeeControllerTestCollection(InfrastructureFixture fixture)
     {
-        _client = fixture.GetClient();
         _fixture = fixture;
+        _userContext = _fixture.GetRandomUser();
+        _client = fixture.GetClientForUser(_userContext);
     }
 
     [Fact]
     public async Task When_correct_data_are_provided_payee_should_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var payee = DataFaker.GeneratePayee();
         var response = await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         response.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -37,10 +38,8 @@ public class PayeeControllerTestCollection
     [Fact]
     public async Task When_incorrect_data_are_provided_api_should_return_bad_request()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var response = await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = "" });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = "" });
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
@@ -48,17 +47,15 @@ public class PayeeControllerTestCollection
     [Fact]
     public async Task When_payee_exists_and_update_request_is_sent_then_payee_should_be_updated()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var payee = DataFaker.GeneratePayee();
         var response = await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         var content = await response.Content.ReadFromJsonAsync<PayeeResponse>();
 
         var updatedPayee = DataFaker.GeneratePayee();
         var putResponse = await _client
-            .PutAsJsonAsync($"payees", new { content!.Id, UserId = userId, Name = updatedPayee });
+            .PutAsJsonAsync($"payees", new { content!.Id, UserId = _userContext.Id, Name = updatedPayee });
 
         putResponse.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -73,22 +70,20 @@ public class PayeeControllerTestCollection
     [Fact]
     public async Task When_payees_exists_api_should_return_a_list_of_payees()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var payee = DataFaker.GeneratePayee();
         await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         payee = DataFaker.GeneratePayee();
         await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         payee = DataFaker.GeneratePayee();
         await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         var payees = await _client
-            .GetFromJsonAsync<List<PayeeResponse>>($"users/{userId}/payees");
+            .GetFromJsonAsync<List<PayeeResponse>>($"users/{_userContext.Id}/payees");
 
         payees.ShouldNotBeNull();
         payees.Count.ShouldBeGreaterThan(2);
@@ -97,11 +92,9 @@ public class PayeeControllerTestCollection
     [Fact]
     public async Task When_payee_exists_and_delete_request_is_sent_then_payee_should_be_deleted()
     {
-        var userId = await _fixture.GetRandomUser();
-
         var payee = DataFaker.GeneratePayee();
         var response = await _client
-            .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            .PostAsJsonAsync("payees", new { UserId = _userContext.Id, Name = payee });
 
         var content = await response.Content.ReadFromJsonAsync<PayeeResponse>();
 

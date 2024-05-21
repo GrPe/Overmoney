@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Overmoney.IntegrationTests.Configurations;
+using Overmoney.IntegrationTests.Models;
 using Shouldly;
 using System.Net.Http.Json;
 
@@ -10,24 +11,25 @@ public class RecurringTransactionControllerTestCollection
 {
     readonly HttpClient _client;
     readonly InfrastructureFixture _fixture;
+    readonly UserContext _userContext;
 
     public RecurringTransactionControllerTestCollection(InfrastructureFixture fixture)
     {
-        _client = fixture.GetClient();
         _fixture = fixture;
+        _userContext = _fixture.GetRandomUser();
+        _client = fixture.GetClientForUser(_userContext);
     }
 
     [Fact]
     public async Task When_correct_data_are_provided_recurring_transaction_should_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateRecurringTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions/recurring", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
+            .PostAsJsonAsync("transactions/recurring", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
 
         response.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -38,7 +40,7 @@ public class RecurringTransactionControllerTestCollection
         content.Amount.ShouldBe(transaction.Amount);
         content.NextOccurrence.ShouldBe(transaction.FirstOccurrence, TimeSpan.FromSeconds(1));
         content.Note.ShouldBe(transaction.Note);
-        content.UserId.ShouldBe(userId);
+        content.UserId.ShouldBe(_userContext.Id);
         content.Wallet?.Id.ShouldBe(walletId);
         content.Category?.Id.ShouldBe(categoryId);
         content.Payee?.Id.ShouldBe(payeeId);
@@ -48,13 +50,12 @@ public class RecurringTransactionControllerTestCollection
     [Fact]
     public async Task When_request_without_payeeId_is_sent_when_recurring_transaction_cannot_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
 
         var transaction = DataFaker.GenerateRecurringTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions/recurring", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
+            .PostAsJsonAsync("transactions/recurring", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
 
         response.IsSuccessStatusCode.ShouldBeFalse();
     }
@@ -62,20 +63,19 @@ public class RecurringTransactionControllerTestCollection
     [Fact]
     public async Task When_transaction_exists_and_update_request_is_sent_then_transaction_should_be_updated()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateRecurringTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions/recurring", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
+            .PostAsJsonAsync("transactions/recurring", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
 
         var content = await response.Content.ReadFromJsonAsync<RecurringTransactionResponse>();
 
         var updatedTransaction = DataFaker.GenerateRecurringTransaction();
         var putResponse = await _client
-            .PutAsJsonAsync($"transactions/recurring", new { content!.Id, UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, updatedTransaction.Amount, updatedTransaction.FirstOccurrence, updatedTransaction.Note, TransactionType = 0, updatedTransaction.Schedule });
+            .PutAsJsonAsync($"transactions/recurring", new { content!.Id, UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, updatedTransaction.Amount, updatedTransaction.FirstOccurrence, updatedTransaction.Note, TransactionType = 0, updatedTransaction.Schedule });
 
         putResponse.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -87,7 +87,7 @@ public class RecurringTransactionControllerTestCollection
         transactionResponse.Amount.ShouldBe(updatedTransaction.Amount);
         transactionResponse.NextOccurrence.ShouldBe(updatedTransaction.FirstOccurrence, TimeSpan.FromSeconds(1));
         transactionResponse.Note.ShouldBe(updatedTransaction.Note);
-        transactionResponse.UserId.ShouldBe(userId);
+        transactionResponse.UserId.ShouldBe(_userContext.Id);
         transactionResponse.Wallet?.Id.ShouldBe(walletId);
         transactionResponse.Category?.Id.ShouldBe(categoryId);
         transactionResponse.Payee?.Id.ShouldBe(payeeId);
@@ -96,14 +96,13 @@ public class RecurringTransactionControllerTestCollection
     [Fact]
     public async Task When_schedule_request_is_sent_then_next_occurrence_date_should_be_updated()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateRecurringTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions/recurring", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
+            .PostAsJsonAsync("transactions/recurring", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.FirstOccurrence, transaction.Note, TransactionType = 0, transaction.Schedule });
 
         response.IsSuccessStatusCode.ShouldBeTrue();
 

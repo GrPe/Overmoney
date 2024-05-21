@@ -1,8 +1,8 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Overmoney.IntegrationTests.ControllerTestCollections;
+using Overmoney.IntegrationTests.Models;
 using System.Net.Http.Json;
-using System.Text.RegularExpressions;
 using Testcontainers.PostgreSql;
 
 namespace Overmoney.IntegrationTests.Configurations;
@@ -19,7 +19,7 @@ public class InfrastructureFixture : IAsyncLifetime
     ApiWebApplicationFactory _application = null!;
     HttpClient _client = null!;
 
-    int[]? _userIds;
+    UserContext[]? _userIds;
     int[]? _currencyIds;
     readonly Dictionary<int, int[]> _categoryIds = [];
     readonly Dictionary<int, int[]> _payeeIds = [];
@@ -39,6 +39,8 @@ public class InfrastructureFixture : IAsyncLifetime
 
         _application = new ApiWebApplicationFactory(_postgresContainer.Hostname, _postgresContainer.GetMappedPublicPort(POSTGRES_PORT));
         _client = _application.CreateClient();
+
+        await SetupUsers();
     }
 
     public async Task DisposeAsync()
@@ -50,21 +52,46 @@ public class InfrastructureFixture : IAsyncLifetime
 
     public HttpClient GetClient() => _client;
 
-    public async Task<int[]> GetUsers()
+    public HttpClient GetClientForUser(UserContext user)
+    {
+        var client = _application.CreateClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {user.Token}");
+        return client;
+    }
+
+    public HttpClient GetClientForRandomUser()
+    {
+        var client = _application.CreateClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_userIds!.First().Token}");
+        return client;
+    }
+
+    public async Task<UserContext[]> SetupUsers()
     {
         if (_userIds is null || _userIds.Length == 0)
         {
-            _userIds = new int[USER_COUNT];
+            _userIds = new UserContext[USER_COUNT];
             for (int i = 0; i < USER_COUNT;)
             {
                 var user = DataFaker.GenerateUser();
                 var response = await _client
-                    .PostAsJsonAsync("users/register", new { user.UserName, user.Email, user.Password });
+                    .PostAsJsonAsync("identity/register", new { user.Email, user.Password });
 
-                if (response.IsSuccessStatusCode)
+                var createProfilerResponse = await _client
+                    .PostAsJsonAsync("users/profile", new { user.Email });
+
+                var loginResponse = await _client
+                    .PostAsJsonAsync(
+                        "identity/login?useCookies=false&useSessionCookies=false",
+                        new { user.Email, user.Password });
+
+                if (response.IsSuccessStatusCode 
+                    && createProfilerResponse.IsSuccessStatusCode 
+                    && loginResponse.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    _userIds[i] = Convert.ToInt32(content);
+                    var profile = await createProfilerResponse.Content.ReadFromJsonAsync<UserProfileResponse>();
+                    var content = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
+                    _userIds[i] = new(profile!.Id, content!.AccessToken);
                     i++;
                 }
             }
@@ -73,11 +100,11 @@ public class InfrastructureFixture : IAsyncLifetime
         return _userIds;
     }
 
-    public async Task<int> GetRandomUser()
+    public UserContext GetRandomUser()
     {
         if (_userIds is null || _userIds.Length == 0)
         {
-            _userIds = await GetUsers();
+            throw new Exception("Users are not initialized");
         }
         return _userIds[Random.Shared.Next(USER_COUNT)];
     }
@@ -87,10 +114,11 @@ public class InfrastructureFixture : IAsyncLifetime
         if (_currencyIds is null || _currencyIds.Length == 0)
         {
             _currencyIds = new int[CURRENCY_COUNT];
+            var client = GetClientForUser(_userIds!.First());
             for (int i = 0; i < CURRENCY_COUNT;)
             {
                 var currency = DataFaker.GenerateCurrency();
-                var response = await _client
+                var response = await client
                     .PostAsJsonAsync("currencies", new { currency.Name, currency.Code });
 
                 if (response.IsSuccessStatusCode)
@@ -114,19 +142,20 @@ public class InfrastructureFixture : IAsyncLifetime
         return _currencyIds[Random.Shared.Next(CURRENCY_COUNT)];
     }
 
-    public async Task<int[]> GetRandomCategories(int userId)
+    public async Task<int[]> GetRandomCategories(UserContext user)
     {
-        if(_categoryIds.TryGetValue(userId, out int[]? value))
+        if(_categoryIds.TryGetValue(user.Id, out int[]? value))
         {
             return value;
         }
 
         var categoryIds = new int[CATEGORY_COUNT];
+        var client = GetClientForUser(user);
         for (int i = 0; i < CATEGORY_COUNT;)
         {
             var category = DataFaker.GenerateCategory();
-            var response = await _client
-                .PostAsJsonAsync("categories", new { UserId = userId, Name = category });
+            var response = await client
+                .PostAsJsonAsync("categories", new { UserId = user.Id, Name = category });
 
             if (response.IsSuccessStatusCode)
             {
@@ -135,29 +164,30 @@ public class InfrastructureFixture : IAsyncLifetime
                 i++;
             }
         }
-        _categoryIds.Add(userId, categoryIds);
+        _categoryIds.Add(user.Id, categoryIds);
         return categoryIds;
     }
 
-    public async Task<int> GetRandomCategory(int userId)
+    public async Task<int> GetRandomCategory(UserContext user)
     {
-        var categoryIds = await GetRandomCategories(userId);
+        var categoryIds = await GetRandomCategories(user);
         return categoryIds[Random.Shared.Next(CATEGORY_COUNT)];
     }
 
-    public async Task<int[]> GetRandomPayees(int userId)
+    public async Task<int[]> GetRandomPayees(UserContext user)
     {
-        if(_payeeIds.TryGetValue(userId, out int[]? value))
+        if(_payeeIds.TryGetValue(user.Id, out int[]? value))
         {
             return value;
         }
 
         var payeeIds = new int[PAYEE_COUNT];
+        var client = GetClientForUser(user);
         for (int i = 0; i < PAYEE_COUNT;)
         {
             var payee = DataFaker.GeneratePayee();
-            var response = await _client
-                .PostAsJsonAsync("payees", new { UserId = userId, Name = payee });
+            var response = await client
+                .PostAsJsonAsync("payees", new { UserId = user.Id, Name = payee });
 
             if (response.IsSuccessStatusCode)
             {
@@ -166,30 +196,31 @@ public class InfrastructureFixture : IAsyncLifetime
                 i++;
             }
         }
-        _payeeIds.Add(userId, payeeIds);
+        _payeeIds.Add(user.Id, payeeIds);
         return payeeIds;
     }
 
-    public async Task<int> GetRandomPayee(int userId)
+    public async Task<int> GetRandomPayee(UserContext user)
     {
-        var payeeIds = await GetRandomPayees(userId);
+        var payeeIds = await GetRandomPayees(user);
         return payeeIds[Random.Shared.Next(PAYEE_COUNT)];
     }
 
-    public async Task<int[]> GetRandomWallets(int userId)
+    public async Task<int[]> GetRandomWallets(UserContext user)
     {
-        if(_walletIds.TryGetValue(userId, out int[]? value))
+        if(_walletIds.TryGetValue(user.Id, out int[]? value))
         {
             return value;
         }
 
         var walletIds = new int[WALLET_COUNT];
+        var client = GetClientForUser(user);
         for (int i = 0; i < WALLET_COUNT;)
         {
             var wallet = DataFaker.GenerateWallet();
             var currencyId = await GetRandomCurrency();
-            var response = await _client
-                .PostAsJsonAsync("wallets", new { UserId = userId, Name = wallet, CurrencyId = currencyId });
+            var response = await client
+                .PostAsJsonAsync("wallets", new { UserId = user.Id, Name = wallet, CurrencyId = currencyId });
 
             if (response.IsSuccessStatusCode)
             {
@@ -198,13 +229,13 @@ public class InfrastructureFixture : IAsyncLifetime
                 i++;
             }
         }
-        _walletIds.Add(userId, walletIds);
+        _walletIds.Add(user.Id, walletIds);
         return walletIds;
     }
 
-    public async Task<int> GetRandomWallet(int userId)
+    public async Task<int> GetRandomWallet(UserContext user)
     {
-        var walletIds = await GetRandomWallets(userId);
+        var walletIds = await GetRandomWallets(user);
         return walletIds[Random.Shared.Next(WALLET_COUNT)];
     }
 }

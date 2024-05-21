@@ -1,4 +1,5 @@
 ﻿using Overmoney.IntegrationTests.Configurations;
+using Overmoney.IntegrationTests.Models;
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
@@ -10,24 +11,25 @@ public class TransactionControllerTestCollection
 {
     readonly HttpClient _client;
     readonly InfrastructureFixture _fixture;
+    readonly UserContext _userContext;
 
     public TransactionControllerTestCollection(InfrastructureFixture fixture)
     {
-        _client = fixture.GetClient();
         _fixture = fixture;
+        _userContext = _fixture.GetRandomUser();
+        _client = fixture.GetClientForUser(_userContext);
     }
 
     [Fact]
     public async Task When_correct_data_are_provided_transaction_should_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
+            .PostAsJsonAsync("transactions", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
 
         response.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -38,7 +40,7 @@ public class TransactionControllerTestCollection
         content.Amount.ShouldBe(transaction.Amount);
         content.TransactionDate.ShouldBe(new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc));
         content.Note.ShouldBe(transaction.Note);
-        content.UserId.ShouldBe(userId);
+        content.UserId.ShouldBe(_userContext.Id);
         content.Wallet?.Id.ShouldBe(walletId);
         content.Category?.Id.ShouldBe(categoryId);
         content.Payee?.Id.ShouldBe(payeeId);
@@ -47,16 +49,15 @@ public class TransactionControllerTestCollection
     [Fact]
     public async Task When_correct_data_are_provided_transactions_should_be_created()
     {
-        var userId = await _fixture.GetRandomUser();
         foreach (var _ in Enumerable.Range(0, 10))
         {
-            var walletId = await _fixture.GetRandomWallet(userId);
-            var categoryId = await _fixture.GetRandomCategory(userId);
-            var payeeId = await _fixture.GetRandomPayee(userId);
+            var walletId = await _fixture.GetRandomWallet(_userContext);
+            var categoryId = await _fixture.GetRandomCategory(_userContext);
+            var payeeId = await _fixture.GetRandomPayee(_userContext);
 
             var transaction = DataFaker.GenerateTransaction();
             var response = await _client
-                .PostAsJsonAsync("transactions", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
+                .PostAsJsonAsync("transactions", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
 
             response.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -67,7 +68,7 @@ public class TransactionControllerTestCollection
             content.Amount.ShouldBe(transaction.Amount);
             content.TransactionDate.ShouldBe(new DateTime(transaction.TransactionDate, new(), DateTimeKind.Utc));
             content.Note.ShouldBe(transaction.Note);
-            content.UserId.ShouldBe(userId);
+            content.UserId.ShouldBe(_userContext.Id);
             content.Wallet?.Id.ShouldBe(walletId);
             content.Category?.Id.ShouldBe(categoryId);
             content.Payee?.Id.ShouldBe(payeeId);
@@ -77,12 +78,11 @@ public class TransactionControllerTestCollection
     [Fact]
     public async Task When_incorrect_data_are_provided_api_should_return_bad_request()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var response = await _client
-            .PostAsJsonAsync("transactions", new { UserId = userId, WalletId = walletId, CategoryId = int.MaxValue, PayeeId = payeeId, Amount = 0, TransactionDate = DateTime.UtcNow, Note = "", TransactionType = 0 });
+            .PostAsJsonAsync("transactions", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = int.MaxValue, PayeeId = payeeId, Amount = 0, TransactionDate = DateTime.UtcNow, Note = "", TransactionType = 0 });
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
@@ -90,20 +90,19 @@ public class TransactionControllerTestCollection
     [Fact]
     public async Task When_transaction_exists_and_update_request_is_sent_then_transaction_should_be_updated()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
+            .PostAsJsonAsync("transactions", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
 
         var content = await response.Content.ReadFromJsonAsync<TransactionResponse>();
 
         var updatedTransaction = DataFaker.GenerateTransaction();
         var putResponse = await _client
-            .PutAsJsonAsync($"transactions", new { content!.Id, UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, updatedTransaction.Amount, updatedTransaction.TransactionDate, updatedTransaction.Note, TransactionType = 0 });
+            .PutAsJsonAsync($"transactions", new { content!.Id, UserId = _userContext, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, updatedTransaction.Amount, updatedTransaction.TransactionDate, updatedTransaction.Note, TransactionType = 0 });
 
         putResponse.IsSuccessStatusCode.ShouldBeTrue();
 
@@ -115,7 +114,7 @@ public class TransactionControllerTestCollection
         transactionResponse.Amount.ShouldBe(updatedTransaction.Amount);
         transactionResponse.TransactionDate.ShouldBe(new DateTime(updatedTransaction.TransactionDate, new(), DateTimeKind.Utc));
         transactionResponse.Note.ShouldBe(updatedTransaction.Note);
-        transactionResponse.UserId.ShouldBe(userId);
+        transactionResponse.UserId.ShouldBe(_userContext.Id);
         transactionResponse.Wallet?.Id.ShouldBe(walletId);
         transactionResponse.Category?.Id.ShouldBe(categoryId);
         transactionResponse.Payee?.Id.ShouldBe(payeeId);
@@ -124,14 +123,13 @@ public class TransactionControllerTestCollection
     [Fact]
     public async Task When_transaction_exists_and_delete_request_is_sent_then_transaction_should_be_deleted()
     {
-        var userId = await _fixture.GetRandomUser();
-        var walletId = await _fixture.GetRandomWallet(userId);
-        var categoryId = await _fixture.GetRandomCategory(userId);
-        var payeeId = await _fixture.GetRandomPayee(userId);
+        var walletId = await _fixture.GetRandomWallet(_userContext);
+        var categoryId = await _fixture.GetRandomCategory(_userContext);
+        var payeeId = await _fixture.GetRandomPayee(_userContext);
 
         var transaction = DataFaker.GenerateTransaction();
         var response = await _client
-            .PostAsJsonAsync("transactions", new { UserId = userId, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
+            .PostAsJsonAsync("transactions", new { UserId = _userContext.Id, WalletId = walletId, CategoryId = categoryId, PayeeId = payeeId, transaction.Amount, transaction.TransactionDate, transaction.Note, TransactionType = 0 });
 
         var content = await response.Content.ReadFromJsonAsync<TransactionResponse>();
 

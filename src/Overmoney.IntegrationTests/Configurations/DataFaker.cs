@@ -7,7 +7,7 @@ internal static class DataFaker
     {
         var userName = new Faker().Name.FirstName();
         var email = new Faker().Internet.Email();
-        var password = new Faker().Internet.Password();
+        var password = new Faker().Internet.Password(20, prefix: "as!@2S");
         return (userName, email, password);
     }
 
