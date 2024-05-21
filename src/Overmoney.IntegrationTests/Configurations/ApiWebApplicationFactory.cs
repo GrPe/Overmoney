@@ -19,13 +19,25 @@ internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureTestServices(services =>
         {
-            var dbContext = services.FirstOrDefault(x => x.ServiceType.Name.Contains("Context"));
+            var dbContext = services.FirstOrDefault(x => x.ServiceType.Name.Contains("DatabaseContext"));
             if (dbContext is not null)
             {
                 services.Remove(dbContext);
             }
 
-            var dbContextOptions = services.FirstOrDefault(x => x.ServiceType.Name.Contains("ContextOptions"));
+            var dbContextOptions = services.FirstOrDefault(x => x.ServiceType.Name.Contains("DbContextOptions"));
+            if (dbContextOptions is not null)
+            {
+                services.Remove(dbContextOptions);
+            }
+
+            var identityDb = services.FirstOrDefault(x => x.ServiceType.Name.Contains("ApplicationIdentityDbContext"));
+            if (identityDb is not null)
+            {
+                services.Remove(identityDb);
+            }
+
+            dbContextOptions = services.FirstOrDefault(x => x.ServiceType.Name.Contains("DbContextOptions"));
             if (dbContextOptions is not null)
             {
                 services.Remove(dbContextOptions);
