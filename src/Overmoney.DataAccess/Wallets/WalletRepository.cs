@@ -80,7 +80,7 @@ internal sealed class WalletRepository : IWalletRepository
 
         var currency = wallet.CurrencyId == updateWallet.Currency.Id
             ? wallet.Currency
-            : await _databaseContext.Currencies.SingleAsync(x => x.Id == wallet.CurrencyId, cancellationToken);
+            : await _databaseContext.Currencies.SingleAsync(x => x.Id == updateWallet.Currency.Id, cancellationToken);
 
         wallet.Update(updateWallet.Name, currency, user);
         _databaseContext.Update(wallet);

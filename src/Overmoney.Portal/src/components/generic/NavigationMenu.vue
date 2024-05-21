@@ -1,6 +1,7 @@
 <template>
     <nav v-if="session.isAuthenticated">
         <router-link to="/">Dashobards</router-link> |
+        <router-link to="/wallets">Wallets</router-link> |
         <router-link to="/payees">Payees</router-link> |
         <router-link to="/categories">Categories</router-link> |
         <router-link to="/transactions">Transactions</router-link> |

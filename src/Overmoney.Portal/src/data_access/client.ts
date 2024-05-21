@@ -9,11 +9,39 @@ import type { createTransactionRequest } from "./models/requests/createTransacti
 import type { Wallet } from "./models/wallet";
 import type { Transaction } from "./models/transaction";
 import type { updateTransactionRequest } from "./models/requests/updateTransactionRequest";
+import type { createWalletRequest } from "./models/requests/createWalletRequest";
+import type { Currency } from "./models/currency";
+import type { updateWalletRequest } from "./models/requests/updateWalletRequest";
 
 export class Client {
   async getWallets(userId: number): Promise<Array<Wallet>> {
     const response = await axios.get<Array<Wallet>>(
       import.meta.env.VITE_API_URL + `users/${userId}/wallets`
+    );
+    return response.data;
+  }
+
+  async createWallet(request: createWalletRequest): Promise<Wallet> {
+    const response = await axios.post(
+      import.meta.env.VITE_API_URL + "wallets",
+      request
+    );
+    return response.data;
+  }
+
+  async updateWallet(request: updateWalletRequest): Promise<void> {
+    await axios.put(import.meta.env.VITE_API_URL + "wallets", request);
+  }
+
+  async removeWallet(walletId: number): Promise<void> {
+    await axios.delete(
+      import.meta.env.VITE_API_URL + "wallets/" + walletId.toString()
+    );
+  }
+
+  async getCurrencies(): Promise<Array<Currency>> {
+    const response = await axios.get<Array<Currency>>(
+      import.meta.env.VITE_API_URL + `currencies`
     );
     return response.data;
   }
