@@ -1,22 +1,16 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Update Category</p>
-                </div>
-
-                <div class="modal-body">
-                    <form @submit.prevent="updateCategory">
-                        <input type="text" v-model="categoryName"/>
-                        <button type="submit">Update</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+    <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Update Category
+            </header>
+            <form @submit.prevent="updateCategory">
+                <input type="text" v-model="categoryName" />
+                <button type="submit">Update</button>
+            </form>
+        </article>
+    </dialog>
 </template>
 <script lang="ts">
 import type { Category } from '../../data_access/models/category';
@@ -35,7 +29,7 @@ export default {
         }
     },
     watch: {
-        currentValue: function(newValue : Category) {
+        currentValue: function (newValue: Category) {
             this.categoryName = newValue.name;
         }
     },
@@ -43,6 +37,9 @@ export default {
         updateCategory() {
             this.$emit('updated', this.currentValue, this.categoryName);
             this.categoryName = '';
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

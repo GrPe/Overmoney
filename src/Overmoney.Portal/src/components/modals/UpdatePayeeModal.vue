@@ -1,23 +1,18 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Update Payee</p>
-                </div>
-
-                <div class="modal-body">
-                    <form @submit.prevent="updatePayee">
-                        <input type="text" v-model="payeeName"/>
-                        <button type="submit">Update</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+    <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Update Payee
+            </header>
+            <form @submit.prevent="updatePayee">
+                <input type="text" v-model="payeeName" />
+                <button type="submit">Update</button>
+            </form>
+        </article>
+    </dialog>
 </template>
+
 <script lang="ts">
 import type { Payee } from '../../data_access/models/payee';
 import type { PropType } from 'vue';
@@ -35,7 +30,7 @@ export default {
         }
     },
     watch: {
-        currentValue: function(newValue : Payee) {
+        currentValue: function (newValue: Payee) {
             this.payeeName = newValue.name;
         }
     },
@@ -43,6 +38,9 @@ export default {
         updatePayee() {
             this.$emit('updated', this.currentValue, this.payeeName);
             this.payeeName = '';
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

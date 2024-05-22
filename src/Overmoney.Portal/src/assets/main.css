@@ -1,35 +1,14 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+header.nav-background {
+    background-color: #23262C;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+button.delete {
+    background-color: #E74B1A;
+    border-color: #E74B1A
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+nav.top {
+    border-style: solid;
+    padding: .2rem 1.5rem .3rem .5rem;
+    border-width: 0px 0px 2px 0px;
 }

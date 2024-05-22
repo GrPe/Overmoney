@@ -1,9 +1,17 @@
 <template>
-    <button @click="showModal = true">Add new</button>
+    <nav class="top">
+        <ul>
+            <strong>Payees</strong>
+        </ul>
+        <ul>
+            <button @click="showModal = true">Add new</button>
+        </ul>
+    </nav>
     <PayeesList :payees="payees" @removePayee="onRemovePayee" @updatePayee="onUpdatePayee">
     </PayeesList>
-    <CreatePayeeModal :show="showModal" @created="onCreatePayee" />
-    <UpdatePayeeModal :show="showUpdateModal" @updated="updatePayee" :currentValue="payeeToUpdate" />
+    <CreatePayeeModal :show="showModal" @created="onCreatePayee" @cancel="showModal = false" />
+    <UpdatePayeeModal :show="showUpdateModal" @updated="updatePayee" :currentValue="payeeToUpdate"
+        @cancel="showUpdateModal = false" />
 </template>
 
 <script lang="ts">
@@ -64,22 +72,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-body #app header {
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.wrapper {
-    padding-left: 30px;
-}
-</style>

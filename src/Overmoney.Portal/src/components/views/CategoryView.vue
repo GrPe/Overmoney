@@ -1,9 +1,17 @@
 <template>
-    <button @click="showModal = true">Add new</button>
+    <nav class="top">
+        <ul>
+            <strong>Categories</strong>
+        </ul>
+        <ul>
+            <button @click="showModal = true">Add new</button>
+        </ul>
+    </nav>
     <CategoryList :categories="categories" @removeCategory="onRemoveCategory" @updateCategory="onUpdateCategory">
     </CategoryList>
-    <CreateCategoryModal :show="showModal" @created="onCreateCategory" />
-    <UpdateCategoryModal :show="showUpdateModal" @updated="updateCategory" :currentValue="categoryToUpdate" />
+    <CreateCategoryModal :show="showModal" @created="onCreateCategory" @cancel="showModal = false" />
+    <UpdateCategoryModal :show="showUpdateModal" @updated="updateCategory" :currentValue="categoryToUpdate"
+        @cancel="showUpdateModal = false" />
 </template>
 
 <script lang="ts">
@@ -64,22 +72,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-body #app header {
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.wrapper {
-    padding-left: 30px;
-}
-</style>

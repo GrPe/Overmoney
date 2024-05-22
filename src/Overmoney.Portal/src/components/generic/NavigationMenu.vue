@@ -1,14 +1,18 @@
 <template>
-    <nav v-if="session.isAuthenticated">
-        <router-link to="/">Dashobards</router-link> |
-        <router-link to="/wallets">Wallets</router-link> |
-        <router-link to="/payees">Payees</router-link> |
-        <router-link to="/categories">Categories</router-link> |
-        <router-link to="/transactions">Transactions</router-link> |
-        <!-- <a v-for="wallet in wallets" :key="wallet.id" href="#">{{ wallet.name }}</a> | -->
-        <router-link to="/settings">Settings</router-link> |
-        <a href="#" @click.prevent="logout">Log out</a> |
-    </nav>
+    <aside v-if="session.isAuthenticated">
+        <nav>
+            <ul>
+                <li><router-link to="/" class="contrast">Dashobards</router-link></li>
+                <li><router-link to="/wallets" class="contrast">Wallets</router-link></li>
+                <li><router-link to="/payees" class="contrast">Payees</router-link></li>
+                <li><router-link to="/categories" class="contrast">Categories</router-link></li>
+                <li><router-link to="/transactions" class="contrast">Transactions</router-link></li>
+                <li><router-link to="/settings" class="contrast">Settings</router-link></li>
+                <li><a href="#" @click.prevent="logout" class="contrast">Log out</a></li>
+            </ul>
+            <!-- <a v-for="wallet in wallets" :key="wallet.id" href="#">{{ wallet.name }}</a> | -->
+        </nav>
+    </aside>
 </template>
 
 <script lang="ts">
@@ -35,5 +39,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+nav {
+    margin: 0 0 0 5px ;
+    padding: 2px;
+};
 </style>
