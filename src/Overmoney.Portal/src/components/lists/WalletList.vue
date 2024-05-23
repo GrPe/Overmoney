@@ -9,15 +9,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="wallet in wallets" :key="wallet.id">
+            <tr v-for="wallet in wallets" :key="wallet.id" @click="updateWallet(wallet.id)">
                 <td>{{ wallet.id }}</td>
                 <td>{{ wallet.name }}</td>
                 <td>{{ wallet.currency.name }}</td>
                 <td>
                     <div class="grid">
-                        <button @click="updateWallet(wallet.id)">
-                            Edit
-                        </button>
                         <button class="delete" @click="removeWallet(wallet.id)">
                             Delete
                         </button>

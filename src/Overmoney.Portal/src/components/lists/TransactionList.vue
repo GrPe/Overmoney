@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="transaction in transactions" :key="transaction.id">
+            <tr v-for="transaction in transactions" :key="transaction.id" @click="updateTransaction(transaction.id)">
                 <td>{{ transaction.id }}</td>
                 <td>{{ transaction.wallet.name }}</td>
                 <td>{{ transaction.payee.name }}</td>
@@ -27,9 +27,6 @@
                 <td>{{ transaction.attachments?.length == 0 ? "Yes" : "No" }}</td>
                 <td>
                     <div class="grid">
-                        <button @click="updateTransaction(transaction.id)">
-                            Edit
-                        </button>
                         <button class="delete" @click="removeTransaction(transaction.id)">
                             Delete
                         </button>

@@ -28,7 +28,7 @@ nav.top {
 }
 
 :root {
-    --pico-font-size:16px;
+    --pico-font-size:16px !important;
 }
 
 .center-form {
@@ -40,4 +40,12 @@ nav.top {
     margin-right: auto;
     padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);
     min-height: 100vh;
+}
+
+tr:hover {
+    background-color: #23262C;
+}
+
+td {
+    background-color: inherit !important;
 }

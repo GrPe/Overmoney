@@ -1,5 +1,5 @@
 <template>
-    <table class="striped">
+    <table>
         <thead>
             <tr>
                 <th>Id</th>
@@ -8,14 +8,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="category in categories" :key="category.id">
+            <tr v-for="category in categories" :key="category.id" @click="updateCategory(category.id)">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
                 <td>
                     <div class="grid">
-                        <button @click="updateCategory(category.id)">
-                            Edit
-                        </button>
                         <button class="delete" @click="removeCategory(category.id)">
                             Delete
                         </button>
