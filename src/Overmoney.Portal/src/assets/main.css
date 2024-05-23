@@ -16,9 +16,9 @@ nav {
     padding: 2px;
 }
 
-button.delete {
-    background-color: #E74B1A;
-    border-color: #E74B1A
+.delete {
+    background-color: #E74B1A !important;
+    border-color: #E74B1A !important;
 }
 
 nav.top {

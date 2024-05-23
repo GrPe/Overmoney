@@ -5,7 +5,6 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Currency</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -13,13 +12,6 @@
                 <td>{{ wallet.id }}</td>
                 <td>{{ wallet.name }}</td>
                 <td>{{ wallet.currency.name }}</td>
-                <td>
-                    <div class="grid">
-                        <button class="delete" @click="removeWallet(wallet.id)">
-                            Delete
-                        </button>
-                    </div>
-                </td>
             </tr>
         </tbody>
     </table>
@@ -35,9 +27,6 @@ export default {
     methods: {
         async updateWallet(id: number) {
             this.$emit('updateWallet', id);
-        },
-        async removeWallet(id: number) {
-            this.$emit('removeWallet', id);
         }
     }
 }

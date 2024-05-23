@@ -16,6 +16,7 @@
                 </select>
 
                 <button type="submit">Update</button>
+                <input type="button" class="delete" value="Delete" @click="removeWallet()"/>
             </form>
         </article>
     </dialog>
@@ -52,6 +53,10 @@ export default {
             this.currencyId = 0;
         },
         cancel() {
+            this.$emit('cancel');
+        },
+        async removeWallet() {
+            this.$emit('removeWallet', this.currentValue?.id);
             this.$emit('cancel');
         }
     }

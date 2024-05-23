@@ -44,7 +44,7 @@
                         <textarea v-model="transaction.note" id="note" placeholder="note...">
                         </textarea>
 
-                        <button type="submit">Create</button>
+                        <button type="submit">Update</button>
                     </form>
         </article>
     </dialog>
