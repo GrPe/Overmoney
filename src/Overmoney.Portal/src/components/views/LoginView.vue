@@ -1,12 +1,15 @@
 <template>
-    <form @submit.prevent="onLogin">
-        <input type="text" v-model="email" />
-        <input type="password" v-model="password" />
-        <button type="submit">Login</button>
-    </form>
-    <p>
-        <router-link to="/register">Register here!</router-link> 
-    </p>
+    <div class="center-form">
+        <h1>Sign in</h1>
+        <form @submit.prevent="onLogin">
+            <input type="text" placeholder="Login" v-model="email" required />
+            <input type="password" placeholder="Password" v-model="password" required />
+            <button type="submit">Login</button>
+        </form>
+        <p>
+            <router-link to="/register">Register here!</router-link>
+        </p>
+    </div>
 </template>
 
 <script lang="ts">

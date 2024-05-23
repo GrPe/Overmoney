@@ -1,9 +1,17 @@
 <template>
-    <button @click="showModal = true">Add new</button>
+    <nav class="top">
+        <ul>
+            <strong>Wallets</strong>
+        </ul>
+        <ul>
+            <button @click="showModal = true">Add new</button>
+        </ul>
+    </nav>
     <WalletList :wallets="wallets" @removeWallet="onRemoveWallet" @updateWallet="onUpdateWallet">
     </WalletList>
-    <CreateWalletModal :show="showModal" :currencies="currencies" @created="onCreateWallet" />
-    <UpdateWalletModal :show="showUpdateModal" :currencies="currencies" @updated="updateWallet" :currentValue="walletToUpdate" />
+    <CreateWalletModal :show="showModal" :currencies="currencies" @created="onCreateWallet" @cancel="showModal = false"/>
+    <UpdateWalletModal :show="showUpdateModal" :currencies="currencies" @updated="updateWallet"
+        :currentValue="walletToUpdate" />
 </template>
 
 <script lang="ts">
@@ -33,7 +41,7 @@ export default {
         this.client.getWallets(this.session.userId)
             .then((x) => { this.wallets = x });
         this.client.getCurrencies()
-            .then((x) => {this.currencies = x});
+            .then((x) => { this.currencies = x });
     },
     components: {
         WalletList,

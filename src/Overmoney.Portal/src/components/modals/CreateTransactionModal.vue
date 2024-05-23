@@ -1,59 +1,54 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Create Transaction</p>
-                </div>
 
-                <div class="modal-body">
-                    <form @submit.prevent="createTransaction">
-                        <label for="wallet">Wallet</label>
-                        <select v-model="transaction.walletId" id="wallet">
-                            <option v-for="wallet in wallets" :key="wallet.id" :value="wallet.id">
-                                {{ wallet.name }}
-                            </option>
-                        </select>
+    <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Create Transaction
+            </header>
+            <form @submit.prevent="createTransaction">
+                <label for="wallet">Wallet</label>
+                <select v-model="transaction.walletId" id="wallet">
+                    <option v-for="wallet in wallets" :key="wallet.id" :value="wallet.id">
+                        {{ wallet.name }}
+                    </option>
+                </select>
 
-                        <label for="category">Category</label>
-                        <select v-model="transaction.categoryId" id="category">
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.name }}
-                            </option>
-                        </select>
-                        
-                        <label for="payee">Payee</label>
-                        <select v-model="transaction.payeeId" id="payee">
-                            <option v-for="payee in payees" :key="payee.id" :value="payee.id">
-                                {{ payee.name }}
-                            </option>
-                        </select>
+                <label for="category">Category</label>
+                <select v-model="transaction.categoryId" id="category">
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                        {{ category.name }}
+                    </option>
+                </select>
 
-                        <label for="transactionDate">Date</label>
-                        <input type="date" id="transactionDate" v-model="transaction.transactionDate"/>
+                <label for="payee">Payee</label>
+                <select v-model="transaction.payeeId" id="payee">
+                    <option v-for="payee in payees" :key="payee.id" :value="payee.id">
+                        {{ payee.name }}
+                    </option>
+                </select>
 
-                        <label for="transactionType">Type</label>
-                        <select v-model="transaction.transactionType" id="transactionType">
-                            <option :value="0">Outcome</option>
-                            <option :value="1">Income</option>
-                            <option :value="2">Transfer</option>
-                        </select>
+                <label for="transactionDate">Date</label>
+                <input type="date" id="transactionDate" v-model="transaction.transactionDate" />
 
-                        <label for="amount">Amount</label>
-                        <input v-model="transaction.amount" id="amount" type="number" step=".01"/>
+                <label for="transactionType">Type</label>
+                <select v-model="transaction.transactionType" id="transactionType">
+                    <option :value="0">Outcome</option>
+                    <option :value="1">Income</option>
+                    <option :value="2">Transfer</option>
+                </select>
 
-                        <label for="note">Note</label>
-                        <textarea v-model="transaction.note" id="note" placeholder="note...">
+                <label for="amount">Amount</label>
+                <input v-model="transaction.amount" id="amount" type="number" step=".01" />
+
+                <label for="note">Note</label>
+                <textarea v-model="transaction.note" id="note" placeholder="note...">
                         </textarea>
 
-                        <button type="submit">Create</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+                <button type="submit">Create</button>
+            </form>
+        </article>
+    </dialog>
 </template>
 
 <script lang="ts">
@@ -81,6 +76,9 @@ export default {
             console.log(this.transaction);
             this.$emit('created', this.transaction);
             this.transaction = {};
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

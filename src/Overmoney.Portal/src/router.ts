@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
   }
   if (requiresAuth && !session.isAuthenticated) {
     next("/login");
-  } else if (to.path === "/login" && session.isAuthenticated) {
+  } else if ((to.path === "/login" || to.path === "/register") && session.isAuthenticated) {
     next("/");
   } else {
     next();

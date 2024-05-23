@@ -1,13 +1,11 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Update Transaction</p>
-                </div>
-
-                <div class="modal-body">
-                    <form @submit.prevent="updateTransaction">
+        <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Update Transaction
+            </header>
+            <form @submit.prevent="updateTransaction">
                         <label for="wallet">Wallet</label>
                         <select v-model="transaction.walletId" id="wallet">
                             <option v-for="wallet in wallets" :key="wallet.id" :value="wallet.id">
@@ -48,12 +46,8 @@
 
                         <button type="submit">Create</button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+        </article>
+    </dialog>
 </template>
 
 <script lang="ts">
@@ -109,6 +103,9 @@ export default {
         async updateTransaction() {
             this.$emit('updated', this.transaction);
             this.transaction = {};
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <aside v-if="session.isAuthenticated">
+    <aside>
         <nav>
             <ul>
                 <li><router-link to="/" class="contrast">Dashobards</router-link></li>
@@ -38,10 +38,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-nav {
-    margin: 0 0 0 5px ;
-    padding: 2px;
-};
-</style>

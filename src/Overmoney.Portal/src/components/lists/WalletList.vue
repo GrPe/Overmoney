@@ -1,24 +1,30 @@
 <template>
     <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Currency</th>
-            <th>Actions</th>
-        </tr>
-        <tr v-for="wallet in wallets" :key="wallet.id">
-            <td>{{ wallet.id }}</td>
-            <td>{{ wallet.name }}</td>
-            <td>{{ wallet.currency.name }}</td>
-            <td>
-                <button @click="updateWallet(wallet.id)">
-                    Edit
-                </button>
-                <button @click="removeWallet(wallet.id)">
-                    Delete
-                </button>
-            </td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Currency</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="wallet in wallets" :key="wallet.id">
+                <td>{{ wallet.id }}</td>
+                <td>{{ wallet.name }}</td>
+                <td>{{ wallet.currency.name }}</td>
+                <td>
+                    <div class="grid">
+                        <button @click="updateWallet(wallet.id)">
+                            Edit
+                        </button>
+                        <button class="delete" @click="removeWallet(wallet.id)">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 
@@ -39,9 +45,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-table, th, td {
-    border: 1px solid pink
-}
-</style>

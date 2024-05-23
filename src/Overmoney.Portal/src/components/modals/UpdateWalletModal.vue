@@ -1,30 +1,24 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Update Wallet</p>
-                </div>
+    <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Update Wallet
+            </header>
+            <form @submit.prevent="updateWallet">
+                <input type="text" v-model="walletName" />
 
-                <div class="modal-body">
-                    <form @submit.prevent="updateWallet">
-                        <input type="text" v-model="walletName"/>
+                <label for="currency">Currency</label>
+                <select v-model="currencyId" id="currency">
+                    <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                        {{ currency.name }}
+                    </option>
+                </select>
 
-                        <label for="currency">Currency</label>
-                        <select v-model="currencyId" id="currency">
-                            <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
-                                {{ currency.name }}
-                            </option>
-                        </select>
-
-                        <button type="submit">Update</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+                <button type="submit">Update</button>
+            </form>
+        </article>
+    </dialog>
 </template>
 <script lang="ts">
 import type { Currency } from '@/data_access/models/currency';
@@ -46,7 +40,7 @@ export default {
         }
     },
     watch: {
-        currentValue: function(newValue : Wallet) {
+        currentValue: function (newValue: Wallet) {
             this.walletName = newValue.name;
             this.currencyId = newValue.currency?.id
         }
@@ -56,6 +50,9 @@ export default {
             this.$emit('updated', this.currentValue, this.walletName, this.currencyId);
             this.walletName = '';
             this.currencyId = 0;
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

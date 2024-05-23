@@ -1,24 +1,28 @@
 <template>
     <table class="striped">
         <thead>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Actions</th>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
         </thead>
-        <tr v-for="category in categories" :key="category.id">
-            <td>{{ category.id }}</td>
-            <td>{{ category.name }}</td>
-            <td>
-                <div class="grid">
-                    <button @click="updateCategory(category.id)">
-                        Edit
-                    </button>
-                    <button class="delete" @click="removeCategory(category.id)">
-                        Delete
-                    </button>
-                </div>
-            </td>
-        </tr>
+        <tbody>
+            <tr v-for="category in categories" :key="category.id">
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <div class="grid">
+                        <button @click="updateCategory(category.id)">
+                            Edit
+                        </button>
+                        <button class="delete" @click="removeCategory(category.id)">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 

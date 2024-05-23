@@ -1,30 +1,24 @@
 <template>
-    <transition>
-        <div v-if="show" class="modal-mask">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <p name="header">Create Wallet</p>
-                </div>
+    <dialog :open="show">
+        <article>
+            <header>
+                <button aria-label="Close" rel="prev" @click="cancel"></button>
+                Create Wallet
+            </header>
+            <form @submit.prevent="createWallet">
+                <input type="text" v-model="walletName" />
 
-                <div class="modal-body">
-                    <form @submit.prevent="createWallet">
-                        <input type="text" v-model="walletName"/>
+                <label for="currency">Currency</label>
+                <select v-model="currencyId" id="currency">
+                    <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                        {{ currency.name }}
+                    </option>
+                </select>
 
-                        <label for="currency">Currency</label>
-                        <select v-model="currencyId" id="currency">
-                            <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
-                                {{ currency.name }}
-                            </option>
-                        </select>
-
-                        <button type="submit">Create</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </transition>
+                <button type="submit">Create</button>
+            </form>
+        </article>
+    </dialog>
 </template>
 
 <script lang="ts">
@@ -46,6 +40,9 @@ export default {
         async createWallet() {
             this.$emit('created', this.walletName, this.currencyId);
             this.walletName = '';
+        },
+        cancel() {
+            this.$emit('cancel');
         }
     }
 }

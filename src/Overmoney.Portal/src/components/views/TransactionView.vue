@@ -1,11 +1,18 @@
 <template>
-    <button @click="showModal = true">Add new</button>
+    <nav class="top">
+        <ul>
+            <strong>Transactions</strong>
+        </ul>
+        <ul>
+            <button @click="showModal = true">Add new</button>
+        </ul>
+    </nav>
     <TransactionList :transactions="transactions" @updateTransaction="onUpdateTransaction"
         @removeTransaction="onDeleteTransaction"></TransactionList>
     <CreateTransactionModal :show="showModal" :wallets="wallets" :payees="payees" :categories="categories"
-        @created="onCreateTransaction" />
+        @created="onCreateTransaction" @cancel="showModal = false"/>
     <UpdateTransactionModal :show="showUpdateModal" :wallets="wallets" :payees="payees" :categories="categories"
-        @updated="updateTransaction" :currentValue="transactionToUpdate">
+        @updated="updateTransaction" :currentValue="transactionToUpdate" @cancel="showUpdateModal = false">
     </UpdateTransactionModal>
 </template>
 
@@ -91,22 +98,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-body #app header {
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.wrapper {
-    padding-left: 30px;
-}
-</style>
