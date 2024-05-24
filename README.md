@@ -1,12 +1,16 @@
 # Overmoney
 
+![logo](docs/imgs/logo.jpg)
+
+## About Overmoney
+
 Overmoney - web app for personal finances management
 
 Inspiration: https://moneymanagerex.org/
 
 ## Features
 
-- [ ] Ability do create account/login via email
+- [x] Ability do create account/login via email
 - [x] Support for multiple wallets
 - [x] Support for multiple currency
 - [x] Detailed transaction log including date, payee, category etc.
@@ -62,6 +66,7 @@ List of technologies, frameworks, libraries used for implementation:
 
 - [VueJS](https://vuejs.org/) - Frontend framework
 - [Pinia](https://pinia.vuejs.org/) - Store for VueJS
+- [Pico](https://picocss.com/) - Mini CSS Framework
 - more in future...
 
 ## Containers
@@ -74,10 +79,10 @@ List of technologies, frameworks, libraries that I want to learn/test:
 
 ### Frameworks/Libraries
 
-- [ ] ASP.NET Core (Security, OAuth)
-- [ ] Dapper
+- [x] ASP.NET Core (Security, OAuth)
+- [x] Dapper/Entity Framework
 - [ ] Worker Services / Hangfire
-- [ ] Integration/E2E Tests
+- [x] Integration/E2E Tests
 
 ### Infra
 
