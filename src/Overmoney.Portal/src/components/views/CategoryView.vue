@@ -7,11 +7,11 @@
             <button @click="showModal = true">Add new</button>
         </ul>
     </nav>
-    <CategoryList :categories="categories" @removeCategory="onRemoveCategory" @updateCategory="onUpdateCategory">
+    <CategoryList :categories="categories" @updateCategory="onUpdateCategory">
     </CategoryList>
     <CreateCategoryModal :show="showModal" @created="onCreateCategory" @cancel="showModal = false" />
     <UpdateCategoryModal :show="showUpdateModal" @updated="updateCategory" :currentValue="categoryToUpdate"
-        @cancel="showUpdateModal = false" />
+        @cancel="showUpdateModal = false" @removeCategory="onRemoveCategory" />
 </template>
 
 <script lang="ts">

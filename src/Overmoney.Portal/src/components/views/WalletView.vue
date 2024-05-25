@@ -7,9 +7,10 @@
             <button @click="showModal = true">Add new</button>
         </ul>
     </nav>
-    <WalletList :wallets="wallets"  @updateWallet="onUpdateWallet">
+    <WalletList :wallets="wallets" @updateWallet="onUpdateWallet">
     </WalletList>
-    <CreateWalletModal :show="showModal" :currencies="currencies" @created="onCreateWallet" @cancel="showModal = false"/>
+    <CreateWalletModal :show="showModal" :currencies="currencies" @created="onCreateWallet"
+        @cancel="showModal = false" />
     <UpdateWalletModal :show="showUpdateModal" :currencies="currencies" @updated="updateWallet"
         :currentValue="walletToUpdate" @cancel="showUpdateModal = false" @removeWallet="onRemoveWallet" />
 </template>

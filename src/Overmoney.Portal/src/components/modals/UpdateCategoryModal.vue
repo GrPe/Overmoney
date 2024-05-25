@@ -8,6 +8,7 @@
             <form @submit.prevent="updateCategory">
                 <input type="text" v-model="categoryName" />
                 <button type="submit">Update</button>
+                <input type="button" class="delete" value="Delete" @click="removeCategory()"/>
             </form>
         </article>
     </dialog>
@@ -39,6 +40,10 @@ export default {
             this.categoryName = '';
         },
         cancel() {
+            this.$emit('cancel');
+        },
+        async removeCategory() {
+            this.$emit('removeCategory', this.currentValue?.id);
             this.$emit('cancel');
         }
     }
