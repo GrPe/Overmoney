@@ -45,6 +45,7 @@
                         </textarea>
 
                         <button type="submit">Update</button>
+                        <input type="button" class="delete" value="Delete" @click="removeTransaction()"/>
                     </form>
         </article>
     </dialog>
@@ -105,6 +106,10 @@ export default {
             this.transaction = {};
         },
         cancel() {
+            this.$emit('cancel');
+        },
+        async removeTransaction() {
+            this.$emit('removeTransaction', this.currentValue?.id);
             this.$emit('cancel');
         }
     }

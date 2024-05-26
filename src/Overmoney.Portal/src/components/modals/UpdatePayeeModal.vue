@@ -8,6 +8,7 @@
             <form @submit.prevent="updatePayee">
                 <input type="text" v-model="payeeName" />
                 <button type="submit">Update</button>
+                <input type="button" class="delete" value="Delete" @click="removePayee()"/>
             </form>
         </article>
     </dialog>
@@ -40,6 +41,10 @@ export default {
             this.payeeName = '';
         },
         cancel() {
+            this.$emit('cancel');
+        },
+        async removePayee() {
+            this.$emit('removePayee', this.currentValue?.id);
             this.$emit('cancel');
         }
     }

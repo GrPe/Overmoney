@@ -4,20 +4,12 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="payee in payees" :key="payee.id" @click="updatePayee(payee.id)">
                 <td>{{ payee.id }}</td>
                 <td>{{ payee.name }}</td>
-                <td>
-                    <div class="grid">
-                        <button class="delete" @click="removePayee(payee.id)">
-                            Delete
-                        </button>
-                    </div>
-                </td>
             </tr>
         </tbody>
     </table>
@@ -31,9 +23,6 @@ export default {
         payees: Array<Payee>
     },
     methods: {
-        async removePayee(id: number) {
-            this.$emit('removePayee', id);
-        },
         async updatePayee(id: number) {
             this.$emit('updatePayee', id);
         }

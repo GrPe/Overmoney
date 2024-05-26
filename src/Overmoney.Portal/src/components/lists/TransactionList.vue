@@ -27,9 +27,6 @@
                 <td>{{ transaction.attachments?.length == 0 ? "Yes" : "No" }}</td>
                 <td>
                     <div class="grid">
-                        <button class="delete" @click="removeTransaction(transaction.id)">
-                            Delete
-                        </button>
                         <button @click="addAttachment(transaction.id)">
                             Add Attachment
                         </button>
@@ -50,9 +47,6 @@ export default {
     methods: {
         async updateTransaction(id: number) {
             this.$emit('updateTransaction', id);
-        },
-        async removeTransaction(id: number) {
-            this.$emit('removeTransaction', id);
         },
         async addAttachment(id: number) {
             this.$emit('addAttachment', id)

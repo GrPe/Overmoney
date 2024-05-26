@@ -7,12 +7,12 @@
             <button @click="showModal = true">Add new</button>
         </ul>
     </nav>
-    <TransactionList :transactions="transactions" @updateTransaction="onUpdateTransaction"
-        @removeTransaction="onDeleteTransaction"></TransactionList>
+    <TransactionList :transactions="transactions" @updateTransaction="onUpdateTransaction"></TransactionList>
     <CreateTransactionModal :show="showModal" :wallets="wallets" :payees="payees" :categories="categories"
-        @created="onCreateTransaction" @cancel="showModal = false"/>
+        @created="onCreateTransaction" @cancel="showModal = false" />
     <UpdateTransactionModal :show="showUpdateModal" :wallets="wallets" :payees="payees" :categories="categories"
-        @updated="updateTransaction" :currentValue="transactionToUpdate" @cancel="showUpdateModal = false">
+        @updated="updateTransaction" :currentValue="transactionToUpdate" @cancel="showUpdateModal = false"
+        @removeTransaction="onDeleteTransaction">
     </UpdateTransactionModal>
 </template>
 

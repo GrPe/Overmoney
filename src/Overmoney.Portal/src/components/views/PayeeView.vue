@@ -7,11 +7,11 @@
             <button @click="showModal = true">Add new</button>
         </ul>
     </nav>
-    <PayeesList :payees="payees" @removePayee="onRemovePayee" @updatePayee="onUpdatePayee">
+    <PayeesList :payees="payees" @updatePayee="onUpdatePayee">
     </PayeesList>
     <CreatePayeeModal :show="showModal" @created="onCreatePayee" @cancel="showModal = false" />
     <UpdatePayeeModal :show="showUpdateModal" @updated="updatePayee" :currentValue="payeeToUpdate"
-        @cancel="showUpdateModal = false" />
+        @cancel="showUpdateModal = false" @removePayee="onRemovePayee" />
 </template>
 
 <script lang="ts">
