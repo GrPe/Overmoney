@@ -6,7 +6,7 @@
                 Create Category
             </header>
             <form @submit.prevent="createCategory">
-                <input type="text" v-model="categoryName" />
+                <input type="text" v-model="categoryName" required/>
                 <button type="submit">Create</button>
             </form>
         </article>

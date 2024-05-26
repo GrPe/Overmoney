@@ -6,7 +6,7 @@
                 Update Payee
             </header>
             <form @submit.prevent="updatePayee">
-                <input type="text" v-model="payeeName" />
+                <input type="text" v-model="payeeName" required/>
                 <button type="submit">Update</button>
                 <input type="button" class="delete" value="Delete" @click="removePayee()"/>
             </form>

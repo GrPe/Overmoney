@@ -6,7 +6,7 @@
                 Update Category
             </header>
             <form @submit.prevent="updateCategory">
-                <input type="text" v-model="categoryName" />
+                <input type="text" v-model="categoryName" required/>
                 <button type="submit">Update</button>
                 <input type="button" class="delete" value="Delete" @click="removeCategory()"/>
             </form>

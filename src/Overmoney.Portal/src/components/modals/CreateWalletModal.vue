@@ -6,10 +6,10 @@
                 Create Wallet
             </header>
             <form @submit.prevent="createWallet">
-                <input type="text" v-model="walletName" />
+                <input type="text" v-model="walletName" required/>
 
                 <label for="currency">Currency</label>
-                <select v-model="currencyId" id="currency">
+                <select v-model="currencyId" id="currency" required>
                     <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
                         {{ currency.name }}
                     </option>

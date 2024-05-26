@@ -6,7 +6,7 @@
                 Create Payee
             </header>
             <form @submit.prevent="createPayee">
-                <input type="text" v-model="payeeName" />
+                <input type="text" v-model="payeeName" required/>
                 <button type="submit">Create</button>
             </form>
         </article>
