@@ -41,8 +41,8 @@ Inspiration: https://moneymanagerex.org/
 | Features (files, reccuring transactions, budget planner) + database        | 2024.04.03 | ✅ Done     |
 | CI/CD (build), tests, Frontend (setup)                                     | 2024.04.14 | ✅ Done     |
 | Frontend - all view                                                        | 2024.05.12 | ✅ Done     |
-| Security, frontend - styles                                                | 2024.05.26 | In progress |
-| dashboards, summaries, CI/CD + IaC (containers, networking), Observability | 2024.06.08 | Todo        |
+| Security, frontend - styles                                                | 2024.05.26 | ✅ Done     |
+| dashboards, summaries, CI/CD + IaC (containers, networking), Observability | 2024.06.08 | In progress |
 
 ## Technology
 
