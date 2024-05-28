@@ -2,6 +2,12 @@ version: "3.9"
 
 volumes:
     postgress_data:
+    loki:
+    loki_config:
+    prometheus_config:
+    prometheus_data:
+    grafana_config:
+    grafana_data:
 
 networks:
     overmoney:
@@ -19,7 +25,7 @@ services:
         networks:
             - overmoney
         ports:
-            - "5432:5432"
+            - 5432:5432
     api:
         build: 
             context: .
@@ -35,7 +41,70 @@ services:
         networks:
             - overmoney
         ports:
-            - "8085:80"
-            - "8081:8081"
+            - 8085:80
+            - 8081:8081
         volumes:
             - ~/.aspnet/https:/https:ro
+
+# OBSERVABILITY
+    loki:
+        restart: always
+        image: grafana/loki
+        command: -config.file=/etc/loki/local-config.yaml
+        volumes:
+          - loki:/loki
+          - loki_config:/etc/loki
+        networks:
+          - overmoney
+
+    prometheus:
+        restart: always
+        image: prom/prometheus
+        ports:
+          - 9090:9090
+        volumes:
+          - prometheus_config:/etc/prometheus/
+          - prometheus_data:/prometheus
+        networks:
+          - overmoney
+
+    grafana:
+        restart: always
+        environment:
+          - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+        entrypoint:
+          - sh
+          - -euc
+          - |
+            mkdir -p /etc/grafana/provisioning/datasources
+            cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+            apiVersion: 1
+            datasources:
+            - name: Loki
+              type: loki
+              access: proxy 
+              orgId: 1
+              url: http://loki:3100
+              basicAuth: false
+              isDefault: true
+              version: 1
+              editable: false
+            - name: Prometheus
+              type: prometheus
+              access: proxy
+              orgId: 1
+              url: http://prometheus:9090
+              basicAuth: false
+              isDefault: false
+              version: 1
+              editable: false
+            EOF
+            /run.sh
+        image: grafana/grafana:latest
+        ports:
+          - 3000:3000
+        volumes:
+          - grafana_config:/var/lib/grafana
+          - grafana_data:/etc/grafana
+        networks:
+          - overmoney
