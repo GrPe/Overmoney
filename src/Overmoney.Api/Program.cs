@@ -6,6 +6,7 @@ using System.Reflection;
 using Overmoney.Domain.Converters;
 using Microsoft.AspNetCore.Identity;
 using Overmoney.DataAccess.Identity;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,13 +62,20 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"));
+builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"), true);
 builder.Services.AddDomain();
 
 builder.Services.AddScoped<ExceptionHandler>();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
+builder.Services.UseHttpClientMetrics();
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationIdentityDbContext>()
+    .ForwardToPrometheus();
+
 
 var app = builder.Build();
 
@@ -95,7 +103,15 @@ app.MapGroup("Identity")
 
 app.UseMiddleware<ExceptionHandler>();
 
+app.UseHttpMetrics(options =>
+{
+    options.ReduceStatusCodeCardinality();
+});
+
 app.MapControllers();
+app.MapMetrics();
+
+app.UseHealthChecks("/health");
 
 app.Run();
 
