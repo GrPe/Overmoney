@@ -62,7 +62,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"), true);
+builder.Services.AddDataAccess(builder.Configuration.GetConnectionString("Database"));
 builder.Services.AddDomain();
 
 builder.Services.AddScoped<ExceptionHandler>();
