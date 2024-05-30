@@ -7,6 +7,8 @@ using Overmoney.Domain.Converters;
 using Microsoft.AspNetCore.Identity;
 using Overmoney.DataAccess.Identity;
 using Prometheus;
+using Serilog;
+using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,21 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new ScheduleJsonConverter());
     options.SerializerOptions.Converters.Add(new IntIdentityJsonConverter());
     options.SerializerOptions.Converters.Add(new LongIdentityJsonConverter());
+});
+
+builder.Logging.ClearProviders();
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.GrafanaLoki("http://loki:3100",
+        [
+            new() {
+                Key = "app",
+                Value = "overmoney_api"
+            }
+        ]);
 });
 
 builder.Services.AddEndpointsApiExplorer();
