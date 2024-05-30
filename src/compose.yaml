@@ -63,7 +63,7 @@ services:
         ports:
           - 9090:9090
         volumes:
-          - prometheus_config:/etc/prometheus/
+          - ./configs/prometheus:/etc/prometheus/
           - prometheus_data:/prometheus
         networks:
           - overmoney
