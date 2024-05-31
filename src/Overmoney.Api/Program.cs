@@ -6,9 +6,9 @@ using System.Reflection;
 using Overmoney.Domain.Converters;
 using Microsoft.AspNetCore.Identity;
 using Overmoney.DataAccess.Identity;
-using Prometheus;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
+using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,12 +87,15 @@ builder.Services.AddScoped<ExceptionHandler>();
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 
-builder.Services.UseHttpClientMetrics();
-
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationIdentityDbContext>()
-    .ForwardToPrometheus();
+    .AddDbContextCheck<ApplicationIdentityDbContext>();
 
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(builder =>
+    {
+        builder.AddPrometheusExporter();
+        builder.AddMeter("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Server.Kestrel");
+    });
 
 var app = builder.Build();
 
@@ -120,13 +123,9 @@ app.MapGroup("Identity")
 
 app.UseMiddleware<ExceptionHandler>();
 
-app.UseHttpMetrics(options =>
-{
-    options.ReduceStatusCodeCardinality();
-});
+app.MapPrometheusScrapingEndpoint();
 
 app.MapControllers();
-app.MapMetrics();
 
 app.UseHealthChecks("/health");
 
