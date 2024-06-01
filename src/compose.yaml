@@ -106,5 +106,7 @@ services:
         volumes:
           - grafana_config:/var/lib/grafana
           - grafana_data:/etc/grafana
+          - ./configs/grafana/dashboards:/var/lib/grafana/dashboards
+          - ./configs/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
         networks:
           - overmoney
