@@ -280,9 +280,9 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserProfileId userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Transaction>> GetUserTransactionsAsync(UserProfileId userId, WalletId? walletId, CategoryId? categoryId, PayeeId? payeeId, CancellationToken cancellationToken)
     {
-        return await _databaseContext
+        var query = _databaseContext
             .Transactions
             .AsNoTracking()
             .Include(x => x.Wallet)
@@ -290,8 +290,24 @@ internal sealed class TransactionRepository : ITransactionRepository
             .Include(x => x.Category)
             .Include(x => x.Payee)
             .Include(x => x.Attachments)
-            .Where(x => x.UserId == userId)
-            .Select(x => new Transaction(
+            .Where(x => x.UserId == userId);
+
+        if(walletId is not null)
+        {
+            query = query.Where(x => x.WalletId == walletId);
+        }
+
+        if(categoryId is not null)
+        {
+            query = query.Where(x => x.CategoryId == categoryId);
+        }
+
+        if(payeeId is not null)
+        {
+            query = query.Where(x => x.PayeeId == payeeId);
+        }
+
+        return await query.Select(x => new Transaction(
                 x.Id,
                 x.UserId,
                 new Wallet(

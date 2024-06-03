@@ -155,13 +155,27 @@ public class UsersController : BaseController
     /// Retrieve user's transactions by query
     /// </summary>
     /// <param name="userId"></param>
+    /// <param name="categoryId">Category Id</param>
+    /// <param name="payeeId">Payee Id</param>
+    /// <param name="walletId">Wallet Id</param>
     /// <returns></returns>
     [HttpGet("{userId}/transactions")]
     [ProducesResponseType<IEnumerable<Transaction>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<Transaction>>> GetUserTransactions(int userId)
+    public async Task<ActionResult<IEnumerable<Transaction>>> GetUserTransactions(
+        int userId, 
+        [FromQuery] int? walletId, 
+        [FromQuery] int? categoryId,
+        [FromQuery] int? payeeId)
     {
-        var result = await _mediator.Send(new GetUserTransactionsQuery(new(userId)));
+        var query = new GetUserTransactionsQuery(
+            new(userId), 
+            walletId is not null ? new(walletId.Value) : null,
+            categoryId is not null ? new(categoryId.Value) : null, 
+            payeeId is not null ? new(payeeId.Value) : null
+            );
+
+        var result = await _mediator.Send(query);
         return result is null || !result.Any() ? NotFound() : Ok(result);
     }
 
