@@ -56,6 +56,8 @@ router.beforeEach((to, from, next) => {
 
 axios.interceptors.response.use(null, (error) => {
   if (error.response.status == 403 || error.response.status == 401) {
+    const session = userSessionStore();
+    session.logoutUser();
     router.push("/login");
   }
 
