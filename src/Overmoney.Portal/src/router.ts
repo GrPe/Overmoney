@@ -10,6 +10,7 @@ import SettingsView from "./components/views/SettingsView.vue";
 import LoginView from "./components/views/LoginView.vue";
 import RegisterView from "./components/views/RegisterView.vue";
 import WalletView from "./components/views/WalletView.vue";
+import ErrorView from "./components/views/ErrorView.vue";
 
 const routes = [
   { path: "/login", component: LoginView, meta: { requiresAuth: false } },
@@ -28,6 +29,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   { path: "/settings", component: SettingsView, meta: { requiresAuth: true } },
+  { path: "/error", component: ErrorView, meta: { requiresAuth: false } },
 ];
 
 const router = createRouter({
@@ -47,7 +49,10 @@ router.beforeEach((to, from, next) => {
   }
   if (requiresAuth && !session.isAuthenticated) {
     next("/login");
-  } else if ((to.path === "/login" || to.path === "/register") && session.isAuthenticated) {
+  } else if (
+    (to.path === "/login" || to.path === "/register") &&
+    session.isAuthenticated
+  ) {
     next("/");
   } else {
     next();
@@ -63,6 +68,10 @@ axios.interceptors.response.use(null, (error) => {
 
   if (error.response.status == 404) {
     return Promise.resolve(null);
+  }
+
+  if (error.response.status >= 500) {
+    router.push("/error");
   }
 
   return Promise.reject(error);
