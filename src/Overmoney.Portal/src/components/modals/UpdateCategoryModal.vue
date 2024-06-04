@@ -8,7 +8,7 @@
             <form @submit.prevent="updateCategory">
                 <input type="text" v-model="categoryName" required/>
                 <button type="submit">Update</button>
-                <input type="button" class="delete" value="Delete" @click="removeCategory()"/>
+                <input type="button" class="delete" value="Delete" @click="removeCategory()" :disabled="disableRemove"/>
             </form>
         </article>
     </dialog>
@@ -20,6 +20,7 @@ import type { PropType } from 'vue';
 export default {
     props: {
         show: Boolean,
+        disableRemove: Boolean,
         currentValue: {
             type: Object as PropType<Category>
         }

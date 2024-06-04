@@ -103,6 +103,45 @@ export class Client {
     return response.data;
   }
 
+  async getTransactionsByWallet(userId: number, walletId: number): Promise<Transaction[] | null> {
+    const response = await axios.get<Array<Transaction>>(
+      import.meta.env.VITE_API_URL +
+        `users/${userId}/transactions?walletId=${walletId}`
+    );
+
+    if (response == null) {
+      return null;
+    }
+
+    return response.data;
+  }
+
+  async getTransactionsByCategory(userId: number, categoryId: number): Promise<Transaction[] | null> {
+    const response = await axios.get<Array<Transaction>>(
+      import.meta.env.VITE_API_URL +
+        `users/${userId}/transactions?categoryId=${categoryId}`
+    );
+
+    if (response == null) {
+      return null;
+    }
+
+    return response.data;
+  }
+
+  async getTransactionsByPayee(userId: number, payeeId: number): Promise<Transaction[] | null> {
+    const response = await axios.get<Array<Transaction>>(
+      import.meta.env.VITE_API_URL +
+        `users/${userId}/transactions?payeeId=${payeeId}`
+    );
+
+    if (response == null) {
+      return null;
+    }
+
+    return response.data;
+  }
+
   async createTransaction(
     request: createTransactionRequest
   ): Promise<Transaction> {

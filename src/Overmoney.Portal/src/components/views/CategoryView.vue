@@ -11,7 +11,7 @@
     </CategoryList>
     <CreateCategoryModal :show="showModal" @created="onCreateCategory" @cancel="showModal = false" />
     <UpdateCategoryModal :show="showUpdateModal" @updated="updateCategory" :currentValue="categoryToUpdate"
-        @cancel="showUpdateModal = false" @removeCategory="onRemoveCategory" />
+        @cancel="showUpdateModal = false" @removeCategory="onRemoveCategory" :disableRemove="disableRemove"/>
 </template>
 
 <script lang="ts">
@@ -31,6 +31,7 @@ export default {
             categories: [] as Array<Category>,
             showModal: false,
             showUpdateModal: false,
+            disableRemove: false,
             categoryToUpdate: {} as Category | undefined,
             session
         }
@@ -55,6 +56,14 @@ export default {
             await this.client.removeCategory(id);
         },
         async onUpdateCategory(id: number) {
+            let transactions = await this.client.getTransactionsByCategory(this.session.userId, id);
+
+            if(transactions != null && transactions.length > 0) {
+                this.disableRemove = true;
+            } else {
+                this.disableRemove = false;
+            }
+
             let category = this.categories.find(x => x.id == id);
             this.categoryToUpdate = category;
             this.showUpdateModal = true;

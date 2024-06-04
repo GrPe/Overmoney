@@ -11,7 +11,7 @@
     </PayeesList>
     <CreatePayeeModal :show="showModal" @created="onCreatePayee" @cancel="showModal = false" />
     <UpdatePayeeModal :show="showUpdateModal" @updated="updatePayee" :currentValue="payeeToUpdate"
-        @cancel="showUpdateModal = false" @removePayee="onRemovePayee" />
+        @cancel="showUpdateModal = false" @removePayee="onRemovePayee" :disableRemove="disableRemove" />
 </template>
 
 <script lang="ts">
@@ -31,6 +31,7 @@ export default {
             payees: [] as Array<Payee>,
             showModal: false,
             showUpdateModal: false,
+            disableRemove: false,
             payeeToUpdate: {} as Payee | undefined,
             session
         }
@@ -55,6 +56,14 @@ export default {
             await this.client.removePayee(id);
         },
         async onUpdatePayee(id: number) {
+            let transactions = await this.client.getTransactionsByPayee(this.session.userId, id);
+
+            if (transactions != null && transactions.length > 0) {
+                this.disableRemove = true;
+            } else {
+                this.disableRemove = false;
+            }
+
             let payee = this.payees.find(x => x.id == id);
             this.payeeToUpdate = payee;
             this.showUpdateModal = true;

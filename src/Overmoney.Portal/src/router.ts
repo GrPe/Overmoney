@@ -61,6 +61,10 @@ axios.interceptors.response.use(null, (error) => {
     router.push("/login");
   }
 
+  if (error.response.status == 404) {
+    return Promise.resolve(null);
+  }
+
   return Promise.reject(error);
 });
 

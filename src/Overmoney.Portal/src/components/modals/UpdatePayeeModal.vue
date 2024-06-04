@@ -8,7 +8,7 @@
             <form @submit.prevent="updatePayee">
                 <input type="text" v-model="payeeName" required/>
                 <button type="submit">Update</button>
-                <input type="button" class="delete" value="Delete" @click="removePayee()"/>
+                <input type="button" class="delete" value="Delete" @click="removePayee()" :disabled="disableRemove"/>
             </form>
         </article>
     </dialog>
@@ -21,6 +21,7 @@ import type { PropType } from 'vue';
 export default {
     props: {
         show: Boolean,
+        disableRemove: Boolean,
         currentValue: {
             type: Object as PropType<Payee>
         }

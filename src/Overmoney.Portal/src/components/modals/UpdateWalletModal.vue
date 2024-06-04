@@ -6,7 +6,7 @@
                 Update Wallet
             </header>
             <form @submit.prevent="updateWallet">
-                <input type="text" v-model="walletName" required/>
+                <input type="text" v-model="walletName" required />
 
                 <label for="currency">Currency</label>
                 <select v-model="currencyId" id="currency" required>
@@ -16,7 +16,7 @@
                 </select>
 
                 <button type="submit">Update</button>
-                <input type="button" class="delete" value="Delete" @click="removeWallet()"/>
+                <input type="button" class="delete" value="Delete" @click="removeWallet()" :disabled="disableRemove"/>
             </form>
         </article>
     </dialog>
@@ -29,6 +29,7 @@ import type { PropType } from 'vue';
 export default {
     props: {
         show: Boolean,
+        disableRemove: Boolean,
         currencies: Array<Currency>,
         currentValue: {
             type: Object as PropType<Wallet>

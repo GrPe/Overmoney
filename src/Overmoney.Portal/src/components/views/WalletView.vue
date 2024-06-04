@@ -12,7 +12,7 @@
     <CreateWalletModal :show="showModal" :currencies="currencies" @created="onCreateWallet"
         @cancel="showModal = false" />
     <UpdateWalletModal :show="showUpdateModal" :currencies="currencies" @updated="updateWallet"
-        :currentValue="walletToUpdate" @cancel="showUpdateModal = false" @removeWallet="onRemoveWallet" />
+        :currentValue="walletToUpdate" @cancel="showUpdateModal = false" @removeWallet="onRemoveWallet" :disableRemove="disableRemove" />
 </template>
 
 <script lang="ts">
@@ -34,6 +34,7 @@ export default {
             currencies: [] as Array<Currency>,
             showModal: false,
             showUpdateModal: false,
+            disableRemove: false,
             walletToUpdate: {} as Wallet | undefined,
             session
         }
@@ -60,6 +61,16 @@ export default {
             await this.client.removeWallet(id);
         },
         async onUpdateWallet(id: number) {
+            let transactions = await this.client.getTransactionsByWallet(this.session.userId, id);
+
+            console.log(transactions);
+
+            if (transactions != null && transactions != undefined && transactions.length > 0) {
+                this.disableRemove = true;
+            } else {
+                this.disableRemove = false;
+            }
+
             let wallet = this.wallets.find(x => x.id == id);
             this.walletToUpdate = wallet;
             this.showUpdateModal = true;
