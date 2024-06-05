@@ -15,19 +15,19 @@ public sealed class Attachment
 {
     public AttachmentId? Id { get; }
     public string Name { get; private set; }
-    public string FilePath { get; private set; }
+    public string Path { get; private set; }
 
-    public Attachment(AttachmentId? id, string name, string filePath)
+    public Attachment(AttachmentId? id, string name, string path)
     {
         Id = id;
         Name = name;
-        FilePath = filePath;
+        Path = path;
     }
 
-    public Attachment(string name, string filePath)
+    public Attachment(string name, string path)
     {
         Name = name;
-        FilePath = filePath;
+        Path = path;
     }
 
     public void Update(string name)

@@ -23,6 +23,6 @@ public interface ITransactionRepository : IRepository
 
     Task DeleteAttachmentAsync(AttachmentId id, CancellationToken cancellationToken);
     Task<Attachment?> GetAttachmentAsync(AttachmentId id, CancellationToken cancellationToken);
-    Task AddAttachmentAsync(TransactionId transactionId, Attachment attachment, CancellationToken cancellationToken);
+    Task<Attachment> AddAttachmentAsync(TransactionId transactionId, Attachment attachment, CancellationToken cancellationToken);
     Task UpdateAttachmentAsync(Attachment attachment, CancellationToken cancellationToken);
 }

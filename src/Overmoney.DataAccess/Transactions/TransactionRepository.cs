@@ -30,7 +30,7 @@ internal sealed class TransactionRepository : ITransactionRepository
 
         foreach (var attachment in transaction.Attachments)
         {
-            entity.Entity.Attachments.Add(new AttachmentEntity(entity.Entity, attachment.Name, attachment.FilePath));
+            entity.Entity.Attachments.Add(new AttachmentEntity(entity.Entity, attachment.Name, attachment.Path));
         }
 
         await _databaseContext.SaveChangesAsync(cancellationToken);
@@ -144,16 +144,18 @@ internal sealed class TransactionRepository : ITransactionRepository
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task AddAttachmentAsync(TransactionId transactionId, Attachment attachment, CancellationToken cancellationToken)
+    public async Task<Attachment> AddAttachmentAsync(TransactionId transactionId, Attachment attachment, CancellationToken cancellationToken)
     {
         var transaction = await _databaseContext
             .Transactions
             .SingleAsync(x => x.Id == transactionId, cancellationToken);
 
-        var entity = new AttachmentEntity(transaction, attachment.Name, attachment.FilePath);
+        var entity = new AttachmentEntity(transaction, attachment.Name, attachment.Path);
 
         _databaseContext.Add(entity);
         await _databaseContext.SaveChangesAsync(cancellationToken);
+
+        return new Attachment(entity.Id, entity.Name, entity.FilePath);
     }
 
     public async Task<RecurringTransaction> CreateAsync(RecurringTransaction transaction, CancellationToken cancellationToken)

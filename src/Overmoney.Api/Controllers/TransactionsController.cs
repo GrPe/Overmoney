@@ -85,14 +85,14 @@ public class TransactionsController : BaseController
     /// Add attachment to transaction
     /// </summary>
     /// <param name="command"></param>
-    /// <returns></returns>
+    /// <returns>Created attachment</returns>
     [HttpPost("attachments")]
     [ProducesResponseType<Attachment>(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]
     public async Task<ActionResult<Attachment>> AddAttachment(AddAttachmentCommand command)
     {
-        await _mediator.Send(command);
-        return Ok();
+        var response = await _mediator.Send(command);
+        return Ok(response);
     }
 
     /// <summary>

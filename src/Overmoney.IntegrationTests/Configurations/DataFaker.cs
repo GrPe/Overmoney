@@ -13,7 +13,7 @@ internal static class DataFaker
 
     public static (string Name, string Code) GenerateCurrency()
     {
-        var currency = new Faker().Finance.Currency();
+        var currency = new Faker().Finance.Currency(true);
         return (currency.Description, currency.Code);
     }
 
@@ -30,6 +30,13 @@ internal static class DataFaker
     public static string GenerateWallet()
     {
         return new Faker().Finance.AccountName();
+    }
+
+    public static (string Name, string Path) GenerateAttachment()
+    {
+        var name = new Faker().System.FileName();
+        var path = new Faker().System.DirectoryPath();
+        return (name, path);
     }
 
     public static (decimal Amount, string Note, DateOnly TransactionDate) GenerateTransaction()

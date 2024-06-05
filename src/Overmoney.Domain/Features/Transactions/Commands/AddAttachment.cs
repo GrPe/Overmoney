@@ -6,7 +6,7 @@ using Overmoney.Domain.Features.Transactions.Models;
 
 namespace Overmoney.Domain.Features.Transactions.Commands;
 
-public sealed record AddAttachmentCommand(TransactionId TransactionId, string Name, string Path) : IRequest;
+public sealed record AddAttachmentCommand(TransactionId TransactionId, string Name, string Path) : IRequest<Attachment>;
 
 internal sealed class AddAttachmentCommandValidator : AbstractValidator<AddAttachmentCommand>
 {
@@ -22,7 +22,7 @@ internal sealed class AddAttachmentCommandValidator : AbstractValidator<AddAttac
     }
 }
 
-internal sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand>
+internal sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmentCommand, Attachment>
 {
     private readonly ITransactionRepository _transactionRepository;
 
@@ -31,7 +31,7 @@ internal sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmen
         _transactionRepository = transactionRepository;
     }
 
-    public async Task Handle(AddAttachmentCommand request, CancellationToken cancellationToken)
+    public async Task<Attachment> Handle(AddAttachmentCommand request, CancellationToken cancellationToken)
     {
         var exists = await _transactionRepository.IsExists(request.TransactionId, cancellationToken);
 
@@ -40,6 +40,6 @@ internal sealed class AddAttachmentCommandHandler : IRequestHandler<AddAttachmen
             throw new DomainValidationException($"Transaction with id {request.TransactionId} doesn't exists.");
         }
 
-        await _transactionRepository.AddAttachmentAsync(request.TransactionId, new Attachment(request.Name, request.Path), cancellationToken);
+        return await _transactionRepository.AddAttachmentAsync(request.TransactionId, new Attachment(request.Name, request.Path), cancellationToken);
     }
 }
