@@ -103,7 +103,7 @@ export default {
     methods: {
         async updateTransaction() {
             this.$emit('updated', this.transaction);
-            this.transaction = {};
+            this.transaction = { } as updateTransactionRequest;
         },
         cancel() {
             this.$emit('cancel');

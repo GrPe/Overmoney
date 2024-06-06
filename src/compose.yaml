@@ -38,6 +38,7 @@ services:
             - ASPNETCORE_HTTPS_PORTS=8081
             - ASPNETCORE_Kestrel__Certificates__Default__Password=password
             - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+            - AutoMigrate=true
         networks:
             - overmoney
         ports:
@@ -45,6 +46,15 @@ services:
             - 8081:8081
         volumes:
             - ~/.aspnet/https:/https:ro
+    portal:
+        build:
+            context: ./Overmoney.Portal/
+            dockerfile: ./Dockerfile
+        container_name: overmoney_portal
+        networks:
+            - overmoney
+        ports:
+            - 80:80
 
 # OBSERVABILITY
     loki:
