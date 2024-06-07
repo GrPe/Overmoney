@@ -51,6 +51,8 @@ services:
             context: ./Overmoney.Portal/
             dockerfile: ./Dockerfile
         container_name: overmoney_portal
+        environment:
+            - VITE_API_URL="https://overmoney_api:80/"
         networks:
             - overmoney
         ports:

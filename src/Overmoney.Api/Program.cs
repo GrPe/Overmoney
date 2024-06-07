@@ -9,6 +9,7 @@ using Overmoney.DataAccess.Identity;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 using OpenTelemetry.Metrics;
+using Microsoft.OpenApi.Any;
 
 var builder = WebApplication.CreateBuilder(args);
 
