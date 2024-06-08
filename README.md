@@ -42,7 +42,7 @@ Inspiration: https://moneymanagerex.org/
 | CI/CD (build), tests, Frontend (setup)                                     | 2024.04.14 | ✅ Done     |
 | Frontend - all view                                                        | 2024.05.12 | ✅ Done     |
 | Security, frontend - styles                                                | 2024.05.26 | ✅ Done     |
-| dashboards, summaries, CI/CD + IaC (containers, networking), Observability | 2024.06.08 | In progress |
+| dashboards, summaries, CI/CD + IaC (containers, networking), Observability | 2024.06.08 | ✅ Done |
 
 ## Technology
 
@@ -86,12 +86,39 @@ List of technologies, frameworks, libraries that I want to learn/test:
 
 ### Infra
 
-- [ ] CI/CD (GitHub) including automatic build, test, deployment, database migrations
+- [x] CI/CD (GitHub) including automatic build, test, deployment, database migrations
 - [ ] IaC (Bicep)
-- [ ] Observability: Loki, Grafana, Prometheus, Jaeger, "sth for alerting"
+- [x] Observability: Loki, Grafana, Prometheus, Jaeger, "sth for alerting"
 - [ ] Hashicorp Vault
 - [ ] RabbitMQ
 - [ ] Azure Containers, networking
+
+
+## Some screens
+
+### Register
+
+![register](docs/imgs/1.png)
+
+### Login
+
+![login](docs/imgs/2.png)
+
+### List of payees
+
+![payees](docs/imgs/3.png)
+
+### List of categories
+
+![categories](docs/imgs/4.png)
+
+### Create transaction view
+
+![transaction](docs/imgs/5.png)
+
+### Transaction list
+
+![transactions](docs/imgs/6.png)
 
 ## How to run
 

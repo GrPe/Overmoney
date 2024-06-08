@@ -9,9 +9,10 @@ using Overmoney.DataAccess.Identity;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 using OpenTelemetry.Metrics;
-using Microsoft.OpenApi.Any;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 
@@ -106,16 +107,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
-
 app.UseCors(options =>
 {
-    //for development purposes
-    options.AllowAnyOrigin();
-    options.AllowAnyMethod();
-    options.AllowAnyHeader();
+    options.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
 });
+
+app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthorization();
 app.MapGroup("Identity")
